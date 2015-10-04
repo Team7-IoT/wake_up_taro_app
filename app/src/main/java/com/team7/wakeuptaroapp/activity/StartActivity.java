@@ -44,8 +44,8 @@ public class StartActivity extends Activity {
     }
 
     /**
-     * Start �{�^�����������ꂽ��ꗗ��ʂ֑J�ڂ���B<br />
-     * �ꗗ��ʂ֑J�ڎ��ɁA���킹�Ė{��ʂ�{@code finish()}����B
+     * Start ボタン押下時にアラーム一覧画面へ遷移する。<br />
+     * 遷移するタイミングでこの画面は {@code finish()} される。
      *
      * @param view {@link View}
      */
