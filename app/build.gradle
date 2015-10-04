@@ -10,6 +10,8 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -17,9 +19,30 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    packagingOptions {
+        // for AndroidStudio's bug. duplication error of file below.
+        pickFirst 'META-INF/LICENSE.txt'
+        pickFirst 'LICENSE.txt'
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.android.support:appcompat-v7:22.2.1'
+
+    compile 'com.android.support:support-annotations:23.0.1'
+
+    androidTestCompile 'junit:junit:4.+'
+
+    // Testing-only dependencies
+    // Force usage of support annotations in the test app, since it is internally used by the runner module.
+    androidTestCompile 'com.android.support:support-annotations:23.0.1'
+    androidTestCompile 'com.android.support.test:runner:0.4'
+    androidTestCompile 'com.android.support.test:rules:0.4'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
+
+    // AssertJ
+    androidTestCompile 'org.assertj:assertj-core:1.+'
+//    androidTestCompile 'com.squareup.assertj:assertj-android-appcompat-v7:1.1.0'
 }

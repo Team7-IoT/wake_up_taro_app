@@ -10,8 +10,8 @@ import android.view.View;
 import com.team7.activity.wakeuptaroapp.R;
 
 /**
- * �N����̏�����ʂɑ΂���A�N�e�B�r�e�B�B<br />
- * ��{�I�ɂ̓A���[���ꗗ��ʂ֑J�ڂ��邽�߂����̉�ʁB
+ * 起動後の初期画面に対するアクティビティ。<br />
+ * 基本的にはアラーム一覧画面へ遷移するためだけの画面。
  */
 public class StartActivity extends Activity {
 
@@ -44,8 +44,8 @@ public class StartActivity extends Activity {
     }
 
     /**
-     * Start �{�^�����������ꂽ��ꗗ��ʂ֑J�ڂ���B<br />
-     * �ꗗ��ʂ֑J�ڎ��ɁA���킹�Ė{��ʂ�{@code finish()}����B
+     * Start �{�^�����������ꂽ��ꗗ��ʂ֑J�ڂ���B<br />
+     * �ꗗ��ʂ֑J�ڎ��ɁA���킹�Ė{��ʂ�{@code finish()}����B
      *
      * @param view {@link View}
      */
