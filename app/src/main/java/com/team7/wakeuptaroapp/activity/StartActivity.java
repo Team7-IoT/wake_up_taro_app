@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.team7.activity.wakeuptaroapp.R;
+import com.team7.wakeuptaroapp.R;
 
 /**
  * 起動後の初期画面に対するアクティビティ。<br />

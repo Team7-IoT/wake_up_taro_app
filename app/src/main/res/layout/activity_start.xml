@@ -25,4 +25,14 @@
         android:layout_centerHorizontal="true"
         android:textSize="24sp"
         android:onClick="toListOnStart" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/version_name"
+        android:id="@+id/app_version"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="68dp" />
 </RelativeLayout>
