@@ -15,10 +15,7 @@ test:
     - circle-android wait-for-boot
     # run tests  against the emulator.
     - ./gradlew connectedAndroidTest -PdisablePreDex
-    # copy the build outputs to artifacts
-    - pwd
-    - ls -lA
-    - ls -lR build
-    - cp -r ./build/outputs $CIRCLE_ARTIFACTS
+  post:
     # copy the test results to the test results directory.
-    - cp -r ./build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+    - find . -type f -regex ".*/androidTest-results/*/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
