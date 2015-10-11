@@ -8,7 +8,7 @@ dependencies:
 test:
   override:
     # start the emulator
-    - emulator -avd circleci-android18 -no-audio -no-window:
+    - emulator -avd testing -no-audio -no-window:
         background: true
         parallel: true
     # wait for it to have booted
