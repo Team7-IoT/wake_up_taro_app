@@ -1,3 +1,6 @@
+checkout:
+  post:
+    -  chmod +x ./gradlew
 test:
   override:
     # start the emulator
