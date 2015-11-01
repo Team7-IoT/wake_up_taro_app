@@ -44,9 +44,6 @@ public class SettingActivityTest {
         assertThat(actual.getAdapter().getCount()).isEqualTo(1);
         assertThat(actual.getAdapter().getItem(0)).isEqualTo(expectedLabel);
 
-        assertThat(readField(testee, "bluetoothAdapter", true)).isNotNull();
-        assertThat(readField(testee, "handler", true)).isNotNull();
-        assertThat(readField(testee, "bluetoothGatt", true)).isNull();
         assertThat(readField(testee, "needToastMessage", true)).isEqualTo(false);
     }
 }
