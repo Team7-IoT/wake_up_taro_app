@@ -1,5 +1,6 @@
 package com.team7.wakeuptaroapp.activity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -45,6 +46,12 @@ public class SettingActivity extends AppCompatActivity {
 
     @BindString(R.string.setting_connect)
     String labelSettingConnect;
+
+    @BindString(R.string.title_dialog_disabled_bluetooth)
+    String titleDialogDisabledBluetooth;
+
+    @BindString(R.string.message_dialog_disabled_bluetooth)
+    String messageDialogDisabledBluetooth;
 
     @BindString(R.string.title_dialog_ble_searching)
     String titleDialogBleSearching;
@@ -177,6 +184,12 @@ public class SettingActivity extends AppCompatActivity {
         }
         AppLog.d("onClickConnectValidate");
 
+        // Bluetooth 有効判定
+        if (!bluetoothAdapter.isEnabled()) {
+            buildDisabledBluetoothAlertDialog().show();
+            return;
+        }
+
         // ラズパイ検索中のダイアログ表示
         searchingDialog = buildSearchingDialog();
         searchingDialog.show();
@@ -188,6 +201,19 @@ public class SettingActivity extends AppCompatActivity {
 
         // TODO 検索結果 (device.getName()) をポップアップの一覧で表示し、そこから接続する親機を選択してもらう (TBD)
         // TODO 一覧から選択されたハードの情報（名前？アドレス？）を端末内に保存
+    }
+
+    /**
+     * Bluetooth が無効である旨を通知するダイアログを組み立てる。
+     *
+     * @return 組み立てた {@link AlertDialog}
+     */
+    private AlertDialog buildDisabledBluetoothAlertDialog() {
+        return new AlertDialog.Builder(this)
+                .setTitle(titleDialogDisabledBluetooth)
+                .setMessage(messageDialogDisabledBluetooth)
+                .setPositiveButton("OK", null)
+                .create();
     }
 
     /**
