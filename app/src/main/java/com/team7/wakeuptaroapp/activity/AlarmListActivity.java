@@ -1,13 +1,14 @@
 package com.team7.wakeuptaroapp.activity;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.team7.activity.wakeuptaroapp.R;
+import com.team7.wakeuptaroapp.R;
 
-public class AlarmListActivity extends ActionBarActivity {
+public class AlarmListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,11 @@ public class AlarmListActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
+            // 設定 Activity 呼び出し
+            Intent intent = new Intent(AlarmListActivity.this, SettingActivity.class);
+            startActivity(intent);
+
             return true;
         }
 
