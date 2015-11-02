@@ -8,11 +8,12 @@
     <string name="title_activity_alarm_list">アラーム一覧</string>
     <string name="title_activity_setting">設定</string>
     <string name="title_dialog_disabled_bluetooth">Bluetooth 無効</string>
-    <string name="title_dialog_ble_searching">端末検索中</string>
+    <string name="title_dialog_ble_searching">起こしタロウ 親機 検索中</string>
+    <string name="title_dialog_ble_select">起こしタロウ 親機 選択</string>
 
     <string name="message_dialog_disabled_bluetooth">Bluetooth を有効にしてください。</string>
     <string name="message_dialog_ble_searching">起こしタロウ 親機を検索しています...</string>
-    <string name="message_found_ble">起こしタロウ 親機 (%1$s) が見つかりました。</string>
+    <string name="message_found_ble">起こしタロウ 親機 (%1$s) への接続に成功しました。</string>
     <string name="message_not_found_ble">起こしタロウ 親機が見つかりませんでした。</string>
 
     <string name="setting_connect">接続検証</string>

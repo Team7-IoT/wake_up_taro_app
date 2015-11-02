@@ -1,12 +1,12 @@
 package com.team7.wakeuptaroapp.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
-import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
@@ -19,21 +19,25 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.google.common.base.Objects;
 import com.team7.wakeuptaroapp.R;
 import com.team7.wakeuptaroapp.util.AppLog;
+import com.team7.wakeuptaroapp.util.TaroSharedPreference;
 import com.team7.wakeuptaroapp.util.Toasts;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
+import de.devland.esperandro.Esperandro;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
-import static com.team7.wakeuptaroapp.ble.RaspberryPi.TARGET_PERIPHERAL_NAME;
 
 
 /**
@@ -59,12 +63,16 @@ public class SettingActivity extends AppCompatActivity {
     @BindString(R.string.message_dialog_ble_searching)
     String messageDialogBleSearching;
 
+    @BindString(R.string.title_dialog_ble_select)
+    String titleDialogBleSelect;
+
     @Bind(R.id.setting_list)
     ListView listView;
 
     // スキャン時間 (5秒)
     private static final long SCAN_PERIOD = 5000;
 
+    // BLE 周りのコンポーネント群
     private BluetoothAdapter bluetoothAdapter;
     private Handler handler;
     private BluetoothGatt bluetoothGatt;
@@ -72,7 +80,12 @@ public class SettingActivity extends AppCompatActivity {
     // 親機を検索中に表示するダイアログ
     private ProgressDialog searchingDialog;
 
+    // 検索中の親機一覧
+    private Map<String, BluetoothDevice> devices;
+    private String selectedDevice;
     private boolean needToastMessage;
+
+    private TaroSharedPreference preference;
 
     /**
      * BLE を使った親機の検索時に使用するコールバック。
@@ -84,12 +97,8 @@ public class SettingActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     AppLog.d("Scan device: " + toStringOfDevice(device));
-                    if (Objects.equal(device.getName(), TARGET_PERIPHERAL_NAME)) {
-                        AppLog.d("DeviceName: " + TARGET_PERIPHERAL_NAME);
 
-                        bluetoothGatt = device.connectGatt(getApplicationContext(), false, gattCallback);
-                        AppLog.i("Scan device connet gatt " + (bluetoothGatt == null));
-                    }
+                    devices.put(device.getName(), device);
                 }
             });
         }
@@ -126,34 +135,18 @@ public class SettingActivity extends AppCompatActivity {
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 AppLog.d("GATT New status is STATE_CONNECTED");
 
-                bluetoothGatt.discoverServices();
-            } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                AppLog.d("GATT New status is STATE_DISCONNECTED");
+                // アラーム停止用にデバイス名を保存しておく
+                preference.deviceName(bluetoothGatt.getDevice().getName());
+
+                final Activity activity = SettingActivity.this;
+                activity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        initializeSettingItems();
+                        Toasts.showMessageLong(activity, R.string.message_found_ble, bluetoothGatt.getDevice().getName());
+                    }
+                });
 
                 stopScan();
-            }
-        }
-
-        /**
-         * {@link BluetoothGatt#discoverServices()}の呼び出し完了後に非同期で呼び出される。
-         *
-         * @see BluetoothGatt#discoverServices()
-         * @see BluetoothGattCallback#onServicesDiscovered(BluetoothGatt, int)
-         */
-        @Override
-        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-            AppLog.d("onConnectionStateChange status is " + status);
-            if (status != BluetoothGatt.GATT_SUCCESS) {
-                AppLog.d("onServicesDiscovered failed.");
-                return;
-            }
-
-            for (BluetoothGattService service : gatt.getServices()) {
-                if ((service == null) || (service.getUuid() == null)) {
-                    AppLog.d("BluetoothGattService is Empty!!");
-                    continue;
-                }
-                AppLog.d("BluetoothGattService UUID is " + service.getUuid().toString());
             }
         }
     };
@@ -162,14 +155,17 @@ public class SettingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
-        ButterKnife.bind(this);
-
         // 戻る
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // ButterKnife DI
+        ButterKnife.bind(this);
+
+        // SharedPreference
+        preference = Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
+
         initializeSettingItems();
         initializeBleComponents();
-        needToastMessage = false;
     }
 
     /**
@@ -198,9 +194,6 @@ public class SettingActivity extends AppCompatActivity {
         // BLE の機能を使って親機を検索
         bluetoothGatt = null;
         startScan();
-
-        // TODO 検索結果 (device.getName()) をポップアップの一覧で表示し、そこから接続する親機を選択してもらう (TBD)
-        // TODO 一覧から選択されたハードの情報（名前？アドレス？）を端末内に保存
     }
 
     /**
@@ -233,6 +226,8 @@ public class SettingActivity extends AppCompatActivity {
 
                         // BLE 検索停止
                         stopScan();
+                        handler.removeCallbacksAndMessages(null);
+                        devices.clear();
                         needToastMessage = false;
 
                         // ProgressDialog をキャンセル
@@ -241,6 +236,36 @@ public class SettingActivity extends AppCompatActivity {
                 });
 
         return searchingDialog;
+    }
+
+    /**
+     * 見つかった親機の一覧を表示するダイアログを組み立てる。<br />
+     * 一覧の先頭を選択状態とする。
+     *
+     * @return 組み立てた {@link AlertDialog}
+     */
+    private AlertDialog buildDevicesDialog() {
+        final String[] labels = (String[]) devices.keySet().toArray(new String[devices.size()]);
+
+        final int defaultIndex = 0;
+        selectedDevice = labels[defaultIndex];
+
+        return new AlertDialog.Builder(this)
+                .setTitle(titleDialogBleSelect)
+                .setSingleChoiceItems(labels, defaultIndex, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        selectedDevice = labels[which];
+                    }
+                })
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        bluetoothGatt = devices.get(selectedDevice).connectGatt(getApplicationContext(), false, gattCallback);
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .create();
     }
 
     @Override
@@ -272,14 +297,31 @@ public class SettingActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 設定項目を初期化する。
+     * TODO イケてない実装です。Android での設定項目のイディオムを知りたい
+     */
     private void initializeSettingItems() {
-        // データ準備
-        List<String> items = new ArrayList<>(1);
-        items.add(labelSettingConnect);
 
-        // Adapter - ArrayAdapter
+        List<String> items = new ArrayList<>(1);
+        items.add(composeLabelSettingConnect());
+
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, items);
         listView.setAdapter(adapter);
+
+        adapter.notifyDataSetChanged();
+    }
+
+    private String composeLabelSettingConnect() {
+        StringBuilder buffer = new StringBuilder();
+        buffer.append(labelSettingConnect);
+
+        String deviceName = preference.deviceName();
+        if (StringUtils.isNotEmpty(deviceName)) {
+            buffer.append("   (").append(deviceName).append(")");
+        }
+
+        return buffer.toString();
     }
 
     /**
@@ -298,10 +340,22 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void run() {
                 closeSearchingDialog();
-                showMessageByToast();
                 stopScan();
+
+                // キャンセル時は何もしない
+                if (!needToastMessage) {
+                    return;
+                }
+
+                if (devices.isEmpty()) {
+                    Toasts.showMessageLong(SettingActivity.this, R.string.message_not_found_ble);
+                } else {
+                    buildDevicesDialog().show();
+                }
             }
         }, SCAN_PERIOD);
+
+        devices = new HashMap<>();
 
         // スキャン開始
         bluetoothAdapter.startLeScan(scanCallback);
@@ -325,25 +379,5 @@ public class SettingActivity extends AppCompatActivity {
         }
         searchingDialog.cancel();
         searchingDialog = null;
-    }
-
-    private boolean isConnected() {
-        return (bluetoothGatt != null);
-    }
-
-    /**
-     * 親機の検索結果に応じたメッセージを{@link android.widget.Toast}を使って表示する。<br />
-     * ただし、検索中にキャンセルを押下された場合にはメッセージ表示は行わない。
-     */
-    private void showMessageByToast() {
-        if (!needToastMessage) {
-            return;
-        }
-
-        if (isConnected()) {
-            Toasts.showMessageLong(this, R.string.message_found_ble, bluetoothGatt.getDevice().getName());
-        } else {
-            Toasts.showMessageLong(this, R.string.message_not_found_ble);
-        }
     }
 }
