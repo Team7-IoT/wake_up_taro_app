@@ -6,7 +6,7 @@ import de.devland.esperandro.annotations.Default;
 import de.devland.esperandro.annotations.SharedPreferences;
 
 /**
- * {@link android.content.SharedPreferences}‚Ì‘€ì‚ğŠÈ—ª‰»‚·‚éƒ‰ƒbƒp[ƒNƒ‰ƒXB
+ * {@link android.content.SharedPreferences}ã®æ“ä½œã‚’ç°¡ç•¥åŒ–ã™ã‚‹ãƒ©ãƒƒãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹ã€‚
  *
  * @author Naotake.K
  * @see <a href="http://dkunzler.github.io/esperandro/">Esperandro</a>
@@ -15,18 +15,18 @@ import de.devland.esperandro.annotations.SharedPreferences;
 public interface TaroSharedPreference extends SharedPreferenceActions {
 
     /**
-     * e‹@‚Æ‚È‚éƒfƒoƒCƒX–¼‚ğæ“¾‚·‚éB<br />
-     * e‹@‚ª–¢İ’è‚Ìê‡A‹ó•¶š‚ğ•Ô‚·B
+     * è¦ªæ©Ÿã¨ãªã‚‹ãƒ‡ãƒã‚¤ã‚¹åã‚’å–å¾—ã™ã‚‹ã€‚<br />
+     * è¦ªæ©ŸãŒæœªè¨­å®šã®å ´åˆã€ç©ºæ–‡å­—ã‚’è¿”ã™ã€‚
      *
-     * @return ƒfƒoƒCƒX–¼
+     * @return ãƒ‡ãƒã‚¤ã‚¹å
      */
     @Default(ofString = "")
     String deviceName();
 
     /**
-     * e‹@‚Æ‚È‚éƒfƒoƒCƒX–¼‚ğ•Û‘¶‚·‚éB
+     * è¦ªæ©Ÿã¨ãªã‚‹ãƒ‡ãƒã‚¤ã‚¹åã‚’ä¿å­˜ã™ã‚‹ã€‚
      *
-     * @param deviceName ƒfƒoƒCƒX–¼
+     * @param deviceName ãƒ‡ãƒã‚¤ã‚¹å
      */
     void deviceName(String deviceName);
 }
