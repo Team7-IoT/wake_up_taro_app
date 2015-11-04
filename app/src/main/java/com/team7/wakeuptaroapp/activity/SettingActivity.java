@@ -10,6 +10,7 @@ import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -93,10 +94,13 @@ public class SettingActivity extends AppCompatActivity {
     private BluetoothAdapter.LeScanCallback scanCallback = new BluetoothAdapter.LeScanCallback() {
         @Override
         public void onLeScan(final BluetoothDevice device, int rssi, final byte[] scanRecord) {
-            runOnUiThread(() -> {
-                AppLog.d("Scan device: " + toStringOfDevice(device));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    AppLog.d("Scan device: " + toStringOfDevice(device));
 
-                devices.put(device.getName(), device);
+                    devices.put(device.getName(), device);
+                }
             });
         }
 
@@ -136,9 +140,11 @@ public class SettingActivity extends AppCompatActivity {
                 preference.deviceName(bluetoothGatt.getDevice().getName());
 
                 final Activity activity = SettingActivity.this;
-                activity.runOnUiThread(() -> {
-                    initializeSettingItems();
-                    Toasts.showMessageLong(activity, R.string.message_found_ble, bluetoothGatt.getDevice().getName());
+                activity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        initializeSettingItems();
+                        Toasts.showMessageLong(activity, R.string.message_found_ble, bluetoothGatt.getDevice().getName());
+                    }
                 });
 
                 stopScan();
@@ -214,17 +220,20 @@ public class SettingActivity extends AppCompatActivity {
         searchingDialog.setMessage(messageDialogBleSearching);
         searchingDialog.setCancelable(false);
         searchingDialog.setButton(BUTTON_NEGATIVE, "Cancel",
-                (dialog, which) -> {
-                    AppLog.d("Cancel SearchingDialog.");
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        AppLog.d("Cancel SearchingDialog.");
 
-                    // BLE 検索停止
-                    stopScan();
-                    handler.removeCallbacksAndMessages(null);
-                    devices.clear();
-                    needToastMessage = false;
+                        // BLE 検索停止
+                        stopScan();
+                        handler.removeCallbacksAndMessages(null);
+                        devices.clear();
+                        needToastMessage = false;
 
-                    // ProgressDialog をキャンセル
-                    dialog.cancel();
+                        // ProgressDialog をキャンセル
+                        dialog.cancel();
+                    }
                 });
 
         return searchingDialog;
@@ -244,11 +253,18 @@ public class SettingActivity extends AppCompatActivity {
 
         return new AlertDialog.Builder(this)
                 .setTitle(titleDialogBleSelect)
-                .setSingleChoiceItems(labels, defaultIndex, (dialog, which) -> {
-                    selectedDevice = labels[which];
-                })
-                .setPositiveButton("OK", (dialog, which) -> {
-                    bluetoothGatt = devices.get(selectedDevice).connectGatt(getApplicationContext(), false, gattCallback);
+                .setSingleChoiceItems(labels, defaultIndex,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                selectedDevice = labels[which];
+                            }
+                        })
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        bluetoothGatt = devices.get(selectedDevice).connectGatt(getApplicationContext(), false, gattCallback);
+                    }
                 })
                 .setNegativeButton("Cancel", null)
                 .create();
@@ -322,19 +338,22 @@ public class SettingActivity extends AppCompatActivity {
     private void startScan() {
 
         // 5秒後に接続が成功していればスキャンを停止する
-        handler.postDelayed(() -> {
-            closeSearchingDialog();
-            stopScan();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                closeSearchingDialog();
+                stopScan();
 
-            // キャンセル時は何もしない
-            if (!needToastMessage) {
-                return;
-            }
+                // キャンセル時は何もしない
+                if (!needToastMessage) {
+                    return;
+                }
 
-            if (devices.isEmpty()) {
-                Toasts.showMessageLong(SettingActivity.this, R.string.message_not_found_ble);
-            } else {
-                buildDevicesDialog().show();
+                if (devices.isEmpty()) {
+                    Toasts.showMessageLong(SettingActivity.this, R.string.message_not_found_ble);
+                } else {
+                    buildDevicesDialog().show();
+                }
             }
         }, SCAN_PERIOD);
 
