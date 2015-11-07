@@ -3,7 +3,7 @@ package com.team7.wakeuptaroapp.activity;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.team7.activity.wakeuptaroapp.R;
+import com.team7.wakeuptaroapp.R;
 
 import org.junit.Rule;
 import org.junit.Test;

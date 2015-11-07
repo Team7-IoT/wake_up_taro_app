@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.team7.activity.wakeuptaroapp.R;
+import com.team7.wakeuptaroapp.R;
 
 public class AlarmListActivity extends ActionBarActivity {
 
