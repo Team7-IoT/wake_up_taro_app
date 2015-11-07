@@ -8,6 +8,12 @@ import android.view.MenuItem;
 
 import com.team7.wakeuptaroapp.R;
 
+/**
+ * アラーム一覧画面に対するアクティビティ。<br />
+ * 設定済みのアラームを確認できる画面。
+ *
+ * @author Naotake.K
+ */
 public class AlarmListActivity extends AppCompatActivity {
 
     @Override
