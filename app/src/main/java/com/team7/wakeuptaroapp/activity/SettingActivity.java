@@ -176,7 +176,7 @@ public class SettingActivity extends AppCompatActivity {
      */
     @OnItemClick(R.id.setting_list)
     public void onClickConnectValidate(int position) {
-        Preconditions.checkArgument((position != 0), "不正な項目が選択されました: " + position);
+        Preconditions.checkArgument((position == 0), "不正な項目が選択されました: " + position);
 
         AppLog.d("onClickConnectValidate");
 
