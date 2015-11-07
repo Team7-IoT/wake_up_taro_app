@@ -12,6 +12,8 @@ import com.team7.wakeuptaroapp.R;
 /**
  * 起動後の初期画面に対するアクティビティ。<br />
  * 基本的にはアラーム一覧画面へ遷移するためだけの画面。
+ *
+ * @author Naotake.K
  */
 public class StartActivity extends Activity {
 

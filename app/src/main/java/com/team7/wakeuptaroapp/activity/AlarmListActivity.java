@@ -1,13 +1,19 @@
 package com.team7.wakeuptaroapp.activity;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.team7.wakeuptaroapp.R;
 
-public class AlarmListActivity extends ActionBarActivity {
+/**
+ * アラーム一覧画面に対するアクティビティ。<br />
+ * 設定済みのアラームを確認できる画面。
+ *
+ * @author Naotake.K
+ */
+public class AlarmListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
