@@ -1,5 +1,6 @@
 package com.team7.wakeuptaroapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -37,6 +38,11 @@ public class AlarmListActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
+            // 設定 Activity 呼び出し
+            Intent intent = new Intent(AlarmListActivity.this, SettingActivity.class);
+            startActivity(intent);
+
             return true;
         }
 

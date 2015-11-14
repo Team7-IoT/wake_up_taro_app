@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.team7.wakeuptaroapp" android:versionCode="@integer/version_code" android:versionName="@string/version_name" >
 
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -20,6 +23,10 @@
         <activity
             android:name="com.team7.wakeuptaroapp.activity.AlarmListActivity"
             android:label="@string/title_activity_alarm_list" >
+        </activity>
+        <activity
+            android:name="com.team7.wakeuptaroapp.activity.SettingActivity"
+            android:label="@string/title_activity_setting" >
         </activity>
     </application>
 
