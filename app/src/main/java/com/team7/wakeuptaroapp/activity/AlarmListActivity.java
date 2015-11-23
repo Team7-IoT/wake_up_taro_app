@@ -5,8 +5,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.team7.wakeuptaroapp.R;
+import com.team7.wakeuptaroapp.util.AppLog;
+
+import butterknife.OnItemClick;
 
 /**
  * アラーム一覧画面に対するアクティビティ。<br />
@@ -27,6 +31,17 @@ public class AlarmListActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.alarm_list, menu);
         return true;
+    }
+
+    /**
+     * アラーム追加ボタンが押下されたときの振る舞いを定義する。
+     */
+    public void onClickNewAlarm(View view) {
+        AppLog.d("onClickNewAlarm");
+
+        // アラーム登録 Activity 呼び出し
+        Intent intent = new Intent(AlarmListActivity.this, AlarmActivity.class);
+        startActivity(intent);
     }
 
     @Override

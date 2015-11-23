@@ -19,9 +19,9 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.google.common.base.Preconditions;
 import com.team7.wakeuptaroapp.R;
 import com.team7.wakeuptaroapp.util.AppLog;
+import com.team7.wakeuptaroapp.util.Preconditions;
 import com.team7.wakeuptaroapp.util.TaroSharedPreference;
 import com.team7.wakeuptaroapp.util.Toasts;
 
