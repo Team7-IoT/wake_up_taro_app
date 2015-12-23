@@ -1,4 +1,4 @@
-package com.team7.wakeuptaroapp.activity;
+package com.team7.wakeuptaroapp.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -20,10 +20,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.team7.wakeuptaroapp.R;
-import com.team7.wakeuptaroapp.util.AppLog;
-import com.team7.wakeuptaroapp.util.Preconditions;
-import com.team7.wakeuptaroapp.util.TaroSharedPreference;
-import com.team7.wakeuptaroapp.util.Toasts;
+import com.team7.wakeuptaroapp.utils.AppLog;
+import com.team7.wakeuptaroapp.utils.Preconditions;
+import com.team7.wakeuptaroapp.utils.TaroSharedPreference;
+import com.team7.wakeuptaroapp.utils.Toasts;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -86,6 +86,7 @@ public class SettingActivity extends AppCompatActivity {
     private String selectedDevice;
     private boolean needToastMessage;
 
+    // SharedPreference
     private TaroSharedPreference preference;
 
     /**
@@ -144,6 +145,8 @@ public class SettingActivity extends AppCompatActivity {
                     public void run() {
                         initializeSettingItems();
                         Toasts.showMessageLong(activity, R.string.message_found_ble, bluetoothGatt.getDevice().getName());
+
+                        // TODO 端末の処理が遅い場合、この run が終わる前に stopScan が実行される恐れがあるので、この中で stopScan をしたほうが良いかも
                     }
                 });
 
@@ -283,11 +286,6 @@ public class SettingActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         // 戻るボタン押下
         if (id == android.R.id.home) {

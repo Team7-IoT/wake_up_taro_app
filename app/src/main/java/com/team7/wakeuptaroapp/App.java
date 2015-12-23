@@ -4,6 +4,9 @@ import android.app.Application;
 
 import com.deploygate.sdk.DeployGate;
 
+import de.devland.esperandro.Esperandro;
+import de.devland.esperandro.serialization.JacksonSerializer;
+
 /**
  * Application クラス。
  * <p/>
@@ -15,5 +18,6 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         DeployGate.install(this);
+        Esperandro.setSerializer(new JacksonSerializer());
     }
 }

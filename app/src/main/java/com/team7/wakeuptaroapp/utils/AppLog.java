@@ -1,4 +1,4 @@
-package com.team7.wakeuptaroapp.util;
+package com.team7.wakeuptaroapp.utils;
 
 import android.util.Log;
 

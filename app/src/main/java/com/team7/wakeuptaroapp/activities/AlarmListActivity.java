@@ -1,34 +1,45 @@
-package com.team7.wakeuptaroapp.activity;
+package com.team7.wakeuptaroapp.activities;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.team7.wakeuptaroapp.R;
-import com.team7.wakeuptaroapp.util.AppLog;
+import com.team7.wakeuptaroapp.utils.AppLog;
 
 /**
- * アラーム登録 / 更新画面に対するアクティビティ。<br />
+ * アラーム一覧画面に対するアクティビティ。<br />
+ * 設定済みのアラームを確認できる画面。
  *
  * @author Naotake.K
  */
-public class AlarmActivity extends AppCompatActivity {
+public class AlarmListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_alarm);
-        // 戻る
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setContentView(R.layout.activity_alarm_list);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.alarm, menu);
+        getMenuInflater().inflate(R.menu.alarm_list, menu);
         return true;
+    }
+
+    /**
+     * アラーム追加ボタンが押下されたときの振る舞いを定義する。
+     */
+    public void onClickNewAlarm(View view) {
+        AppLog.d("onClickNewAlarm");
+
+        // アラーム登録 Activity 呼び出し
+        Intent intent = new Intent(AlarmListActivity.this, AlarmActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -40,13 +51,11 @@ public class AlarmActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
-        }
 
-        // 戻るボタン押下
-        if (id == android.R.id.home) {
-            AppLog.d("Tap to back on alarm.");
-            finish();
+            // 設定 Activity 呼び出し
+            Intent intent = new Intent(AlarmListActivity.this, SettingActivity.class);
+            startActivity(intent);
+
             return true;
         }
 

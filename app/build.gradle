@@ -23,8 +23,8 @@ android {
 
     packagingOptions {
         // for AndroidStudio's bug. duplication error of file below.
-        pickFirst 'META-INF/LICENSE.txt'
-        pickFirst 'LICENSE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
     }
 
     lintOptions {
@@ -32,6 +32,10 @@ android {
         // Or, if you prefer, you can continue to check for errors in release builds,
         // but continue the build even when errors are found:
         abortOnError false
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
 }
 
@@ -50,20 +54,22 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'de.devland.esperandro:esperandro-api:2.2.0'
     apt 'de.devland.esperandro:esperandro:2.2.0'
+    compile 'de.devland.esperandro:esperandro-jackson-addon:2.2.0'
 
     // DeployGate SDK for Android
     compile 'com.deploygate:sdk:3.1'
 
-    androidTestCompile 'junit:junit:4.+'
+    // For Unit test dependencies
+    testCompile "org.robolectric:robolectric:3.0"
+    testCompile 'org.mockito:mockito-all:1.10.19'
+    testCompile 'junit:junit:4.+'
+    testCompile 'org.assertj:assertj-core:1.+'
 
-    // Testing-only dependencies
-    // Force usage of support annotations in the test app, since it is internally used by the runner module.
+    // For Espresso test dependencies
     androidTestCompile 'com.android.support:support-annotations:23.0.1'
     androidTestCompile 'com.android.support.test:runner:0.4'
     androidTestCompile 'com.android.support.test:rules:0.4'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
-
-    // AssertJ
+    androidTestCompile 'junit:junit:4.+'
     androidTestCompile 'org.assertj:assertj-core:1.+'
-//    androidTestCompile 'com.squareup.assertj:assertj-android-appcompat-v7:1.1.0'
 }

@@ -14,7 +14,7 @@ test:
     # wait for it to have booted
     - circle-android wait-for-boot
     # run tests  against the emulator.
-    - ./gradlew connectedAndroidTest -PdisablePreDex
+    - ./gradlew connectedAndroidTest test -PdisablePreDex
   post:
     # copy the test results to the test results directory.
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
