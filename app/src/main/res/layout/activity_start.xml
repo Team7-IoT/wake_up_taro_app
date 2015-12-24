@@ -41,7 +41,6 @@
         android:layout_marginBottom="68dp"
         android:clickable="true"
         android:onClick="deleteAllAlarm"
-        android:text="@string/version_name"
         android:textAppearance="?android:attr/textAppearanceSmall"
         />
 </RelativeLayout>

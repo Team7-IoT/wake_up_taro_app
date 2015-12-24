@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import com.team7.wakeuptaroapp.BuildConfig;
 import com.team7.wakeuptaroapp.R;
 import com.team7.wakeuptaroapp.models.Alarm;
 import com.team7.wakeuptaroapp.utils.AppLog;
@@ -16,6 +19,8 @@ import com.team7.wakeuptaroapp.utils.Toasts;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import de.devland.esperandro.Esperandro;
 
 /**
@@ -26,10 +31,18 @@ import de.devland.esperandro.Esperandro;
  */
 public class StartActivity extends Activity {
 
+    @Bind(R.id.app_version)
+    TextView appVersionView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+
+        // ButterKnife DI
+        ButterKnife.bind(this);
+
+        appVersionView.setText(BuildConfig.APP_VERSION);
     }
 
     @Override
