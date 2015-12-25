@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-import com.team7.wakeuptaroapp.Adapter.ListItemAdapter;
+import com.team7.wakeuptaroapp.adapter.ListItemAdapter;
 import com.team7.wakeuptaroapp.R;
 import com.team7.wakeuptaroapp.models.Alarm;
 
