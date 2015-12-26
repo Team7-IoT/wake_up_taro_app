@@ -32,6 +32,26 @@ public class AlarmAssertion extends AbstractAssert<AlarmAssertion, Alarm> {
         return this;
     }
 
+    public AlarmAssertion hasTimeHour(int expected) {
+        isNotNull();
+
+        if (actual.getTimeHour() != expected) {
+            failWithMessage("Expected alarm time hour to be <%s> but was <%s>", expected, actual.getTimeHour());
+        }
+
+        return this;
+    }
+
+    public AlarmAssertion hasTimeMinute(int expected) {
+        isNotNull();
+
+        if (actual.getTimeMinute() != expected) {
+            failWithMessage("Expected alarm time minute to be <%s> but was <%s>", expected, actual.getTimeMinute());
+        }
+
+        return this;
+    }
+
     public AlarmAssertion hasDayOfWeeks(String... expecteds) {
         isNotNull();
 
@@ -79,7 +99,7 @@ public class AlarmAssertion extends AbstractAssert<AlarmAssertion, Alarm> {
     public AlarmAssertion hasRegisteredDateTime(Long expected) {
         isNotNull();
 
-        if (actual.getRegisteredDateTime() != actual.getRegisteredDateTime()) {
+        if (!actual.getAlarmKey().equals(expected)) {
             failWithMessage("Expected alarm registered datetime to be <%s> but was <%s>",
                     new Date(expected), new Date(actual.getRegisteredDateTime()));
         }

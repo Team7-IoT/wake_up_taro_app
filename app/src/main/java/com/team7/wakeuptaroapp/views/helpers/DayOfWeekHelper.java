@@ -19,7 +19,9 @@ import java.util.Set;
  */
 public class DayOfWeekHelper {
 
-    private static final String DOW_LABEL_PREFIX = "label_alarm_";
+    // アラーム登録画面で選択される曜日の各キー値
+    private static final String DOW_SAT = "6_sat";
+    private static final String DOW_SUN = "7_sun";
 
     /**
      * 選択された曜日に応じて表示用のラベルへ変換する。
@@ -77,11 +79,11 @@ public class DayOfWeekHelper {
     }
 
     private static boolean containsSaturday(String... days) {
-        return ArrayUtils.contains(days, Alarms.DOW_SAT);
+        return ArrayUtils.contains(days, DOW_SAT);
     }
 
     private static boolean containsSunday(String... days) {
-        return ArrayUtils.contains(days, Alarms.DOW_SUN);
+        return ArrayUtils.contains(days, DOW_SUN);
     }
 
     private static String convertToDayOfWeeks(Context context, String... days) {

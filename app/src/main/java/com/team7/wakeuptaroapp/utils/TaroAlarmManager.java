@@ -53,8 +53,8 @@ public class TaroAlarmManager {
             Long alarmTime = generateAlarmTime(alarm, dow);
 
             AlarmIntent intent = AlarmIntent.forService(context, alarm);
-            intent.setActionAsUniqueKey(alarm.getRegisteredDateTime() + dow.getCalendarField()); // アラーム情報を重複させないよう識別させる
-            intent.setAlarmKey(alarm.getRegisteredDateTime());
+            intent.setActionAsUniqueKey(alarm.getAlarmKey() + dow.getCalendarField()); // アラーム情報を重複させないよう識別させる
+            intent.setAlarmKey(alarm.getAlarmKey());
             PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             // FIXME アラームという性質上、時間の (多少の) 不正確を許可する setInexactRepeating を使用していない
@@ -75,7 +75,7 @@ public class TaroAlarmManager {
             DayOfWeek dow = DayOfWeek.resolve(dayOfWeek);
 
             AlarmIntent intent = AlarmIntent.forService(context, alarm);
-            intent.setActionAsUniqueKey(alarm.getRegisteredDateTime() + dow.getCalendarField()); // アラーム情報を重複させないよう識別させる
+            intent.setActionAsUniqueKey(alarm.getAlarmKey() + dow.getCalendarField()); // アラーム情報を重複させないよう識別させる
             PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             // 同一 Action 値のアラームを全てキャンセル
@@ -107,8 +107,8 @@ public class TaroAlarmManager {
             cal.add(Calendar.DATE, 7);
         }
 
-        cal.set(Calendar.HOUR_OF_DAY, Alarms.selectHour(alarm.getTime()));
-        cal.set(Calendar.MINUTE, Alarms.selectMinute(alarm.getTime()));
+        cal.set(Calendar.HOUR_OF_DAY, alarm.getTimeHour());
+        cal.set(Calendar.MINUTE, alarm.getTimeMinute());
 
         AppLog.d("AlarmTime(DOW): " + cal.toString() + "(" + dow.getResId() + ")");
         return cal.getTimeInMillis();

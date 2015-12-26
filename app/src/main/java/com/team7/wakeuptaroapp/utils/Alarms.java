@@ -11,15 +11,6 @@ public final class Alarms {
 
     public static final String DEFAULT_VALUE = "00:00";
 
-    // アラーム登録画面で選択される曜日の各キー値
-    public static final String DOW_MON = "1_mon";
-    public static final String DOW_TUE = "2_tue";
-    public static final String DOW_WED = "3_wed";
-    public static final String DOW_THU = "4_thu";
-    public static final String DOW_FRI = "5_fri";
-    public static final String DOW_SAT = "6_sat";
-    public static final String DOW_SUN = "7_sun";
-
     /**
      * インスタンス化を抑制。
      */

@@ -7,6 +7,7 @@ import org.mockito.internal.util.reflection.Whitebox;
 
 import java.util.Calendar;
 
+import static com.team7.wakeuptaroapp.assertions.AlarmAssertion.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -55,5 +56,11 @@ public class AlarmTest {
 
         // 検証
         assertThat(testee.compareTo(other)).isEqualTo(0);
+    }
+
+    @Test
+    public void アラーム時刻の情報を取得できること() {
+        testee.setTime("19:32");
+        assertThat(testee).hasTimeHour(19).hasTimeMinute(32);
     }
 }

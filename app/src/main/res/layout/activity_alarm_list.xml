@@ -11,7 +11,7 @@
                 tools:context=".activities.AlarmListActivity">
 
     <ListView
-        android:id="@+id/listView"
+        android:id="@+id/alarm_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -19,7 +19,7 @@
         />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/newAlarm"
+        android:id="@+id/new_alarm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

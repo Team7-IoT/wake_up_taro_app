@@ -10,7 +10,7 @@
                 tools:context=".activities.AlarmNotificationActivity">
 
     <TextView
-        android:id="@+id/alarmMessage"
+        android:id="@+id/alarm_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -22,7 +22,7 @@
         />
 
     <Button
-        android:id="@+id/stopAlarm"
+        android:id="@+id/stop_alarm"
         android:layout_width="160dp"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
