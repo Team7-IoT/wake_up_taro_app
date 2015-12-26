@@ -1,6 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 
+def VERSION_CODE = 1
+def VERSION_NAME = "0.2.0"
+
 android {
     compileSdkVersion 22
     buildToolsVersion "23.0.1"
@@ -9,26 +12,38 @@ android {
         applicationId "com.team7.wakeuptaroapp"
         minSdkVersion 18
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode VERSION_CODE
+        versionName VERSION_NAME
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         debug {
-            buildConfigField "String", "APP_VERSION", "\"${project.property("appVersion")}\""
+            // デバッグモード許可
+            debuggable true
+            // バージョン名接尾辞
+            versionNameSuffix "-dev"
         }
         release {
+            // デバッグモード許可
+            debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "APP_VERSION", "\"${project.property("appVersion")}\""
         }
     }
 
     packagingOptions {
         // for AndroidStudio's bug. duplication error of file below.
-        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
 
     lintOptions {
@@ -41,10 +56,6 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
     }
-}
-
-repositories {
-    mavenCentral();
 }
 
 dependencies {

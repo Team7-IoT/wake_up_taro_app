@@ -42,7 +42,7 @@ public class StartActivity extends Activity {
         // ButterKnife DI
         ButterKnife.bind(this);
 
-        appVersionView.setText(BuildConfig.APP_VERSION);
+        appVersionView.setText(BuildConfig.VERSION_NAME);
     }
 
     @Override
