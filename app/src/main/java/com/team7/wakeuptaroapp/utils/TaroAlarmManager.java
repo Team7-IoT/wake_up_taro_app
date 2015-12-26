@@ -44,7 +44,7 @@ public class TaroAlarmManager {
      * @param alarm 登録対象のアラーム情報
      */
     public void register(@NonNull Alarm alarm) {
-        Preconditions.notNull(alarm, "Register alarm required!!");
+        Preconditions.notNull(alarm, "Register menu_alarm_register required!!");
 
         for (String dayOfWeek : alarm.getDayOfWeeks()) {
             DayOfWeek dow = DayOfWeek.resolve(dayOfWeek);
@@ -69,7 +69,7 @@ public class TaroAlarmManager {
      * @param alarm 取り消し対象のアラーム情報
      */
     public void cancel(@NonNull Alarm alarm) {
-        Preconditions.notNull(alarm, "Cancel alarm required!!");
+        Preconditions.notNull(alarm, "Cancel menu_alarm_register required!!");
 
         for (String dayOfWeek : alarm.getDayOfWeeks()) {
             DayOfWeek dow = DayOfWeek.resolve(dayOfWeek);
@@ -123,7 +123,7 @@ public class TaroAlarmManager {
      * @return アラーム時刻が既に過ぎている場合は true
      */
     private boolean isOverAlarmTime(Calendar now, Alarm alarm) {
-        String nowTime = String.format("%2d:%2d", now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE));
+        String nowTime = String.format("%02d:%02d", now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE));
         return (nowTime.compareTo(alarm.getTime()) > 0);
     }
 }
