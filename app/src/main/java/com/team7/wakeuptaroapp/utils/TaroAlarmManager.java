@@ -100,25 +100,30 @@ public class TaroAlarmManager {
         Calendar cal = Calendar.getInstance(Locale.JAPAN);
         cal = DateUtils.truncate(cal, Calendar.MINUTE);
 
-        cal.set(Calendar.DAY_OF_WEEK, dow.getCalendarField());
+        if (cal.get(Calendar.DAY_OF_WEEK) != dow.getCalendarField()) {
+            cal.set(Calendar.DAY_OF_WEEK, dow.getCalendarField());
+            cal.add(Calendar.DATE, 7);
+        } else if (isOverAlarmTime(cal, alarm)) {
+            cal.add(Calendar.DATE, 7);
+        }
+
         cal.set(Calendar.HOUR_OF_DAY, Alarms.selectHour(alarm.getTime()));
         cal.set(Calendar.MINUTE, Alarms.selectMinute(alarm.getTime()));
 
-        if (isNearestAlarmNextWeek(cal, alarm, dow)) {
-            cal.add(Calendar.DAY_OF_MONTH, 7);
-        }
-
+        AppLog.d("AlarmTime(DOW): " + cal.toString() + "(" + dow.getResId() + ")");
         return cal.getTimeInMillis();
     }
 
-    private boolean isNearestAlarmNextWeek(Calendar cal, Alarm alarm, DayOfWeek dow) {
-        int targetDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
-        if (targetDayOfWeek != dow.getCalendarField()) {
-            return false;
-        }
-
-        int hour = cal.get(Calendar.HOUR_OF_DAY);
-        int minute = cal.get(Calendar.MINUTE);
-        return ((Alarms.selectHour(alarm.getTime()) < hour) && (Alarms.selectMinute(alarm.getTime()) < minute));
+    /**
+     * 現在時刻を基にアラーム時刻が過ぎているかどうかを判定する。<br />
+     * 判定には時分 (HH:MM) の情報で行い、同時刻の場合は過ぎている (true) と判断する。
+     *
+     * @param now   現在日時 (時刻)
+     * @param alarm アラーム情報
+     * @return アラーム時刻が既に過ぎている場合は true
+     */
+    private boolean isOverAlarmTime(Calendar now, Alarm alarm) {
+        String nowTime = String.format("%2d:%2d", now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE));
+        return (nowTime.compareTo(alarm.getTime()) > 0);
     }
 }
