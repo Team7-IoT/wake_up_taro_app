@@ -1,4 +1,4 @@
-package com.team7.wakeuptaroapp.activity;
+package com.team7.wakeuptaroapp.activities;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;

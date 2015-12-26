@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <!-- アラーム時刻 -->
+    <com.team7.wakeuptaroapp.views.preferences.AlarmTimePreference
+        android:key="alarmTime"
+        android:title="@string/title_alarm_time"
+        />
+
+    <!-- アラーム曜日 -->
+    <com.team7.wakeuptaroapp.views.preferences.AlarmDayOfWeekPreference
+        android:entries="@array/day_of_week_labels"
+        android:entryValues="@array/day_of_week_values"
+        android:key="alarmDayOfWeeks"
+        android:title="@string/title_alarm_day_of_week"
+        />
+
+    <!-- アラーム音 -->
+    <com.team7.wakeuptaroapp.views.preferences.AlarmRingtonePreference
+        android:defaultValue="content://settings/system/notification_sound"
+        android:key="alarmRingtone"
+        android:ringtoneType="alarm"
+        android:title="@string/title_alarm_ringtone"
+        />
+</PreferenceScreen>
