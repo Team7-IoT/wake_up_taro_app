@@ -9,6 +9,9 @@ import android.view.View;
 
 import com.team7.wakeuptaroapp.R;
 import com.team7.wakeuptaroapp.utils.AppLog;
+import com.team7.wakeuptaroapp.utils.TaroSharedPreference;
+
+import de.devland.esperandro.Esperandro;
 
 /**
  * アラーム一覧画面に対するアクティビティ。<br />
@@ -38,7 +41,21 @@ public class AlarmListActivity extends AppCompatActivity {
         AppLog.d("onClickNewAlarm");
 
         // アラーム登録 Activity 呼び出し
-        Intent intent = new Intent(AlarmListActivity.this, AlarmActivity.class);
+        Intent intent = new Intent(AlarmListActivity.this, AlarmRegisterActivity.class);
+        startActivity(intent);
+    }
+
+    /**
+     * アラーム編集ボタンが押下されたときの振る舞いを定義する。
+     */
+    public void onClickEditAlarm(View view) {
+        AppLog.d("onClickEditAlarm");
+
+        TaroSharedPreference preference =
+                Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
+
+        Intent intent = new Intent(AlarmListActivity.this, AlarmUpdateActivity.class);
+        intent.putExtra(AlarmUpdateActivity.ALARM_KEY, preference.alarms().get(0).getAlarmKey());
         startActivity(intent);
     }
 

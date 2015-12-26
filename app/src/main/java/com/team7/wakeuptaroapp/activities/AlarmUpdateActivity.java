@@ -1,32 +1,43 @@
 package com.team7.wakeuptaroapp.activities;
 
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.team7.wakeuptaroapp.R;
+import com.team7.wakeuptaroapp.fragments.AlarmFragment;
 import com.team7.wakeuptaroapp.models.Alarm;
 import com.team7.wakeuptaroapp.utils.AppLog;
+import com.team7.wakeuptaroapp.utils.Preconditions;
 import com.team7.wakeuptaroapp.utils.TaroAlarmManager;
 import com.team7.wakeuptaroapp.utils.TaroSharedPreference;
 import com.team7.wakeuptaroapp.utils.Toasts;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import de.devland.esperandro.Esperandro;
 
 /**
- * アラーム登録 / 更新画面に対するアクティビティ。<br />
+ * アラーム更新画面に対するアクティビティ。
  *
  * @author Naotake.K
  */
-public class AlarmActivity extends AppCompatActivity {
+public class AlarmUpdateActivity extends AppCompatActivity {
 
     // SharedPreference
     private TaroSharedPreference preference;
+
+    // 更新対象のアラームを識別するキー
+    private Long targetAlarmKey;
+
+    // 更新対象のアラーム情報
+    private Alarm targetAlarm;
+
+    // アラーム更新画面へ必要な情報を渡すためのキー
+    public static final String ALARM_KEY = "UPDATE_TARGET_KEY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,15 +53,23 @@ public class AlarmActivity extends AppCompatActivity {
 
         // SharedPreference
         preference = Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
-        preference.alarmTime(null);
-        preference.alarmDayOfWeeks(null);
-        preference.alarmRingtone(null);
+
+        // 更新対象を抽出
+        targetAlarmKey = getIntent().getLongExtra(ALARM_KEY, 0);
+        Preconditions.checkArgument((targetAlarmKey != 0), "Illegal Update Alarm Key");
+
+        targetAlarm = selectAlarm(preference.alarms());
+        Preconditions.notNull(targetAlarm, "Not Exists Update Alarm " + targetAlarmKey);
+
+        preference.alarmTime(targetAlarm.getTime());
+        preference.alarmDayOfWeeks(targetAlarm.getDayOfWeeks());
+        preference.alarmRingtone(targetAlarm.getRingtoneUri());
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.alarm, menu);
+        getMenuInflater().inflate(R.menu.menu_alarm_update, menu);
         return true;
     }
 
@@ -62,15 +81,17 @@ public class AlarmActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         // 登録ボタン押下
-        if (id == R.id.action_store_alarm) {
-            AppLog.d("Tap to store on alarm.");
+        if (id == R.id.action_update_alarm) {
+            AppLog.d("Tap to update on alarm.");
 
-            // アラームの保存
-            Alarm newAlarm = storeAlarm();
-            registerAlarm(newAlarm);
+            // アラームの更新
+            TaroAlarmManager alarmManager = new TaroAlarmManager(getApplicationContext());
+            alarmManager.cancel(targetAlarm);
+            updateAlarm();
+            alarmManager.register(targetAlarm);
 
             // メッセージ
-            Toasts.showMessageLong(this, R.string.message_store_alarm);
+            Toasts.showMessageLong(this, R.string.message_update_alarm);
 
             finish();
             return true;
@@ -78,7 +99,7 @@ public class AlarmActivity extends AppCompatActivity {
 
         // 戻るボタン押下
         if (id == android.R.id.home) {
-            AppLog.d("Tap to back on alarm.");
+            AppLog.d("Tap to back on menu_alarm_update.");
 
             finish();
             return true;
@@ -90,7 +111,7 @@ public class AlarmActivity extends AppCompatActivity {
     /**
      * 入力内容を基にアラーム情報を SharedPreference に保存する。
      */
-    private Alarm storeAlarm() {
+    private void updateAlarm() {
 
         String time = preference.alarmTime();
         Set<String> dayOfWeeks = preference.alarmDayOfWeeks();
@@ -105,27 +126,32 @@ public class AlarmActivity extends AppCompatActivity {
             alarms = new ArrayList<>();
         }
 
-        Alarm newAlarm = new Alarm(time, dayOfWeeks, ringtoneUri);
-        alarms.add(newAlarm);
-        preference.alarms(alarms);
+        targetAlarm.setTime(time);
+        targetAlarm.setDayOfWeeks(dayOfWeeks);
+        targetAlarm.setRingtoneUri(ringtoneUri);
 
-        return newAlarm;
+        alarms.remove(targetAlarm);
+        alarms.add(targetAlarm);
+
+        preference.alarms(alarms);
     }
 
     /**
-     * 入力内容を基にアラーム情報を登録する。
+     * アラーム一覧からキーが一致するアラームを取り出す。
+     *
+     * @param alarms アラーム一覧
+     * @return キーが一致したアラーム情報
      */
-    private void registerAlarm(Alarm alarm) {
-        TaroAlarmManager alarmManager = new TaroAlarmManager(getApplicationContext());
-        alarmManager.register(alarm);
-    }
-
-    public static class AlarmFragment extends PreferenceFragment {
-
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.alarm_settings);
+    private Alarm selectAlarm(List<Alarm> alarms) {
+        if (alarms == null) {
+            return null;
         }
+
+        for (Alarm alarm : alarms) {
+            if (alarm.equalsKey(targetAlarmKey)) {
+                return alarm;
+            }
+        }
+        return null;
     }
 }

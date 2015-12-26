@@ -18,7 +18,7 @@ public enum DayOfWeek {
     /**
      * 火曜日
      */
-    TUESDAY(Calendar.TUESDAY, "2_tue</", R.string.label_alarm_tue),
+    TUESDAY(Calendar.TUESDAY, "2_tue", R.string.label_alarm_tue),
     /**
      * 水曜日
      */

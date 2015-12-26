@@ -1,6 +1,7 @@
 package com.team7.wakeuptaroapp.views.preferences;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.support.annotation.VisibleForTesting;
@@ -30,7 +31,8 @@ public class AlarmDayOfWeekPreference extends MultiSelectListPreference {
 
     @Override
     protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
-        setSummary(DayOfWeekHelper.convertToLabel(getContext()));
+        super.onSetInitialValue(restorePersistedValue, defaultValue);
+        setSummary(DayOfWeekHelper.convertToLabel(getContext(), getValues()));
     }
 
     @VisibleForTesting

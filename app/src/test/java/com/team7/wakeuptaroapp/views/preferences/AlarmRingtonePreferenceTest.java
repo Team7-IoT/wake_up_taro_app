@@ -3,7 +3,7 @@ package com.team7.wakeuptaroapp.views.preferences;
 import android.media.Ringtone;
 
 import com.team7.wakeuptaroapp.BuildConfig;
-import com.team7.wakeuptaroapp.activities.AlarmActivity;
+import com.team7.wakeuptaroapp.activities.AlarmRegisterActivity;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,11 +26,11 @@ import static org.mockito.Mockito.mock;
 public class AlarmRingtonePreferenceTest {
 
     private AlarmRingtonePreference testee;
-    private AlarmActivity activity;
+    private AlarmRegisterActivity activity;
 
     @Before
     public void setUp() {
-        activity = Robolectric.setupActivity(AlarmActivity.class);
+        activity = Robolectric.setupActivity(AlarmRegisterActivity.class);
         testee = new AlarmRingtonePreference(activity);
     }
 

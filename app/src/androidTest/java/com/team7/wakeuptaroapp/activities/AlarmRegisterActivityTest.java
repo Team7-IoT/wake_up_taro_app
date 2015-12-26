@@ -41,16 +41,16 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
 
 /**
- * {@link AlarmActivity}に対するテストクラス。<br />
+ * {@link AlarmRegisterActivity}に対するテストクラス。<br />
  * テスト実行にはエミュレータ、もしくは接続された実機経由で行う必要がある。
  *
  * @author Naotake.K
  */
 @RunWith(AndroidJUnit4.class)
-public class AlarmActivityTest {
+public class AlarmRegisterActivityTest {
 
     @Rule
-    public ActivityTestRule<AlarmActivity> alarmActivityRule = new ActivityTestRule<>(AlarmActivity.class);
+    public ActivityTestRule<AlarmRegisterActivity> alarmActivityRule = new ActivityTestRule<>(AlarmRegisterActivity.class);
 
     private TaroSharedPreference preference;
 
