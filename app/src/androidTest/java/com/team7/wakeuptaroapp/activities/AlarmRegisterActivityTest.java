@@ -20,12 +20,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.devland.esperandro.Esperandro;
 
-import static com.team7.wakeuptaroapp.assertions.AlarmAssertion.assertThat;
-import static org.assertj.core.api.Assertions.assertThat;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -35,22 +34,24 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.team7.wakeuptaroapp.assertions.AlarmAssertion.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
 
 /**
- * {@link AlarmActivity}に対するテストクラス。<br />
+ * {@link AlarmRegisterActivity}に対するテストクラス。<br />
  * テスト実行にはエミュレータ、もしくは接続された実機経由で行う必要がある。
  *
  * @author Naotake.K
  */
 @RunWith(AndroidJUnit4.class)
-public class AlarmActivityTest {
+public class AlarmRegisterActivityTest {
 
     @Rule
-    public ActivityTestRule<AlarmActivity> alarmActivityRule = new ActivityTestRule<>(AlarmActivity.class);
+    public ActivityTestRule<AlarmListActivity> alarmActivityRule = new ActivityTestRule<>(AlarmListActivity.class);
 
     private TaroSharedPreference preference;
 
@@ -58,6 +59,11 @@ public class AlarmActivityTest {
     public void setUp() {
         preference = Esperandro.getPreferences(TaroSharedPreference.class,
                 alarmActivityRule.getActivity().getApplicationContext());
+        preference.alarms(new ArrayList<Alarm>());
+
+        // 登録画面へ
+        onView(withId(R.id.new_alarm)).perform(click());
+        onView(withClassName(is("AlarmRegisterActivity")));
     }
 
     @After
@@ -121,7 +127,7 @@ public class AlarmActivityTest {
 
     @Test
     public void 登録したアラーム情報が_SharedPreference_に保存されていること() {
-        assertThat(preference.alarms()).isNull();
+        assertThat(preference.alarms()).isEmpty();
 
         // 登録内容を設定
         selectTime();
@@ -138,6 +144,9 @@ public class AlarmActivityTest {
         List<Alarm> storedAlarms = preference.alarms();
         assertThat(storedAlarms).hasSize(1);
         assertThat(storedAlarms.get(0)).hasTime("13:51").hasDayOfWeeks("6_sat", "7_sun");
+
+        // 一覧画面へ戻ってくること
+        onView(withClassName(is("AlarmListActivity")));
     }
 
     private void selectTime() {

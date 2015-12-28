@@ -55,9 +55,26 @@ public class AlarmRingtonePreference extends RingtonePreference {
         }
     }
 
+    /**
+     * 着信音のサマリー情報を制御する。<br />
+     * 指定された着信音の URI が null の場合、サイレントを設定する。
+     * それ以外の場合、対応する着信音のタイトルを設定する。
+     *
+     * @param ringtoneUri 着信音の URI
+     */
+    public void handleSummary(String ringtoneUri) {
+        if (TextUtils.isEmpty(ringtoneUri)) {
+            setAsSilentSummary();
+        } else {
+            Ringtone ringtone = RingtoneManager.getRingtone(getContext(), Uri.parse(ringtoneUri));
+            setAsRingtoneSummary(ringtone);
+        }
+    }
+
     @Override
     protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
-        setAsSilentSummary();
+        String persisted = getPersistedString(null);
+        handleSummary(persisted);
     }
 
     @VisibleForTesting
@@ -67,16 +84,8 @@ public class AlarmRingtonePreference extends RingtonePreference {
         public boolean onPreferenceChange(Preference preference, Object newValue) {
 
             AlarmRingtonePreference pref = AlarmRingtonePreference.class.cast(preference);
-
             String ringtoneUri = newValue.toString();
-            if (TextUtils.isEmpty(ringtoneUri)) {
-                pref.setAsSilentSummary();
-
-            } else {
-                Ringtone ringtone = RingtoneManager.getRingtone(
-                        pref.getContext(), Uri.parse(ringtoneUri));
-                pref.setAsRingtoneSummary(ringtone);
-            }
+            pref.handleSummary(ringtoneUri);
 
             return true;
         }

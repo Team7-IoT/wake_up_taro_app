@@ -1,29 +1,29 @@
 package com.team7.wakeuptaroapp.activities;
 
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.team7.wakeuptaroapp.R;
+import com.team7.wakeuptaroapp.fragments.AlarmFragment;
 import com.team7.wakeuptaroapp.models.Alarm;
 import com.team7.wakeuptaroapp.utils.AppLog;
 import com.team7.wakeuptaroapp.utils.TaroAlarmManager;
 import com.team7.wakeuptaroapp.utils.TaroSharedPreference;
 import com.team7.wakeuptaroapp.utils.Toasts;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import de.devland.esperandro.Esperandro;
 
 /**
- * アラーム登録 / 更新画面に対するアクティビティ。<br />
+ * アラーム登録画面に対するアクティビティ。
  *
  * @author Naotake.K
  */
-public class AlarmActivity extends AppCompatActivity {
+public class AlarmRegisterActivity extends AppCompatActivity {
 
     // SharedPreference
     private TaroSharedPreference preference;
@@ -50,7 +50,7 @@ public class AlarmActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.alarm, menu);
+        getMenuInflater().inflate(R.menu.menu_alarm_register, menu);
         return true;
     }
 
@@ -100,12 +100,9 @@ public class AlarmActivity extends AppCompatActivity {
         AppLog.d("Alarm Week: " + dayOfWeeks);
         AppLog.d("Alarm Ring: " + ringtoneUri);
 
-        ArrayList<Alarm> alarms = preference.alarms();
-        if (alarms == null) {
-            alarms = new ArrayList<>();
-        }
-
         Alarm newAlarm = new Alarm(time, dayOfWeeks, ringtoneUri);
+
+        List<Alarm> alarms = preference.alarms();
         alarms.add(newAlarm);
         preference.alarms(alarms);
 
@@ -118,14 +115,5 @@ public class AlarmActivity extends AppCompatActivity {
     private void registerAlarm(Alarm alarm) {
         TaroAlarmManager alarmManager = new TaroAlarmManager(getApplicationContext());
         alarmManager.register(alarm);
-    }
-
-    public static class AlarmFragment extends PreferenceFragment {
-
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.alarm_settings);
-        }
     }
 }

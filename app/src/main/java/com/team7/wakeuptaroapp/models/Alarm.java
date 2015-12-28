@@ -6,9 +6,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.team7.wakeuptaroapp.utils.Alarms;
 
+import org.joda.time.LocalDateTime;
+
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,7 +56,7 @@ public class Alarm implements Comparable<Alarm>, Serializable {
         this.dayOfWeeks = dayOfWeeks;
         this.ringtoneUri = ringtoneUri;
         this.valid = false;
-        this.registeredDateTime = Long.valueOf(new Date().getTime());
+        this.registeredDateTime = LocalDateTime.now().toDateTime().getMillis();
     }
 
     /**
@@ -100,14 +101,16 @@ public class Alarm implements Comparable<Alarm>, Serializable {
      * 曜日一覧を取得する。<br />
      * 未設定の場合、空の一覧 ({@link Collections#EMPTY_SET}) を返す。
      *
-     * @return アラーム一覧
+     * @return アラームの曜日一覧
      */
     public Set<String> getDayOfWeeks() {
         return (dayOfWeeks == null ? Collections.EMPTY_SET : dayOfWeeks);
     }
 
     /**
-     * @deprecated この Setter は Esperandro 向けに用意しているため、通常のアプリケーションでの使用不可
+     * 曜日一覧を設定する。
+     *
+     * @param dayOfWeeks アラームの曜日一覧
      */
     public void setDayOfWeeks(Set<String> dayOfWeeks) {
         this.dayOfWeeks = dayOfWeeks;
@@ -123,7 +126,9 @@ public class Alarm implements Comparable<Alarm>, Serializable {
     }
 
     /**
-     * @deprecated この Setter は Esperandro 向けに用意しているため、通常のアプリケーションでの使用不可
+     * アラーム音の URI (文字列) を取得する。
+     *
+     * @param ringtoneUri アラーム音の URI (文字列)
      */
     public void setRingtoneUri(String ringtoneUri) {
         this.ringtoneUri = ringtoneUri;
@@ -171,6 +176,17 @@ public class Alarm implements Comparable<Alarm>, Serializable {
     @JsonIgnore
     public Long getAlarmKey() {
         return registeredDateTime;
+    }
+
+    /**
+     * このアラームが指定されたキー情報と等しいかどうかを判定する。
+     *
+     * @param key 判定対象となるキー情報
+     * @return 等しい場合は true
+     */
+    @JsonIgnore
+    public boolean equalsKey(Long key) {
+        return (registeredDateTime.equals(key));
     }
 
     @Override

@@ -30,7 +30,8 @@ public class AlarmDayOfWeekPreference extends MultiSelectListPreference {
 
     @Override
     protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
-        setSummary(DayOfWeekHelper.convertToLabel(getContext()));
+        super.onSetInitialValue(restorePersistedValue, defaultValue);
+        setSummary(DayOfWeekHelper.convertToLabel(getContext(), getValues()));
     }
 
     @VisibleForTesting

@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.team7.wakeuptaroapp.R;
 
-import java.util.Calendar;
+import org.joda.time.DateTimeConstants;
 
 /**
  * @author Naotake.K
@@ -14,50 +14,49 @@ public enum DayOfWeek {
     /**
      * 月曜日
      */
-    MONDAY(Calendar.MONDAY, "1_mon", R.string.label_alarm_mon),
+    MONDAY(DateTimeConstants.MONDAY, "1_mon", R.string.label_alarm_mon),
     /**
      * 火曜日
      */
-    TUESDAY(Calendar.TUESDAY, "2_tue</", R.string.label_alarm_tue),
+    TUESDAY(DateTimeConstants.TUESDAY, "2_tue", R.string.label_alarm_tue),
     /**
      * 水曜日
      */
-    WEDNESDAY(Calendar.WEDNESDAY, "3_wed", R.string.label_alarm_wed),
+    WEDNESDAY(DateTimeConstants.WEDNESDAY, "3_wed", R.string.label_alarm_wed),
     /**
      * 木曜日
      */
-    THURSDAY(Calendar.THURSDAY, "4_thu", R.string.label_alarm_thu),
+    THURSDAY(DateTimeConstants.THURSDAY, "4_thu", R.string.label_alarm_thu),
     /**
      * 金曜日
      */
-    FRIDAY(Calendar.FRIDAY, "5_fri", R.string.label_alarm_fri),
+    FRIDAY(DateTimeConstants.FRIDAY, "5_fri", R.string.label_alarm_fri),
     /**
      * 土曜日
      */
-    SATURDAY(Calendar.SATURDAY, "6_sat", R.string.label_alarm_sat),
+    SATURDAY(DateTimeConstants.SATURDAY, "6_sat", R.string.label_alarm_sat),
     /**
      * 日曜日
      */
-    SUNDAY(Calendar.SUNDAY, "7_sun", R.string.label_alarm_sun);
+    SUNDAY(DateTimeConstants.SUNDAY, "7_sun", R.string.label_alarm_sun);
 
-    private final int days;
+    private final int constants;
     private final String key;
     private final int resId;
 
-    DayOfWeek(int days, String key, int resId) {
-        this.days = days;
+    DayOfWeek(int constants, String key, int resId) {
+        this.constants = constants;
         this.key = key;
         this.resId = resId;
     }
 
     /**
-     * 自身が表す曜日に応じた {@link Calendar} の情報を取得する。<br />
-     * {@link Calendar#set(int, int)} などで使用するための曜日情報。
+     * 自身が表す曜日に応じた {@link DateTimeConstants} の値を取得する。
      *
-     * @return 曜日を表す {@link Calendar} 用の値
+     * @return 曜日を表す {@link DateTimeConstants}
      */
-    public int getCalendarField() {
-        return days;
+    public int getConstants() {
+        return constants;
     }
 
     /**

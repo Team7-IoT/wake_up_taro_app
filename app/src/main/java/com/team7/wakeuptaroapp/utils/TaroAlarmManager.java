@@ -9,10 +9,8 @@ import com.team7.wakeuptaroapp.models.Alarm;
 import com.team7.wakeuptaroapp.models.AlarmIntent;
 import com.team7.wakeuptaroapp.models.DayOfWeek;
 
-import org.apache.commons.lang3.time.DateUtils;
-
-import java.util.Calendar;
-import java.util.Locale;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
 
 import static android.app.AlarmManager.INTERVAL_DAY;
 
@@ -44,7 +42,7 @@ public class TaroAlarmManager {
      * @param alarm 登録対象のアラーム情報
      */
     public void register(@NonNull Alarm alarm) {
-        Preconditions.notNull(alarm, "Register alarm required!!");
+        Preconditions.notNull(alarm, "Register menu_alarm_register required!!");
 
         for (String dayOfWeek : alarm.getDayOfWeeks()) {
             DayOfWeek dow = DayOfWeek.resolve(dayOfWeek);
@@ -53,7 +51,7 @@ public class TaroAlarmManager {
             Long alarmTime = generateAlarmTime(alarm, dow);
 
             AlarmIntent intent = AlarmIntent.forService(context, alarm);
-            intent.setActionAsUniqueKey(alarm.getAlarmKey() + dow.getCalendarField()); // アラーム情報を重複させないよう識別させる
+            intent.setActionAsUniqueKey(alarm.getAlarmKey() + dow.getConstants()); // アラーム情報を重複させないよう識別させる
             intent.setAlarmKey(alarm.getAlarmKey());
             PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -69,13 +67,13 @@ public class TaroAlarmManager {
      * @param alarm 取り消し対象のアラーム情報
      */
     public void cancel(@NonNull Alarm alarm) {
-        Preconditions.notNull(alarm, "Cancel alarm required!!");
+        Preconditions.notNull(alarm, "Cancel menu_alarm_register required!!");
 
         for (String dayOfWeek : alarm.getDayOfWeeks()) {
             DayOfWeek dow = DayOfWeek.resolve(dayOfWeek);
 
             AlarmIntent intent = AlarmIntent.forService(context, alarm);
-            intent.setActionAsUniqueKey(alarm.getAlarmKey() + dow.getCalendarField()); // アラーム情報を重複させないよう識別させる
+            intent.setActionAsUniqueKey(alarm.getAlarmKey() + dow.getConstants()); // アラーム情報を重複させないよう識別させる
             PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             // 同一 Action 値のアラームを全てキャンセル
@@ -97,21 +95,18 @@ public class TaroAlarmManager {
      */
     private Long generateAlarmTime(Alarm alarm, DayOfWeek dow) {
 
-        Calendar cal = Calendar.getInstance(Locale.JAPAN);
-        cal = DateUtils.truncate(cal, Calendar.MINUTE);
+        LocalDateTime dateTime = LocalDateTime.now().minuteOfHour().roundFloorCopy();
 
-        if (cal.get(Calendar.DAY_OF_WEEK) != dow.getCalendarField()) {
-            cal.set(Calendar.DAY_OF_WEEK, dow.getCalendarField());
-            cal.add(Calendar.DATE, 7);
-        } else if (isOverAlarmTime(cal, alarm)) {
-            cal.add(Calendar.DATE, 7);
+        if (dateTime.getDayOfWeek() != dow.getConstants()) {
+            dateTime = dateTime.withDayOfWeek(dow.getConstants());
+        } else if (isOverAlarmTime(dateTime, alarm)) {
+            dateTime = dateTime.plusWeeks(1);
         }
 
-        cal.set(Calendar.HOUR_OF_DAY, alarm.getTimeHour());
-        cal.set(Calendar.MINUTE, alarm.getTimeMinute());
+        dateTime = dateTime.withHourOfDay(alarm.getTimeHour()).withMinuteOfHour(alarm.getTimeMinute());
 
-        AppLog.d("AlarmTime(DOW): " + cal.toString() + "(" + dow.getResId() + ")");
-        return cal.getTimeInMillis();
+        AppLog.d("AlarmTime(DOW): " + dateTime.toString(DateTimeFormat.fullDateTime()) + "(" + dow.getResId() + ")");
+        return dateTime.toDateTime().getMillis();
     }
 
     /**
@@ -122,8 +117,8 @@ public class TaroAlarmManager {
      * @param alarm アラーム情報
      * @return アラーム時刻が既に過ぎている場合は true
      */
-    private boolean isOverAlarmTime(Calendar now, Alarm alarm) {
-        String nowTime = String.format("%2d:%2d", now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE));
-        return (nowTime.compareTo(alarm.getTime()) > 0);
+    private boolean isOverAlarmTime(LocalDateTime now, Alarm alarm) {
+        String nowTime = String.format("%02d:%02d", now.getHourOfDay(), now.getMinuteOfHour());
+        return (nowTime.compareTo(alarm.getTime()) >= 0);
     }
 }

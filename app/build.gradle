@@ -70,6 +70,7 @@ dependencies {
     compile 'de.devland.esperandro:esperandro-api:2.2.0'
     apt 'de.devland.esperandro:esperandro:2.2.0'
     compile 'de.devland.esperandro:esperandro-jackson-addon:2.2.0'
+    compile 'net.danlew:android.joda:2.6.0'
 
     // DeployGate SDK for Android
     compile 'com.deploygate:sdk:3.1'

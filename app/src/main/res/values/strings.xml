@@ -6,10 +6,12 @@
     <string name="start">Start</string>
     <string name="action_settings">設定</string>
     <string name="action_store_alarm">登録</string>
+    <string name="action_update_alarm">更新</string>
     <string name="stop_alarm">Stop!!</string>
 
     <string name="title_activity_alarm_list">アラーム一覧</string>
-    <string name="title_activity_alarm">アラーム登録</string>
+    <string name="title_activity_alarm_register">アラーム登録</string>
+    <string name="title_activity_alarm_update">アラーム更新</string>
     <string name="title_activity_setting">設定</string>
     <string name="title_dialog_disabled_bluetooth">Bluetooth 無効</string>
     <string name="title_dialog_ble_searching">起こしタロウ 親機 検索中</string>
@@ -20,6 +22,7 @@
     <string name="message_found_ble">起こしタロウ 親機 (%1$s) への接続に成功しました。</string>
     <string name="message_not_found_ble">起こしタロウ 親機が見つかりませんでした。</string>
     <string name="message_store_alarm">アラームを登録しました。</string>
+    <string name="message_update_alarm">アラームを更新しました。</string>
     <string name="message_notification">早く起きて!!</string>
     <string name="message_alarm">早く起きて!!\n親機まで急げ!!</string>
 
@@ -49,4 +52,6 @@
     <string name="label_alarm_weekday">平日</string>
     <string name="label_alarm_weekend">週末</string>
     <string name="label_alarm_silent">サイレント</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>

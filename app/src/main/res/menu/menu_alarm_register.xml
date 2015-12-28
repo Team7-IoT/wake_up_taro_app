@@ -8,5 +8,6 @@
         android:id="@+id/action_store_alarm"
         android:orderInCategory="100"
         android:title="@string/action_store_alarm"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        />
 </menu>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.team7.wakeuptaroapp"
-          xmlns:android="http://schemas.android.com/apk/res/android"
-          android:versionCode="@integer/version_code"
-          android:versionName="@string/version_name">
+<manifest
+    package="com.team7.wakeuptaroapp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
 
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
@@ -21,6 +21,7 @@
             android:theme="@android:style/Theme.Light.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -29,8 +30,12 @@
             android:label="@string/title_activity_alarm_list">
         </activity>
         <activity
-            android:name=".activities.AlarmActivity"
-            android:label="@string/title_activity_alarm">
+            android:name=".activities.AlarmRegisterActivity"
+            android:label="@string/title_activity_alarm_register">
+        </activity>
+        <activity
+            android:name=".activities.AlarmUpdateActivity"
+            android:label="@string/title_activity_alarm_update">
         </activity>
         <activity
             android:name=".activities.SettingActivity"
