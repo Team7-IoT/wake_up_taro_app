@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 
 import com.team7.wakeuptaroapp.R;
 import com.team7.wakeuptaroapp.models.DayOfWeek;
-import com.team7.wakeuptaroapp.utils.Alarms;
 
 import org.apache.commons.lang3.ArrayUtils;
 

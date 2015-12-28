@@ -1,7 +1,6 @@
 package com.team7.wakeuptaroapp.views.preferences;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.support.annotation.VisibleForTesting;
