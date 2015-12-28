@@ -14,7 +14,6 @@ import com.team7.wakeuptaroapp.utils.TaroAlarmManager;
 import com.team7.wakeuptaroapp.utils.TaroSharedPreference;
 import com.team7.wakeuptaroapp.utils.Toasts;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -59,7 +58,7 @@ public class AlarmUpdateActivity extends AppCompatActivity {
         Preconditions.checkArgument((targetAlarmKey != 0), "Illegal Update Alarm Key");
 
         targetAlarm = selectAlarm(preference.alarms());
-        Preconditions.notNull(targetAlarm, "Not Exists Update Alarm " + targetAlarmKey);
+        Preconditions.notNull(targetAlarm, "Not Exists Update Alarm(onCreate) " + targetAlarmKey);
 
         preference.alarmTime(targetAlarm.getTime());
         preference.alarmDayOfWeeks(targetAlarm.getDayOfWeeks());
@@ -121,10 +120,8 @@ public class AlarmUpdateActivity extends AppCompatActivity {
         AppLog.d("Alarm Week: " + dayOfWeeks);
         AppLog.d("Alarm Ring: " + ringtoneUri);
 
-        ArrayList<Alarm> alarms = preference.alarms();
-        if (alarms == null) {
-            alarms = new ArrayList<>();
-        }
+        List<Alarm> alarms = preference.alarms();
+        Preconditions.notNull(targetAlarm, "Not Exists Update Alarm " + targetAlarmKey);
 
         targetAlarm.setTime(time);
         targetAlarm.setDayOfWeeks(dayOfWeeks);
@@ -143,9 +140,7 @@ public class AlarmUpdateActivity extends AppCompatActivity {
      * @return キーが一致したアラーム情報
      */
     private Alarm selectAlarm(List<Alarm> alarms) {
-        if (alarms == null) {
-            return null;
-        }
+        Preconditions.notNull(alarms, "Not Exists Alarms " + targetAlarmKey);
 
         for (Alarm alarm : alarms) {
             if (alarm.equalsKey(targetAlarmKey)) {

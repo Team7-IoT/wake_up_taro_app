@@ -13,7 +13,7 @@ import com.team7.wakeuptaroapp.utils.TaroAlarmManager;
 import com.team7.wakeuptaroapp.utils.TaroSharedPreference;
 import com.team7.wakeuptaroapp.utils.Toasts;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import de.devland.esperandro.Esperandro;
@@ -100,12 +100,9 @@ public class AlarmRegisterActivity extends AppCompatActivity {
         AppLog.d("Alarm Week: " + dayOfWeeks);
         AppLog.d("Alarm Ring: " + ringtoneUri);
 
-        ArrayList<Alarm> alarms = preference.alarms();
-        if (alarms == null) {
-            alarms = new ArrayList<>();
-        }
-
         Alarm newAlarm = new Alarm(time, dayOfWeeks, ringtoneUri);
+
+        List<Alarm> alarms = preference.alarms();
         alarms.add(newAlarm);
         preference.alarms(alarms);
 

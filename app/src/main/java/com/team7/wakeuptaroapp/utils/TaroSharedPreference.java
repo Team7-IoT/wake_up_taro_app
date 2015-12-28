@@ -2,7 +2,7 @@ package com.team7.wakeuptaroapp.utils;
 
 import com.team7.wakeuptaroapp.models.Alarm;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import de.devland.esperandro.SharedPreferenceActions;
@@ -83,12 +83,12 @@ public interface TaroSharedPreference extends SharedPreferenceActions {
      *
      * @return アラーム一覧
      */
-    ArrayList<Alarm> alarms();
+    List<Alarm> alarms();
 
     /**
      * 登録済みのアラーム一覧を更新する。
      *
      * @param alarms アラーム一覧
      */
-    void alarms(ArrayList<Alarm> alarms);
+    void alarms(List<Alarm> alarms);
 }

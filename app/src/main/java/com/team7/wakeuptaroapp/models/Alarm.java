@@ -6,9 +6,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.team7.wakeuptaroapp.utils.Alarms;
 
+import org.joda.time.LocalDateTime;
+
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,7 +56,7 @@ public class Alarm implements Comparable<Alarm>, Serializable {
         this.dayOfWeeks = dayOfWeeks;
         this.ringtoneUri = ringtoneUri;
         this.valid = false;
-        this.registeredDateTime = Long.valueOf(new Date().getTime());
+        this.registeredDateTime = LocalDateTime.now().toDateTime().getMillis();
     }
 
     /**

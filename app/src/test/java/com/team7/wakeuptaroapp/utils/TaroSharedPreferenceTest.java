@@ -14,6 +14,7 @@ import org.robolectric.annotation.Config;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import de.devland.esperandro.Esperandro;
@@ -65,7 +66,7 @@ public class TaroSharedPreferenceTest {
 
     @Test
     public void アラーム情報一覧を取得保存できること() {
-        assertThat(testee.alarms()).isNull();
+        assertThat(testee.alarms()).isEmpty();
 
         // 空を保存
         testee.alarms(new ArrayList<Alarm>());
@@ -73,7 +74,7 @@ public class TaroSharedPreferenceTest {
 
         // アラーム 1 件保存
         Alarm alarm = newAlarm("08:00", "Ringtone1", "土", "日");
-        ArrayList<Alarm> alarms = testee.alarms();
+        List<Alarm> alarms = testee.alarms();
         alarms.add(alarm);
         testee.alarms(alarms);
 

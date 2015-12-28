@@ -54,6 +54,7 @@ public class AlarmListActivity extends AppCompatActivity {
         TaroSharedPreference preference =
                 Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
 
+        // FIXME 仮実装
         Intent intent = new Intent(AlarmListActivity.this, AlarmUpdateActivity.class);
         intent.putExtra(AlarmUpdateActivity.ALARM_KEY, preference.alarms().get(0).getAlarmKey());
         startActivity(intent);
