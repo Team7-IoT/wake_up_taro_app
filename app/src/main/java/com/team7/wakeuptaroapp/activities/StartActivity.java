@@ -86,7 +86,7 @@ public class StartActivity extends Activity {
         TaroSharedPreference preference = Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
         TaroAlarmManager alarmManager = new TaroAlarmManager(getApplicationContext());
 
-        if (preference.alarms() == null) {
+        if (preference.alarms().isEmpty()) {
             Toasts.showMessageShort(this, R.string.message_alarm_delete_none);
             return;
         }
