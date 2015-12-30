@@ -1,9 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 
-def VERSION_CODE = 1
-def VERSION_NAME = "0.3.0"
-
 android {
     compileSdkVersion 22
     buildToolsVersion "23.0.1"
@@ -12,8 +9,8 @@ android {
         applicationId "com.team7.wakeuptaroapp"
         minSdkVersion 18
         targetSdkVersion 22
-        versionCode VERSION_CODE
-        versionName VERSION_NAME
+        version "${version_code}"
+        versionName "${version_name}"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -23,12 +20,20 @@ android {
             debuggable true
             // バージョン名接尾辞
             versionNameSuffix "-dev"
+
+            // Raspberry Pi
+            buildConfigField "String", "NOTIFICATION_SERVICE_UUID", "\"${project.property("notification_service_uuid")}\""
+            buildConfigField "String", "NOTIFICATION_CHARACTERISTIC_UUID", "\"${project.property("notification_characteristic_uuid")}\""
         }
         release {
             // デバッグモード許可
             debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            // Raspberry Pi
+            buildConfigField "String", "NOTIFICATION_SERVICE_UUID", "\"${project.property("notification_service_uuid")}\""
+            buildConfigField "String", "NOTIFICATION_CHARACTERISTIC_UUID", "\"${project.property("notification_characteristic_uuid")}\""
         }
     }
 

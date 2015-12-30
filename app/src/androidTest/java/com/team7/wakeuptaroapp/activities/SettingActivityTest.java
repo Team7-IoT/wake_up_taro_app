@@ -2,17 +2,19 @@ package com.team7.wakeuptaroapp.activities;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.widget.ListView;
 
+import com.team7.wakeuptaroapp.utils.TaroSharedPreference;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import de.devland.esperandro.Esperandro;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static org.apache.commons.lang3.reflect.FieldUtils.readField;
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link SettingActivity}に対するテストクラス。<br />
@@ -26,24 +28,21 @@ public class SettingActivityTest {
     @Rule
     public ActivityTestRule<SettingActivity> settingActivityRule = new ActivityTestRule<>(SettingActivity.class);
 
-    private SettingActivity testee;
+    private TaroSharedPreference preference;
 
     @Before
     public void setUp() {
-        testee = settingActivityRule.getActivity();
+        preference = Esperandro.getPreferences(TaroSharedPreference.class,
+                settingActivityRule.getActivity().getApplicationContext());
+    }
+
+    @After
+    public void tearDown() {
+        preference.clear();
     }
 
     @Test
-    public void 画面の初期化が行われていること() throws Exception {
+    public void 画面が表示されていること() {
         onView(isDisplayed());
-
-        ListView actual = testee.listView;
-        String expectedLabel = testee.labelSettingConnect;
-
-        assertThat(actual).isNotNull();
-        assertThat(actual.getAdapter().getCount()).isEqualTo(1);
-        assertThat(actual.getAdapter().getItem(0)).isEqualTo(expectedLabel);
-
-        assertThat(readField(testee, "needToastMessage", true)).isEqualTo(false);
     }
 }
