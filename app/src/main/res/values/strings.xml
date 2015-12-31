@@ -47,6 +47,7 @@
     <string name="title_alarm_ringtone">アラーム音</string>
     <string name="title_setting_try_connect">接続検証</string>
     <string name="title_setting_try_censor">センサー検証</string>
+    <string name="title_setting_version">バージョン</string>
 
     <!-- alarm labels -->
     <string name="label_alarm_mon">月</string>

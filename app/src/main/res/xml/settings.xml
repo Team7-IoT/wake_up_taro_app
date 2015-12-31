@@ -14,4 +14,10 @@
         android:key="tryMotion"
         android:title="@string/title_setting_try_censor"
         />
+
+    <!-- アプリバージョン -->
+    <com.team7.wakeuptaroapp.views.preferences.VersionPreference
+        android:key="appVersion"
+        android:title="@string/title_setting_version"
+        />
 </PreferenceScreen>

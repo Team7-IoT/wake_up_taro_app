@@ -97,5 +97,8 @@ public class StartActivity extends Activity {
         preference.alarms(new ArrayList<Alarm>());
 
         Toasts.showMessageShort(this, R.string.message_alarm_delete_all);
+
+        // 保存済みのデバイス名も削除
+        preference.deviceName("");
     }
 }
