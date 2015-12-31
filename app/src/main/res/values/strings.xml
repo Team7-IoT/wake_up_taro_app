@@ -16,11 +16,17 @@
     <string name="title_dialog_disabled_bluetooth">Bluetooth 無効</string>
     <string name="title_dialog_ble_searching">起こしタロウ 親機 検索中</string>
     <string name="title_dialog_ble_select">起こしタロウ 親機 選択</string>
+    <string name="title_dialog_usated_device">起こしタロウ 親機 未設定</string>
+    <string name="title_dialog_motion_waiting">起こしタロウ 親機 動作確認中</string>
 
     <string name="message_dialog_disabled_bluetooth">Bluetooth を有効にしてください。</string>
     <string name="message_dialog_ble_searching">起こしタロウ 親機を検索しています...</string>
+    <string name="message_dialog_usated_device">起こしタロウ 親機との接続検証を先に行ってください。</string>
+    <string name="message_dialog_motion_waiting">起こしタロウ 親機のセンサーを確認しています...</string>
     <string name="message_found_ble">起こしタロウ 親機 (%1$s) への接続に成功しました。</string>
     <string name="message_not_found_ble">起こしタロウ 親機が見つかりませんでした。</string>
+    <string name="message_motion_failure">起こしタロウ 親機のセンサーを確認できませんでした。</string>
+    <string name="message_motion_success">起こしタロウ 親機のセンサー検証に成功しました。</string>
     <string name="message_store_alarm">アラームを登録しました。</string>
     <string name="message_update_alarm">アラームを更新しました。</string>
     <string name="message_notification">早く起きて!!</string>
@@ -29,6 +35,7 @@
     <!-- On Development Message -->
     <string name="message_alarm_delete_all">アラーム情報を全て削除しました。</string>
     <string name="message_alarm_delete_none">削除するアラーム情報はありませんでした。</string>
+    <string name="message_clear_device_name">保存済みのデバイス名を削除しました。</string>
 
     <string name="setting_connect">接続検証</string>
 
@@ -38,6 +45,9 @@
     <string name="title_alarm_time">時間</string>
     <string name="title_alarm_day_of_week">曜日</string>
     <string name="title_alarm_ringtone">アラーム音</string>
+    <string name="title_setting_try_connect">接続検証</string>
+    <string name="title_setting_try_censor">センサー検証</string>
+    <string name="title_setting_version">バージョン</string>
 
     <!-- alarm labels -->
     <string name="label_alarm_mon">月</string>

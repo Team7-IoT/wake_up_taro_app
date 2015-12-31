@@ -1,8 +1,15 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 
-def VERSION_CODE = 1
-def VERSION_NAME = "0.3.0"
+def versionPrefixTime = {
+    Calendar now = Calendar.getInstance()
+    int year = now.get(Calendar.YEAR)
+    int month = now.get(Calendar.MONTH) + 1
+    int day = now.get(Calendar.DAY_OF_MONTH)
+    int hour = now.get(Calendar.HOUR_OF_DAY)
+    int minute = now.get(Calendar.MINUTE)
+    return String.format(Locale.JAPAN, ".%04d%02d%02d%02d%02d", year, month, day, hour, minute)
+}
 
 android {
     compileSdkVersion 22
@@ -12,8 +19,8 @@ android {
         applicationId "com.team7.wakeuptaroapp"
         minSdkVersion 18
         targetSdkVersion 22
-        versionCode VERSION_CODE
-        versionName VERSION_NAME
+        version "${version_code}"
+        versionName "${version_name}"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -22,13 +29,21 @@ android {
             // デバッグモード許可
             debuggable true
             // バージョン名接尾辞
-            versionNameSuffix "-dev"
+            versionNameSuffix "${versionPrefixTime()}"
+
+            // Raspberry Pi
+            buildConfigField "String", "NOTIFICATION_SERVICE_UUID", "\"${project.property("notification_service_uuid")}\""
+            buildConfigField "String", "NOTIFICATION_CHARACTERISTIC_UUID", "\"${project.property("notification_characteristic_uuid")}\""
         }
         release {
             // デバッグモード許可
             debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            // Raspberry Pi
+            buildConfigField "String", "NOTIFICATION_SERVICE_UUID", "\"${project.property("notification_service_uuid")}\""
+            buildConfigField "String", "NOTIFICATION_CHARACTERISTIC_UUID", "\"${project.property("notification_characteristic_uuid")}\""
         }
     }
 
