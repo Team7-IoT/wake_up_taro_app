@@ -28,8 +28,10 @@
         android:layout_height="60dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:background="@color/kraft_paper"
         android:onClick="toListOnStart"
         android:text="@string/start"
+        android:textColor="@color/pewter"
         android:textSize="24sp"
         />
 

@@ -23,8 +23,8 @@ public class AlertDialogBuilder {
 
         public void show() {
             AlertDialog dialog = new AlertDialog.Builder(context)
-                    .setTitle(getLabel(R.string.title_dialog_disabled_bluetooth))
-                    .setMessage(getLabel(R.string.message_dialog_disabled_bluetooth))
+                    .setTitle(R.string.title_dialog_disabled_bluetooth)
+                    .setMessage(R.string.message_dialog_disabled_bluetooth)
                     .setPositiveButton("OK", null)
                     .create();
 
@@ -43,8 +43,8 @@ public class AlertDialogBuilder {
 
         public void show() {
             AlertDialog dialog = new AlertDialog.Builder(context)
-                    .setTitle(getLabel(R.string.title_dialog_usated_device))
-                    .setMessage(getLabel(R.string.message_dialog_usated_device))
+                    .setTitle(R.string.title_dialog_usated_device)
+                    .setMessage(R.string.message_dialog_usated_device)
                     .setPositiveButton("OK", null)
                     .create();
 
@@ -58,10 +58,6 @@ public class AlertDialogBuilder {
 
         public Builder(Context context) {
             this.context = context;
-        }
-
-        protected String getLabel(int resId) {
-            return context.getString(resId);
         }
     }
 }

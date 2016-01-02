@@ -19,18 +19,8 @@ import com.team7.wakeuptaroapp.R;
  */
 public class AlarmRingtonePreference extends RingtonePreference {
 
-    public AlarmRingtonePreference(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        setOnPreferenceChangeListener(listener);
-    }
-
     public AlarmRingtonePreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setOnPreferenceChangeListener(listener);
-    }
-
-    public AlarmRingtonePreference(Context context) {
-        super(context);
         setOnPreferenceChangeListener(listener);
     }
 

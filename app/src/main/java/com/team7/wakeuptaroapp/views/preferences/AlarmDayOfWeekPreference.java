@@ -23,11 +23,6 @@ public class AlarmDayOfWeekPreference extends MultiSelectListPreference {
         setOnPreferenceChangeListener(listener);
     }
 
-    public AlarmDayOfWeekPreference(Context context) {
-        super(context);
-        setOnPreferenceChangeListener(listener);
-    }
-
     @Override
     protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
         super.onSetInitialValue(restorePersistedValue, defaultValue);
