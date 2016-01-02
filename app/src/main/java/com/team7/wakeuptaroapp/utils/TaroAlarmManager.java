@@ -99,6 +99,10 @@ public class TaroAlarmManager {
 
         if (dateTime.getDayOfWeek() != dow.getConstants()) {
             dateTime = dateTime.withDayOfWeek(dow.getConstants());
+            // 曜日設定後、日付が過去日の場合は 1 週間後を設定
+            if (dateTime.isBefore(LocalDateTime.now())) {
+                dateTime = dateTime.plusWeeks(1);
+            }
         } else if (isOverAlarmTime(dateTime, alarm)) {
             dateTime = dateTime.plusWeeks(1);
         }

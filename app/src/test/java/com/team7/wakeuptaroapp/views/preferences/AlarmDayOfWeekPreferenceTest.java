@@ -43,7 +43,7 @@ public class AlarmDayOfWeekPreferenceTest {
     @Before
     public void setUp() {
         activity = Robolectric.setupActivity(AlarmRegisterActivity.class);
-        testee = new AlarmDayOfWeekPreference(activity);
+        testee = new AlarmDayOfWeekPreference(activity, null);
         preferenceMock = mock(PreferenceManager.class);
     }
 
