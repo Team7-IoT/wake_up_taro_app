@@ -31,7 +31,7 @@ public class AlarmRingtonePreferenceTest {
     @Before
     public void setUp() {
         activity = Robolectric.setupActivity(AlarmRegisterActivity.class);
-        testee = new AlarmRingtonePreference(activity);
+        testee = new AlarmRingtonePreference(activity, null);
     }
 
     @Test
