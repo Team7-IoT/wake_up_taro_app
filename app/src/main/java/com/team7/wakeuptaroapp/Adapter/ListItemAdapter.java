@@ -1,17 +1,23 @@
-package com.team7.wakeuptaroapp.Adapter;
+package com.team7.wakeuptaroapp.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.team7.wakeuptaroapp.R;
 import com.team7.wakeuptaroapp.models.Alarm;
+import com.team7.wakeuptaroapp.utils.TaroAlarmManager;
+import com.team7.wakeuptaroapp.utils.TaroSharedPreference;
+import com.team7.wakeuptaroapp.views.helpers.DayOfWeekHelper;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import de.devland.esperandro.Esperandro;
 
 /** データ一覧をビューに渡すために使用されるクラス */
 public class ListItemAdapter extends BaseAdapter {
@@ -65,7 +71,7 @@ public class ListItemAdapter extends BaseAdapter {
      */
     @Override
     public long getItemId(int position) {
-        return itemList.get(position).getId();
+        return itemList.get(position).getRegisteredDateTime();
     }
 
     /**
@@ -77,15 +83,55 @@ public class ListItemAdapter extends BaseAdapter {
      * @return View(アラーム一覧画面)
      */
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         convertView = layoutInflater.inflate(R.layout.list_item, parent, false);
 
         // アラーム時刻を取得
         ((TextView)convertView.findViewById(R.id.textView1)).setText(itemList.get(position).getTime());
         // 曜日を取得
-        ((TextView)convertView.findViewById(R.id.textView2)).setText((itemList.get(position).getDayOfWeeks()).toString());
+        DayOfWeekHelper helper = new DayOfWeekHelper();
+        ((TextView) convertView.findViewById(R.id.textView2)).setText(helper.convertToLabel(context, itemList.get(position).getDayOfWeeks()));
+
+        // ON/OFFスイッチ
+        Switch aSwitch = (Switch) convertView.findViewById(R.id.alarm_switch);
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) { // ON
+                    TaroAlarmManager alarmManager = new TaroAlarmManager(context);
+                    alarmManager.register(itemList.get(position));
+
+                    TaroSharedPreference preference = Esperandro.getPreferences(TaroSharedPreference.class, context);
+                    List<Alarm> alarms = preference.alarms();
+                    Alarm alarm = alarms.get(position);
+                    alarms.remove(alarm);
+                    alarm.setValid(true);
+                    alarms.add(alarm);
+                    preference.alarms(alarms);
+
+                } else { // OFF
+                    TaroAlarmManager alarmManager = new TaroAlarmManager(context);
+                    alarmManager.cancel(itemList.get(position));
+
+                    // Sheres Preference
+                    TaroSharedPreference preference = Esperandro.getPreferences(TaroSharedPreference.class, context);
+                    List<Alarm> alarms = preference.alarms();
+                    Alarm alarm = alarms.get(position);
+                    alarms.remove(alarm);
+                    alarm.setValid(false);
+                    alarms.add(alarm);
+                    preference.alarms(alarms);
+
+                }
+            }
+        });
+
 
         return convertView;
+    }
+
+    public void addList(Alarm alarm) {
+        itemList.add(alarm);
     }
 
 }
