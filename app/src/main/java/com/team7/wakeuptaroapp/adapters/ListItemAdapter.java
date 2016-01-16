@@ -25,10 +25,10 @@ import de.devland.esperandro.Esperandro;
  * */
 public class ListItemAdapter extends BaseAdapter {
 
-    Context context;
-    // 他のxmlリソースのviewを扱うための変数
-    LayoutInflater layoutInflater = null;
-    List<Alarm> itemList;
+    private Context context;
+    private LayoutInflater layoutInflater;
+    private List<Alarm> itemList;
+    private TaroSharedPreference preference;
 
     public ListItemAdapter(Context context) {
         this.context = context;
@@ -87,6 +87,8 @@ public class ListItemAdapter extends BaseAdapter {
      */
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
+
+
         convertView = layoutInflater.inflate(R.layout.list_item, parent, false);
 
         // アラーム時刻設定する
@@ -106,7 +108,7 @@ public class ListItemAdapter extends BaseAdapter {
                     TaroAlarmManager alarmManager = new TaroAlarmManager(context);
                     alarmManager.register(itemList.get(position));
 
-                    TaroSharedPreference preference = Esperandro.getPreferences(TaroSharedPreference.class, context);
+                    preference = Esperandro.getPreferences(TaroSharedPreference.class, context);
                     List<Alarm> alarms = preference.alarms();
                     Alarm alarm = alarms.get(position);
                     alarms.remove(alarm);
@@ -119,7 +121,7 @@ public class ListItemAdapter extends BaseAdapter {
                     alarmManager.cancel(itemList.get(position));
 
                     // Sheres Preference
-                    TaroSharedPreference preference = Esperandro.getPreferences(TaroSharedPreference.class, context);
+                    preference = Esperandro.getPreferences(TaroSharedPreference.class, context);
                     List<Alarm> alarms = preference.alarms();
                     Alarm alarm = alarms.get(position);
                     alarms.remove(alarm);
