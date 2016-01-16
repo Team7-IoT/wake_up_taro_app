@@ -1,6 +1,5 @@
 package com.team7.wakeuptaroapp.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.team7.wakeuptaroapp.R;
-import com.team7.wakeuptaroapp.adapter.ListItemAdapter;
 import com.team7.wakeuptaroapp.fragments.AlarmFragment;
 import com.team7.wakeuptaroapp.models.Alarm;
 import com.team7.wakeuptaroapp.utils.AppLog;

@@ -11,7 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.team7.wakeuptaroapp.R;
-import com.team7.wakeuptaroapp.adapter.ListItemAdapter;
+import com.team7.wakeuptaroapp.adapters.ListItemAdapter;
 import com.team7.wakeuptaroapp.models.Alarm;
 import com.team7.wakeuptaroapp.utils.AppLog;
 import com.team7.wakeuptaroapp.utils.TaroSharedPreference;

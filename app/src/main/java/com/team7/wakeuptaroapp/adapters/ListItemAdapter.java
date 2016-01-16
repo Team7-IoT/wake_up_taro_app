@@ -1,4 +1,4 @@
-package com.team7.wakeuptaroapp.adapter;
+package com.team7.wakeuptaroapp.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
