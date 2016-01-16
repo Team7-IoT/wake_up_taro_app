@@ -19,7 +19,10 @@ import java.util.List;
 
 import de.devland.esperandro.Esperandro;
 
-/** データ一覧をビューに渡すために使用されるクラス */
+/**
+ * アラーム一覧情報をビューに渡すアダプタークラス。
+ *
+ * */
 public class ListItemAdapter extends BaseAdapter {
 
     Context context;
@@ -34,7 +37,7 @@ public class ListItemAdapter extends BaseAdapter {
     }
 
     /**
-     * アラーム一覧を設定する
+     * アラーム一覧を設定する。
      *
      * @param itemList
      */
@@ -43,7 +46,7 @@ public class ListItemAdapter extends BaseAdapter {
     }
 
     /**
-     * 設定されているアラームの数を取得する
+     * 設定されているアラームの数を取得する。
      *
      * @return アラーム一覧のオブジェクト数
      */
@@ -53,7 +56,7 @@ public class ListItemAdapter extends BaseAdapter {
     }
 
     /**
-     * リストの指定した位置のアラームを取得する
+     * リストの指定した位置のアラームを取得する。
      *
      * @param position
      * @return 指定位置のアラーム情報
@@ -75,7 +78,7 @@ public class ListItemAdapter extends BaseAdapter {
     }
 
     /**
-     * アラーム一覧画面を表示させる
+     * アラーム一覧画面を表示させる。
      *
      * @param position
      * @param convertView
@@ -86,15 +89,15 @@ public class ListItemAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         convertView = layoutInflater.inflate(R.layout.list_item, parent, false);
 
-        // アラーム時刻を取得
+        // アラーム時刻設定する
         ((TextView)convertView.findViewById(R.id.textView1)).setText(itemList.get(position).getTime());
-        // 曜日を取得
+        // アラーム設定曜日を設定する
         DayOfWeekHelper helper = new DayOfWeekHelper();
         ((TextView) convertView.findViewById(R.id.textView2)).setText(helper.convertToLabel(context, itemList.get(position).getDayOfWeeks()));
 
         ((Switch)convertView.findViewById(R.id.alarm_switch)).setChecked(itemList.get(position).isValid());
 
-        // ON/OFFスイッチ
+        // スイッチの ON/OFF を設定する
         Switch aSwitch = (Switch) convertView.findViewById(R.id.alarm_switch);
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

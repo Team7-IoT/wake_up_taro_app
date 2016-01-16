@@ -106,6 +106,7 @@ public class AlarmRegisterActivity extends AppCompatActivity {
         AppLog.d("Alarm Ring: " + ringtoneUri);
 
         Alarm newAlarm = new Alarm(time, dayOfWeeks, ringtoneUri);
+        newAlarm.setValid(true);
 
         List<Alarm> alarms = preference.alarms();
         alarms.add(newAlarm);

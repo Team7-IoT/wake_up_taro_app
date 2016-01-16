@@ -29,9 +29,10 @@ import de.devland.esperandro.Esperandro;
  */
 public class AlarmListActivity extends AppCompatActivity {
 
-    ListView lv;
+    private ListView lv;
     private List<Alarm> list;
     private ListItemAdapter adapter;
+    private TaroSharedPreference preference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,19 +43,20 @@ public class AlarmListActivity extends AppCompatActivity {
 
         list = this.getListItem();
 
+        // アラームデータをビューに渡す
         adapter = new ListItemAdapter(this);
         adapter.setItemList(list);
         lv.setAdapter(adapter);
 
-        // ListView クリック時アラーム更新画面へ遷移させる。
+        preference = Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
+
+        // ListView クリック時アラーム更新画面へ遷移させる
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 AppLog.d("onClickEditAlarm");
 
                 ListView listView = (ListView) parent;
-                TaroSharedPreference preference =
-                        Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
 
                 Intent intent = new Intent(AlarmListActivity.this, AlarmUpdateActivity.class);
                 intent.putExtra(AlarmUpdateActivity.ALARM_KEY, preference.alarms().get(position).getAlarmKey());
@@ -62,7 +64,7 @@ public class AlarmListActivity extends AppCompatActivity {
             }
         });
 
-        // 削除時のコンテキストを登録する。
+        //ロングタップ時に表示されるコンテキストを登録する。
         registerForContextMenu(lv);
     }
 
@@ -83,13 +85,25 @@ public class AlarmListActivity extends AppCompatActivity {
         startActivity(intent);
       }
 
-     //削除時のコンテキストメニュー作成処理
+    /**
+     * 削除時のコンテキストメニュー作成。
+     *
+     * @param menu
+     * @param view
+     * @param info
+     */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo info) {
         super.onCreateContextMenu(menu, view, info);
         getMenuInflater().inflate(R.menu.alarm_delete, menu);
     }
-    // 削除時のコンテキストメニュー選択処理
+
+    /**
+     * 削除のコンテキストメニューを選択した時の処理。
+     *
+     * @param item
+     * @return 削除されたかどうか
+     */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
@@ -101,7 +115,7 @@ public class AlarmListActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
 
                 // 端末から対象のアラーム情報を削除する。
-                TaroSharedPreference preference = Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
+                preference = Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
                 preference.alarms(list);
 
                 Toasts.showMessageLong(this, R.string.message_delete_alarm);
@@ -113,6 +127,11 @@ public class AlarmListActivity extends AppCompatActivity {
         return false;
     }
 
+    /**
+     * メニューバーの設定アイコン選択時の処理。
+     * @param item
+     * @return 設定画面が呼び出されたかどうか
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -139,7 +158,7 @@ public class AlarmListActivity extends AppCompatActivity {
      */
     private List<Alarm> getListItem() {
 
-        TaroSharedPreference preference = Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
+        preference = Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
         List<Alarm> alarms = preference.alarms();
 
         return alarms;
