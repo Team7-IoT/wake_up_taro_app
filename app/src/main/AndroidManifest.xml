@@ -1,33 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.team7.wakeuptaroapp" android:versionCode="@integer/version_code" android:versionName="@string/version_name" >
+<manifest
+    package="com.team7.wakeuptaroapp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
 
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
 
     <application
         android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.AppCompat">
+        android:theme="@style/TaroAppTheme">
         <activity
-            android:name="com.team7.wakeuptaroapp.activity.StartActivity"
+            android:name=".activities.StartActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Light.NoTitleBar">
+            android:screenOrientation="portrait"
+            android:theme="@style/NonActionBarTaroAppTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
-            android:name="com.team7.wakeuptaroapp.activity.AlarmListActivity"
-            android:label="@string/title_activity_alarm_list" >
+            android:name=".activities.AlarmListActivity"
+            android:label="@string/title_activity_alarm_list"
+            android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="com.team7.wakeuptaroapp.activity.SettingActivity"
-            android:label="@string/title_activity_setting" >
+            android:name=".activities.AlarmRegisterActivity"
+            android:label="@string/title_activity_alarm_register"
+            android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name=".activities.AlarmUpdateActivity"
+            android:label="@string/title_activity_alarm_update"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activities.SettingActivity"
+            android:label="@string/title_activity_setting"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activities.AlarmNotificationActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/NonActionBarTaroAppTheme">
+        </activity>
+
+        <service android:name=".services.AlarmService"/>
+
+        <receiver android:name=".services.AlarmReceiver">
+            <intent-filter>
+                <action android:name="TIMER_FINISHED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

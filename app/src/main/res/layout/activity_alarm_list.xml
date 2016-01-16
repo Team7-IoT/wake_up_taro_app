@@ -1,4 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -6,12 +8,39 @@
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
-                tools:context="com.team7.wakeuptaroapp.activity.AlarmListActivity">
+                tools:context=".activities.AlarmListActivity">
 
     <ListView
-        android:id="@+id/listView"
+        android:id="@+id/alarm_list"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/new_alarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:onClick="onClickNewAlarm"
+        android:src="@drawable/plus"
+        app:backgroundTint="#FF3366"
+        app:borderWidth="0dp"
+        app:fabSize="normal"
+        />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/edit_alarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:onClick="onClickEditAlarm"
+        android:src="@drawable/plus"
+        app:backgroundTint="#5BD4D8"
+        app:borderWidth="0dp"
+        app:fabSize="normal"
+        />
 </RelativeLayout>

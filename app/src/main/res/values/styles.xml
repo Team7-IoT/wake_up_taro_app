@@ -1,8 +1,16 @@
 <resources>
-
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="TaroAppTheme" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/pewter</item>
+        <item name="android:windowBackground">@color/metal</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
     </style>
 
+    <!-- No action bar theme. -->
+    <style name="NonActionBarTaroAppTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/metal</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+    </style>
 </resources>
