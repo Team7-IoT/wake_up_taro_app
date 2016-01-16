@@ -7,7 +7,9 @@
     <string name="action_settings">設定</string>
     <string name="action_store_alarm">登録</string>
     <string name="action_update_alarm">更新</string>
+    <string name="action_delete_alarm">削除</string>
     <string name="stop_alarm">Stop!!</string>
+
 
     <string name="title_activity_alarm_list">アラーム一覧</string>
     <string name="title_activity_alarm_register">アラーム登録</string>
@@ -29,6 +31,7 @@
     <string name="message_motion_success">起こしタロウ 親機のセンサー検証に成功しました。</string>
     <string name="message_store_alarm">アラームを登録しました。</string>
     <string name="message_update_alarm">アラームを更新しました。</string>
+    <string name="message_delete_alarm">アラームを削除しました。</string>
     <string name="message_notification">早く起きて!!</string>
     <string name="message_alarm">早く起きて!!\n親機まで急げ!!</string>
 

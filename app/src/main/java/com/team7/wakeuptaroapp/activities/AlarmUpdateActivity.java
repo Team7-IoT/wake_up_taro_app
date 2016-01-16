@@ -1,11 +1,14 @@
 package com.team7.wakeuptaroapp.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.team7.wakeuptaroapp.R;
+import com.team7.wakeuptaroapp.adapter.ListItemAdapter;
 import com.team7.wakeuptaroapp.fragments.AlarmFragment;
 import com.team7.wakeuptaroapp.models.Alarm;
 import com.team7.wakeuptaroapp.utils.AppLog;
@@ -131,6 +134,10 @@ public class AlarmUpdateActivity extends AppCompatActivity {
         alarms.add(targetAlarm);
 
         preference.alarms(alarms);
+
+        // アラーム一覧画面の Activity を呼び出す。
+        Intent intent = new Intent(AlarmUpdateActivity.this, AlarmListActivity.class);
+        startActivity(intent);
     }
 
     /**

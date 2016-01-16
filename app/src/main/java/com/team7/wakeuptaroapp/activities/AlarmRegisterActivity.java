@@ -1,5 +1,6 @@
 package com.team7.wakeuptaroapp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -68,6 +69,10 @@ public class AlarmRegisterActivity extends AppCompatActivity {
             // アラームの保存
             Alarm newAlarm = storeAlarm();
             registerAlarm(newAlarm);
+
+            // アラーム一覧画面の Activity を呼び出す。
+            Intent intent = new Intent(AlarmRegisterActivity.this, AlarmListActivity.class);
+            startActivity(intent);
 
             // メッセージ
             Toasts.showMessageLong(this, R.string.message_store_alarm);

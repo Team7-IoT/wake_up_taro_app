@@ -1,13 +1,25 @@
-package com.team7.wakeuptaroapp.activity;
+package com.team7.wakeuptaroapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
-import com.team7.wakeuptaroapp.adapter.ListItemAdapter;
 import com.team7.wakeuptaroapp.R;
+import com.team7.wakeuptaroapp.adapter.ListItemAdapter;
+import com.team7.wakeuptaroapp.models.Alarm;
+import com.team7.wakeuptaroapp.utils.AppLog;
+import com.team7.wakeuptaroapp.utils.TaroSharedPreference;
+import com.team7.wakeuptaroapp.utils.Toasts;
+
+import java.util.List;
+
+import de.devland.esperandro.Esperandro;
 
 /**
  * アラーム一覧画面に対するアクティビティ。<br />
@@ -18,26 +30,40 @@ import com.team7.wakeuptaroapp.R;
 public class AlarmListActivity extends AppCompatActivity {
 
     ListView lv;
+    private List<Alarm> list;
+    private ListItemAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_list);
 
-        lv = (ListView) findViewById(R.id.listView);
+        lv = (ListView) findViewById(R.id.alarm_list);
 
-        List<Alarm> list = new ArrayList<Alarm>();
         list = this.getListItem();
 
-        // TODO:アラームが登録されていないときの処理
-        if(list == null || list.size() == 0) {
-
-        }
-
-        // ListView に取得してきたリストをセットする
-        ListItemAdapter adapter = new ListItemAdapter(this);
+        adapter = new ListItemAdapter(this);
         adapter.setItemList(list);
         lv.setAdapter(adapter);
+
+        // ListView クリック時アラーム更新画面へ遷移させる。
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                AppLog.d("onClickEditAlarm");
+
+                ListView listView = (ListView) parent;
+                TaroSharedPreference preference =
+                        Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
+
+                Intent intent = new Intent(AlarmListActivity.this, AlarmUpdateActivity.class);
+                intent.putExtra(AlarmUpdateActivity.ALARM_KEY, preference.alarms().get(position).getAlarmKey());
+                startActivity(intent);
+            }
+        });
+
+        // 削除時のコンテキストを登録する。
+        registerForContextMenu(lv);
     }
 
     @Override
@@ -47,37 +73,39 @@ public class AlarmListActivity extends AppCompatActivity {
         return true;
     }
 
-    /**
-     * アラーム追加ボタンが押下されたときの振る舞いを定義する。
-     */
-    public void onClickNewAlarm(View view) {
-        AppLog.d("onClickNewAlarm");
-
-        // アラーム登録 Activity 呼び出し
-        Intent intent = new Intent(AlarmListActivity.this, AlarmRegisterActivity.class);
-        startActivity(intent);
+     //削除時のコンテキストメニュー作成処理
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo info) {
+        super.onCreateContextMenu(menu, view, info);
+        getMenuInflater().inflate(R.menu.alarm_delete, menu);
     }
+    // 削除時のコンテキストメニュー選択処理
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
 
-    /**
-     * アラーム編集ボタンが押下されたときの振る舞いを定義する。
-     */
-    public void onClickEditAlarm(View view) {
-        AppLog.d("onClickEditAlarm");
+        switch(item.getItemId()) {
+            case R.id.alarm_delete:
+                Alarm alarm = list.get(info.position);
+                list.remove(alarm);
+                adapter.notifyDataSetChanged();
 
-        TaroSharedPreference preference =
-                Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
+                // 端末から対象のアラーム情報を削除する。
+                TaroSharedPreference preference = Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
+                preference.alarms(list);
 
-        // FIXME 仮実装
-        Intent intent = new Intent(AlarmListActivity.this, AlarmUpdateActivity.class);
-        intent.putExtra(AlarmUpdateActivity.ALARM_KEY, preference.alarms().get(0).getAlarmKey());
-        startActivity(intent);
+                Toasts.showMessageLong(this, R.string.message_delete_alarm);
+
+                break;
+            default:
+                break;
+        }
+        return false;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -88,62 +116,28 @@ public class AlarmListActivity extends AppCompatActivity {
             startActivity(intent);
 
             return true;
+
+        } else if (id == R.id.new_alarm) {
+
+            // アラーム登録 Activity の呼び出し
+            Intent intent = new Intent(AlarmListActivity.this, AlarmRegisterActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
     }
 
     /**
-     *保存されているアラーム情報を取得する
+     * 端末に保存されているアラーム情報を取得する。
      *
-     * @return
+     * @return alarms アラーム一覧
      */
     private List<Alarm> getListItem() {
 
-        // TODO:マージ後、ダミーでなく保存されているデータから取得するようにする
-        //  保存されているデータを取得し、リストに格納
-        //TaroSharedPreference preference = Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
-        //ArrayList<Alarm> alarms = preference.alarms();
-        ArrayList<Alarm> alarms = new ArrayList<>();
-
-        // ダミーを使用
-        alarms = creatDammy();
+        TaroSharedPreference preference = Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
+        List<Alarm> alarms = preference.alarms();
 
         return alarms;
     }
 
-    // TODO;削除
-    // ダミ―データを作成
-    private  ArrayList<Alarm> creatDammy() {
-
-        // 時刻
-        String time1 = "time1";
-        String time2 = "time2";
-        String time3 = "time3";
-        // 曜日
-        String date1 = "date1";
-        String date2 = "date1";
-        String date3 = "date3";
-        // 曜日一覧リストに格納
-        Set<String> dateOfWeek = new HashSet<String>();
-        dateOfWeek.add(date1);
-        dateOfWeek.add(date2);
-        dateOfWeek.add(date3);
-        // アラーム音の URI
-        String uri1 = "uri1";
-        String uri2 = "uri2";
-        String uri3 = "uri31";
-        // Alarmオブジェクト作成
-        Alarm am1 = new Alarm(time1, dateOfWeek, uri1);
-        Alarm am2 = new Alarm(time2, dateOfWeek, uri2);
-        Alarm am3 = new Alarm(time3, dateOfWeek, uri3);
-
-        ArrayList<Alarm> dammyList = new ArrayList<>();
-        // アラームリストに格納
-        dammyList.add(am1);
-        dammyList.add(am2);
-        dammyList.add(am3);
-
-        return dammyList;
-    }
 }

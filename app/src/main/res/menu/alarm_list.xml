@@ -10,4 +10,10 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/new_alarm"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="@string/action_store_alarm" />
+
 </menu>
