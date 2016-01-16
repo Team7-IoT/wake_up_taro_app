@@ -92,6 +92,8 @@ public class ListItemAdapter extends BaseAdapter {
         DayOfWeekHelper helper = new DayOfWeekHelper();
         ((TextView) convertView.findViewById(R.id.textView2)).setText(helper.convertToLabel(context, itemList.get(position).getDayOfWeeks()));
 
+        ((Switch)convertView.findViewById(R.id.alarm_switch)).setChecked(itemList.get(position).isValid());
+
         // ON/OFFスイッチ
         Switch aSwitch = (Switch) convertView.findViewById(R.id.alarm_switch);
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

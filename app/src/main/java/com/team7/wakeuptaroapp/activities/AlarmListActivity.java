@@ -73,6 +73,16 @@ public class AlarmListActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * アラーム追加ボタンが押下されたときの振る舞いを定義する。
+     */
+     public void onClickNewAlarm(View view) {
+        AppLog.d("onClickNewAlarm");
+       // アラーム登録 Activity 呼び出し
+        Intent intent = new Intent(AlarmListActivity.this, AlarmRegisterActivity.class);
+        startActivity(intent);
+      }
+
      //削除時のコンテキストメニュー作成処理
     @Override
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo info) {
@@ -117,11 +127,6 @@ public class AlarmListActivity extends AppCompatActivity {
 
             return true;
 
-        } else if (id == R.id.new_alarm) {
-
-            // アラーム登録 Activity の呼び出し
-            Intent intent = new Intent(AlarmListActivity.this, AlarmRegisterActivity.class);
-            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
