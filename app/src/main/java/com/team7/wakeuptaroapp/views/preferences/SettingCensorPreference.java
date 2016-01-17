@@ -138,8 +138,28 @@ public class SettingCensorPreference extends Preference {
                             Toasts.showMessageLong(activity, R.string.message_motion_success);
                         }
                     });
+
+                    stopScan();
                 }
             }
+        }
+    };
+
+    /**
+     * 一定時間スキャン後に呼び出す後処理。
+     */
+    private Runnable scanFinalizer = new Runnable() {
+        @Override
+        public void run() {
+            closeWaitingDialog();
+            stopScan();
+
+            // キャンセル時は何もしない
+            if (!needToastMessage) {
+                return;
+            }
+
+            Toasts.showMessageLong(activity, R.string.message_motion_failure);
         }
     };
 
@@ -194,20 +214,7 @@ public class SettingCensorPreference extends Preference {
     private void startScan() {
 
         // 5秒後に接続が成功していればスキャンを停止する
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                closeWaitingDialog();
-                stopScan();
-
-                // キャンセル時は何もしない
-                if (!needToastMessage) {
-                    return;
-                }
-
-                Toasts.showMessageLong(activity, R.string.message_motion_failure);
-            }
-        }, WAIT_MOTION_PERIOD);
+        handler.postDelayed(scanFinalizer, WAIT_MOTION_PERIOD);
 
         // スキャン開始
         bluetoothAdapter.startLeScan(scanCallback);
@@ -262,6 +269,8 @@ public class SettingCensorPreference extends Preference {
             bluetoothGatt.close();
         }
         bluetoothGatt = null;
+
+        handler.removeCallbacks(scanFinalizer);
     }
 
     private boolean isConnected() {
