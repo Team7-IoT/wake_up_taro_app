@@ -50,7 +50,6 @@ public class SettingConnectionPreference extends Preference {
     // 検索中の親機一覧
     private Map<String, BluetoothDevice> devices;
     private String selectedDevice;
-    private boolean needToastMessage;
 
     // SharedPreference
     private TaroSharedPreference preference;
@@ -98,6 +97,23 @@ public class SettingConnectionPreference extends Preference {
         }
     };
 
+    /**
+     * 一定時間スキャン後に呼び出す後処理。
+     */
+    private Runnable scanFinalizer = new Runnable() {
+        @Override
+        public void run() {
+            closeSearchingDialog();
+            stopScan();
+
+            if (devices.isEmpty()) {
+                Toasts.showMessageLong(activity, R.string.message_not_found_ble);
+            } else {
+                buildDevicesDialog().show();
+            }
+        }
+    };
+
     public SettingConnectionPreference(Context context) {
         super(context);
         initialize();
@@ -121,7 +137,6 @@ public class SettingConnectionPreference extends Preference {
         // ラズパイ検索中のダイアログ表示
         searchingDialog = buildSearchingDialog();
         searchingDialog.show();
-        needToastMessage = true;
 
         // BLE の機能を使って親機を検索
         bluetoothGatt = null;
@@ -147,26 +162,8 @@ public class SettingConnectionPreference extends Preference {
     }
 
     private void startScan() {
-
         // 5秒後に接続が成功していればスキャンを停止する
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                closeSearchingDialog();
-                stopScan();
-
-                // キャンセル時は何もしない
-                if (!needToastMessage) {
-                    return;
-                }
-
-                if (devices.isEmpty()) {
-                    Toasts.showMessageLong(activity, R.string.message_not_found_ble);
-                } else {
-                    buildDevicesDialog().show();
-                }
-            }
-        }, SCAN_PERIOD);
+        handler.postDelayed(scanFinalizer, SCAN_PERIOD);
 
         devices = new HashMap<>();
 
@@ -207,7 +204,6 @@ public class SettingConnectionPreference extends Preference {
                         stopScan();
                         handler.removeCallbacksAndMessages(null);
                         devices.clear();
-                        needToastMessage = false;
 
                         // ProgressDialog をキャンセル
                         dialog.cancel();
@@ -257,6 +253,8 @@ public class SettingConnectionPreference extends Preference {
             bluetoothGatt.close();
         }
         bluetoothGatt = null;
+
+        handler.removeCallbacks(scanFinalizer);
     }
 
     private String getLabel(int resId) {

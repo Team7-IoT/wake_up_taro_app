@@ -52,8 +52,6 @@ public class SettingCensorPreference extends Preference {
     // センサー検証中に表示するダイアログ
     private ProgressDialog waitingDialog;
 
-    private boolean needToastMessage;
-
     // SharedPreference
     private TaroSharedPreference preference;
 
@@ -134,7 +132,6 @@ public class SettingCensorPreference extends Preference {
                         @Override
                         public void run() {
                             closeWaitingDialog();
-                            needToastMessage = false;
                             Toasts.showMessageLong(activity, R.string.message_motion_success);
                         }
                     });
@@ -153,11 +150,6 @@ public class SettingCensorPreference extends Preference {
         public void run() {
             closeWaitingDialog();
             stopScan();
-
-            // キャンセル時は何もしない
-            if (!needToastMessage) {
-                return;
-            }
 
             Toasts.showMessageLong(activity, R.string.message_motion_failure);
         }
@@ -187,7 +179,6 @@ public class SettingCensorPreference extends Preference {
         // センサー検証中のダイアログ表示
         waitingDialog = buildWaitingDialog();
         waitingDialog.show();
-        needToastMessage = true;
 
         // BLE の機能を使って親機を検索
         bluetoothGatt = null;
@@ -212,6 +203,9 @@ public class SettingCensorPreference extends Preference {
     }
 
     private void startScan() {
+
+        // 中途半端な接続情報をクリア
+        stopScan();
 
         // 5秒後に接続が成功していればスキャンを停止する
         handler.postDelayed(scanFinalizer, WAIT_MOTION_PERIOD);
@@ -252,7 +246,6 @@ public class SettingCensorPreference extends Preference {
                         // BLE 検索停止
                         stopScan();
                         handler.removeCallbacksAndMessages(null);
-                        needToastMessage = false;
 
                         // ProgressDialog をキャンセル
                         dialog.cancel();
