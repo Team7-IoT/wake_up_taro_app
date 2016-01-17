@@ -18,4 +18,11 @@
         <item>6_sat</item>
         <item>7_sun</item>
     </string-array>
+    <string-array name="day_of_week_default_values">
+        <item>1_mon</item>
+        <item>2_tue</item>
+        <item>3_wed</item>
+        <item>4_thu</item>
+        <item>5_fri</item>
+    </string-array>
 </resources>

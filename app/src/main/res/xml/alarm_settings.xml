@@ -5,12 +5,14 @@
 
     <!-- アラーム時刻 -->
     <com.team7.wakeuptaroapp.views.preferences.AlarmTimePreference
+        android:defaultValue="07:00"
         android:key="alarmTime"
         android:title="@string/title_alarm_time"
         />
 
     <!-- アラーム曜日 -->
     <com.team7.wakeuptaroapp.views.preferences.AlarmDayOfWeekPreference
+        android:defaultValue="@array/day_of_week_default_values"
         android:entries="@array/day_of_week_labels"
         android:entryValues="@array/day_of_week_values"
         android:key="alarmDayOfWeeks"
