@@ -25,6 +25,7 @@ import de.devland.esperandro.Esperandro;
  * アラーム一覧画面に対するアクティビティ。<br />
  * 設定済みのアラームを確認できる画面。
  *
+ * @author Shiori.K
  * @author Naotake.K
  */
 public class AlarmListActivity extends AppCompatActivity {
@@ -78,12 +79,12 @@ public class AlarmListActivity extends AppCompatActivity {
     /**
      * アラーム追加ボタンが押下されたときの振る舞いを定義する。
      */
-     public void onClickNewAlarm(View view) {
+    public void onClickNewAlarm(View view) {
         AppLog.d("onClickNewAlarm");
-       // アラーム登録 Activity 呼び出し
+        // アラーム登録 Activity 呼び出し
         Intent intent = new Intent(AlarmListActivity.this, AlarmRegisterActivity.class);
         startActivity(intent);
-      }
+    }
 
     /**
      * 削除時のコンテキストメニュー作成。
@@ -106,9 +107,9 @@ public class AlarmListActivity extends AppCompatActivity {
      */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.alarm_delete:
                 Alarm alarm = list.get(info.position);
                 list.remove(alarm);
@@ -129,6 +130,7 @@ public class AlarmListActivity extends AppCompatActivity {
 
     /**
      * メニューバーの設定アイコン選択時の処理。
+     *
      * @param item
      * @return 設定画面が呼び出されたかどうか
      */

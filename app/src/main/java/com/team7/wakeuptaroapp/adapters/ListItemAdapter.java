@@ -22,18 +22,25 @@ import de.devland.esperandro.Esperandro;
 /**
  * アラーム一覧情報をビューに渡すアダプタークラス。
  *
- * */
+ * @author Shiori.K
+ * @author Naotake.K
+ */
 public class ListItemAdapter extends BaseAdapter {
 
     private Context context;
     private LayoutInflater layoutInflater;
     private List<Alarm> itemList;
     private TaroSharedPreference preference;
+    private TaroAlarmManager alarmManager;
 
     public ListItemAdapter(Context context) {
         this.context = context;
         // LayoutInflaterを取得
-        this.layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        // SharedPreference
+        preference = Esperandro.getPreferences(TaroSharedPreference.class, context);
+        // AlarmManager
+        alarmManager = new TaroAlarmManager(context);
     }
 
     /**
@@ -52,6 +59,9 @@ public class ListItemAdapter extends BaseAdapter {
      */
     @Override
     public int getCount() {
+        if (itemList == null) {
+            return 0;
+        }
         return itemList.size();
     }
 
@@ -63,11 +73,14 @@ public class ListItemAdapter extends BaseAdapter {
      */
     @Override
     public Object getItem(int position) {
+        if (itemList == null || position < 0 || position >= itemList.size()) {
+            return null;
+        }
         return itemList.get(position);
     }
 
     /**
-     * 指定位置のリストIDを取得する
+     * 指定位置のリストIDを取得する。
      *
      * @param position
      * @return リストID
@@ -88,27 +101,23 @@ public class ListItemAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-
         convertView = layoutInflater.inflate(R.layout.list_item, parent, false);
 
         // アラーム時刻設定する
-        ((TextView)convertView.findViewById(R.id.textView1)).setText(itemList.get(position).getTime());
+        ((TextView) convertView.findViewById(R.id.alarm_time)).setText(itemList.get(position).getTime());
         // アラーム設定曜日を設定する
-        DayOfWeekHelper helper = new DayOfWeekHelper();
-        ((TextView) convertView.findViewById(R.id.textView2)).setText(helper.convertToLabel(context, itemList.get(position).getDayOfWeeks()));
+        ((TextView) convertView.findViewById(R.id.alarm_day_of_time)).setText(DayOfWeekHelper.convertToLabel(context, itemList.get(position).getDayOfWeeks()));
+        // アラーム状態 (有効/無効) を設定する
+        ((Switch) convertView.findViewById(R.id.alarm_switch)).setChecked(itemList.get(position).isValid());
 
-        ((Switch)convertView.findViewById(R.id.alarm_switch)).setChecked(itemList.get(position).isValid());
-
-        // スイッチの ON/OFF を設定する
+        // スイッチの ON/OFF 変更時の挙動を設定
         Switch aSwitch = (Switch) convertView.findViewById(R.id.alarm_switch);
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) { // ON
-                    TaroAlarmManager alarmManager = new TaroAlarmManager(context);
                     alarmManager.register(itemList.get(position));
 
-                    preference = Esperandro.getPreferences(TaroSharedPreference.class, context);
                     List<Alarm> alarms = preference.alarms();
                     Alarm alarm = alarms.get(position);
                     alarms.remove(alarm);
@@ -117,11 +126,8 @@ public class ListItemAdapter extends BaseAdapter {
                     preference.alarms(alarms);
 
                 } else { // OFF
-                    TaroAlarmManager alarmManager = new TaroAlarmManager(context);
                     alarmManager.cancel(itemList.get(position));
 
-                    // Sheres Preference
-                    preference = Esperandro.getPreferences(TaroSharedPreference.class, context);
                     List<Alarm> alarms = preference.alarms();
                     Alarm alarm = alarms.get(position);
                     alarms.remove(alarm);
@@ -133,12 +139,10 @@ public class ListItemAdapter extends BaseAdapter {
             }
         });
 
-
         return convertView;
     }
 
     public void addList(Alarm alarm) {
         itemList.add(alarm);
     }
-
 }

@@ -2,34 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
               android:layout_height="match_parent"
-
               android:orientation="horizontal">
 
     <Switch
         android:id="@+id/alarm_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:focusable="false"
         />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/alarm_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textSize="13pt"
         android:focusable="false"
+        android:textSize="13pt"
         />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/alarm_day_of_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="6pt"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:focusable="false"
+        android:textSize="6pt"
         />
 
 </LinearLayout>
