@@ -86,6 +86,21 @@ public interface TaroSharedPreference extends SharedPreferenceActions {
     List<Alarm> alarms();
 
     /**
+     * アラームが有効かどうかの情報を保存する。
+     *
+     * @return valid
+     */
+    Boolean valid();
+
+    /**
+     * アラームが有効かどうかの情報を取得する。
+     *
+     * @param valid ON/OFF 情報
+     */
+    void valid(Boolean valid);
+
+
+    /**
      * 登録済みのアラーム一覧を更新する。
      *
      * @param alarms アラーム一覧

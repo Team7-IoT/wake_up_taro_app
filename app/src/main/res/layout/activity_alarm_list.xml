@@ -14,6 +14,8 @@
         android:id="@+id/alarm_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         />
@@ -31,16 +33,4 @@
         app:fabSize="normal"
         />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/edit_alarm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:onClick="onClickEditAlarm"
-        android:src="@drawable/plus"
-        app:backgroundTint="#5BD4D8"
-        app:borderWidth="0dp"
-        app:fabSize="normal"
-        />
 </RelativeLayout>
