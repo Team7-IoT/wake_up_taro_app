@@ -31,6 +31,7 @@
     <string name="message_update_alarm">アラームを更新しました。</string>
     <string name="message_notification">早く起きて!!</string>
     <string name="message_alarm">早く起きて!!\n親機まで急げ!!</string>
+    <string name="message_alarm_stop_success">おはようございます!!</string>
 
     <!-- On Development Message -->
     <string name="message_alarm_delete_all">アラーム情報を全て削除しました。</string>

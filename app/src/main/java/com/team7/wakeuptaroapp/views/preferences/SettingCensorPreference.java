@@ -17,6 +17,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 
 import com.team7.wakeuptaroapp.R;
+import com.team7.wakeuptaroapp.ble.RaspberryPi;
 import com.team7.wakeuptaroapp.ble.RpiGattCallback;
 import com.team7.wakeuptaroapp.ble.RpiLeScanCallback;
 import com.team7.wakeuptaroapp.utils.AppLog;
@@ -42,12 +43,6 @@ public class SettingCensorPreference extends Preference {
 
     // センサーの検証待ち時間 (10秒)
     private static final long WAIT_MOTION_PERIOD = 10000;
-
-    /**
-     * キャラクタリスティック設定UUID (BluetoothLeGattプロジェクト、SampleGattAttributes.CLIENT_CHARACTERISTIC_CONFIGより
-     */
-    private static final String CLIENT_CHARACTERISTIC_CONFIG = "00002902-0000-1000-8000-00805f9b34fb";
-    public static final UUID CLIENT_CHARACTERISTIC_UUID = UUID.fromString(CLIENT_CHARACTERISTIC_CONFIG);
 
     // BLE 周りのコンポーネント群
     private BluetoothAdapter bluetoothAdapter;
@@ -115,7 +110,7 @@ public class SettingCensorPreference extends Preference {
                 AppLog.d("setCharacteristicNotification result: " + result);
 
                 // Characteristic の Notification 有効化
-                BluetoothGattDescriptor descriptor = c.getDescriptor(CLIENT_CHARACTERISTIC_UUID);
+                BluetoothGattDescriptor descriptor = c.getDescriptor(RaspberryPi.CLIENT_CHARACTERISTIC_UUID);
                 descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
                 gatt.writeDescriptor(descriptor);
             }
@@ -139,6 +134,7 @@ public class SettingCensorPreference extends Preference {
                         @Override
                         public void run() {
                             closeWaitingDialog();
+                            needToastMessage = false;
                             Toasts.showMessageLong(activity, R.string.message_motion_success);
                         }
                     });

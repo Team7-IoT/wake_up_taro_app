@@ -20,4 +20,10 @@ public class RaspberryPi {
     public static final UUID BATTERY_UUID = UUID.fromString("00002a19-0000-1000-8000-00805f9b34fb");
     public static final UUID BATTERY_POWER_STATE_UUID = UUID.fromString("00002a1b-0000-1000-8000-00805f9b34fb");
     public static final UUID ALERT_LEVEL_UUID = UUID.fromString("00002a06-0000-1000-8000-00805f9b34fb");
+
+    /**
+     * キャラクタリスティック設定UUID (BluetoothLeGattプロジェクト、SampleGattAttributes.CLIENT_CHARACTERISTIC_CONFIGより
+     */
+    private static final String CLIENT_CHARACTERISTIC_CONFIG = "00002902-0000-1000-8000-00805f9b34fb";
+    public static final UUID CLIENT_CHARACTERISTIC_UUID = UUID.fromString(CLIENT_CHARACTERISTIC_CONFIG);
 }
