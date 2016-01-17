@@ -28,7 +28,6 @@ import com.team7.wakeuptaroapp.models.AlarmIntent;
 import com.team7.wakeuptaroapp.utils.AppLog;
 import com.team7.wakeuptaroapp.utils.TaroSharedPreference;
 import com.team7.wakeuptaroapp.utils.Toasts;
-import com.team7.wakeuptaroapp.views.dialogs.AlertDialogBuilder;
 
 import java.util.UUID;
 
@@ -46,6 +45,9 @@ public class AlarmNotificationActivity extends Activity {
 
     // 親機への接続検証待ち時間 (5秒)
     private static final long WAIT_CONNECT_PERIOD = 5000;
+
+    // 端末の Bluetooth が有効になるまでの待ち時間 (3秒)
+    private static final long WAIT_BLUETOOTH_ENABLED = 3000;
 
     // BLE 周りのコンポーネント群
     private BluetoothAdapter bluetoothAdapter;
@@ -149,6 +151,37 @@ public class AlarmNotificationActivity extends Activity {
         }
     };
 
+    /**
+     * 一定時間スキャン後に呼び出す後処理。
+     */
+    private Runnable scanFinalizer = new Runnable() {
+        @Override
+        public void run() {
+
+            if (scanSuccessful) {
+                AppLog.d("AlarmNotificationActivity Scan successful");
+                return;
+            }
+
+            // TODO 接続失敗時に、接続をリトライするか？
+        }
+    };
+
+    /**
+     * Bluetooth が有効になるのを待った後に再度スキャンを行うコールバック。
+     */
+    private Runnable retryScanner = new Runnable() {
+        @Override
+        public void run() {
+            if (bluetoothAdapter.isEnabled()) {
+                startScan();
+            } else {
+                AppLog.d("Still Bluetooth disabled on Handler.");
+                // TODO リトライ後でもダメだった場合どうする？
+            }
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -181,7 +214,6 @@ public class AlarmNotificationActivity extends Activity {
         // 接続検証済み親機の存在判定
         if (TextUtils.isEmpty(preference.deviceName())) {
             // TODO アラーム起動時に、接続検証済みの親機が居ない場合
-            new AlertDialogBuilder.UnknownDevice(getApplicationContext()).show();
             return;
         }
 
@@ -195,10 +227,10 @@ public class AlarmNotificationActivity extends Activity {
         super.onStart();
         ringtone.play();
 
+        // TODO もし親機との疎通に失敗した場合、緊急停止用として停止ボタンを活性化させる？
+
         // スキャン開始
         startScan();
-
-        // TODO もし親機との疎通に失敗した場合、緊急停止用として停止ボタンを活性化させる？
     }
 
     @Override
@@ -219,20 +251,16 @@ public class AlarmNotificationActivity extends Activity {
     }
 
     private void startScan() {
+        if (!bluetoothAdapter.isEnabled()) {
+            AppLog.d("Still Bluetooth disabled.");
 
+            // 一定時間後に再スキャン
+            handler.postDelayed(retryScanner, WAIT_BLUETOOTH_ENABLED);
+
+            return;
+        }
         // 5秒後に接続が成功していればスキャンを停止する
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                if (scanSuccessful) {
-                    AppLog.d("AlarmNotificationActivity Scan successful");
-                    return;
-                }
-
-                // TODO 接続失敗時に、接続をリトライするか？
-            }
-        }, WAIT_CONNECT_PERIOD);
+        handler.postDelayed(scanFinalizer, WAIT_CONNECT_PERIOD);
 
         // スキャン開始
         bluetoothAdapter.startLeScan(scanCallback);
@@ -245,6 +273,8 @@ public class AlarmNotificationActivity extends Activity {
             bluetoothGatt.close();
         }
         bluetoothGatt = null;
+
+        handler.removeCallbacks(scanFinalizer);
     }
 
     private boolean isConnected() {
