@@ -29,7 +29,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="63dp"
         android:background="@color/kraft_paper"
-        android:onClick="stopAlarm"
+        android:onClick="stopAlarmForce"
         android:text="@string/stop_alarm"
         android:textColor="@color/pewter"
         android:textSize="24sp"
