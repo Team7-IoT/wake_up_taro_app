@@ -31,6 +31,5 @@ proguard/
 *.iml
 
 # IDEA
-/.idea/workspace.xml
-/.idea/libraries
+.idea
 
