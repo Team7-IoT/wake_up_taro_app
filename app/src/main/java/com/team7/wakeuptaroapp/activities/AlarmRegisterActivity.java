@@ -1,18 +1,21 @@
 package com.team7.wakeuptaroapp.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.team7.wakeuptaroapp.R;
+import com.team7.wakeuptaroapp.exceptions.AlarmConstraintViolationsException;
 import com.team7.wakeuptaroapp.fragments.AlarmFragment;
 import com.team7.wakeuptaroapp.models.Alarm;
 import com.team7.wakeuptaroapp.utils.AppLog;
 import com.team7.wakeuptaroapp.utils.TaroAlarmManager;
 import com.team7.wakeuptaroapp.utils.TaroSharedPreference;
 import com.team7.wakeuptaroapp.utils.Toasts;
+import com.team7.wakeuptaroapp.views.dialogs.AlertDialogBuilder;
 
 import java.util.List;
 import java.util.Set;
@@ -43,9 +46,12 @@ public class AlarmRegisterActivity extends AppCompatActivity {
 
         // SharedPreference
         preference = Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
-        preference.alarmTime(null);
-        preference.alarmDayOfWeeks(null);
-        preference.alarmRingtone(null);
+
+        // デフォルト値が設定されるように既存のアラーム情報を削除
+        SharedPreferences.Editor editor = preference.get().edit();
+        editor.remove(TaroSharedPreference.ALARM_TIME).apply();
+        editor.remove(TaroSharedPreference.ALARM_DAY_OF_WEEKS).apply();
+        editor.remove(TaroSharedPreference.ALARM_RINGTONE).apply();
     }
 
     @Override
@@ -67,7 +73,13 @@ public class AlarmRegisterActivity extends AppCompatActivity {
             AppLog.d("Tap to store on alarm.");
 
             // アラームの保存
-            Alarm newAlarm = storeAlarm();
+            Alarm newAlarm;
+            try {
+                newAlarm = storeAlarm();
+            } catch (AlarmConstraintViolationsException e) {
+                new AlertDialogBuilder.ValidationFailureDialog(this).cause(e.getCauseMessageId()).show();
+                return true;
+            }
             registerAlarm(newAlarm);
 
             // アラーム一覧画面の Activity を呼び出す。
@@ -95,7 +107,7 @@ public class AlarmRegisterActivity extends AppCompatActivity {
     /**
      * 入力内容を基にアラーム情報を SharedPreference に保存する。
      */
-    private Alarm storeAlarm() {
+    private Alarm storeAlarm() throws AlarmConstraintViolationsException {
 
         String time = preference.alarmTime();
         Set<String> dayOfWeeks = preference.alarmDayOfWeeks();
@@ -107,6 +119,7 @@ public class AlarmRegisterActivity extends AppCompatActivity {
 
         Alarm newAlarm = new Alarm(time, dayOfWeeks, ringtoneUri);
         newAlarm.setValid(true);
+        newAlarm.validate();
 
         List<Alarm> alarms = preference.alarms();
         alarms.add(newAlarm);

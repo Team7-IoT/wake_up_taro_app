@@ -18,6 +18,10 @@ import de.devland.esperandro.annotations.SharedPreferences;
 @SharedPreferences
 public interface TaroSharedPreference extends SharedPreferenceActions {
 
+    public static String ALARM_TIME = "alarmTime";
+    public static String ALARM_DAY_OF_WEEKS = "alarmDayOfWeeks";
+    public static String ALARM_RINGTONE = "alarmRingtone";
+
     /**
      * 親機となるデバイス名を取得する。<br />
      * 親機が未設定の場合、空文字を返す。

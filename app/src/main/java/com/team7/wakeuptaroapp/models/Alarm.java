@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.team7.wakeuptaroapp.R;
+import com.team7.wakeuptaroapp.exceptions.AlarmConstraintViolationsException;
 import com.team7.wakeuptaroapp.utils.Alarms;
 
 import org.joda.time.LocalDateTime;
@@ -166,6 +168,13 @@ public class Alarm implements Comparable<Alarm>, Serializable {
      */
     public Long getRegisteredDateTime() {
         return registeredDateTime;
+    }
+
+    @JsonIgnore
+    public void validate() throws AlarmConstraintViolationsException {
+        if (dayOfWeeks.isEmpty()) {
+            throw new AlarmConstraintViolationsException(R.string.message_day_of_week_not_selected);
+        }
     }
 
     /**

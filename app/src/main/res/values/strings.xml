@@ -20,6 +20,7 @@
     <string name="title_dialog_ble_select">起こしタロウ 親機 選択</string>
     <string name="title_dialog_usated_device">起こしタロウ 親機 未設定</string>
     <string name="title_dialog_motion_waiting">起こしタロウ 親機 動作確認中</string>
+    <string name="title_dialog_alarm_validation_failure">アラーム登録失敗</string>
 
     <string name="message_dialog_disabled_bluetooth">Bluetooth を有効にしてください。</string>
     <string name="message_dialog_ble_searching">起こしタロウ 親機を検索しています...</string>
@@ -35,6 +36,7 @@
     <string name="message_notification">早く起きて!!</string>
     <string name="message_alarm">早く起きて!!\n親機まで急げ!!</string>
     <string name="message_alarm_stop_success">おはようございます!!</string>
+    <string name="message_day_of_week_not_selected">アラームを鳴らす曜日を 1 つ以上選択してください。</string>
 
     <!-- On Development Message -->
     <string name="message_alarm_delete_all">アラーム情報を全て削除しました。</string>

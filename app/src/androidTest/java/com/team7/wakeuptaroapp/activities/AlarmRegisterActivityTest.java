@@ -80,7 +80,7 @@ public class AlarmRegisterActivityTest {
     public void 選択した時刻が画面に表示されること() {
         // 事前検証
         onData(withKey("alarmTime")).onChildView(
-                withId(android.R.id.summary)).check(matches(withText("00:00")));
+                withId(android.R.id.summary)).check(matches(withText("07:00")));
 
         // アラーム時刻を選択
         selectTime();
@@ -94,14 +94,14 @@ public class AlarmRegisterActivityTest {
     public void 選択した曜日が画面に表示されること() {
         // 事前検証
         onData(withKey("alarmDayOfWeeks")).onChildView(
-                withId(android.R.id.summary)).check(matches(withText("なし")));
+                withId(android.R.id.summary)).check(matches(withText("平日")));
 
         // 曜日を選択
         selectDayOfWeeks();
 
         // 検証
         onData(withKey("alarmDayOfWeeks")).onChildView(
-                withId(android.R.id.summary)).check(matches(withText("週末")));
+                withId(android.R.id.summary)).check(matches(withText("毎日")));
     }
 
     @Ignore("アラーム一覧から値を選択するには?")
@@ -137,16 +137,41 @@ public class AlarmRegisterActivityTest {
         // 登録
         onView(withId(R.id.action_store_alarm)).perform(click());
 
-        // 画面遷移を検証
+        // 一覧画面へ戻ってくること
         onView(withClassName(is("AlarmListActivity")));
 
         // SharedPreference を検証
         List<Alarm> storedAlarms = preference.alarms();
         assertThat(storedAlarms).hasSize(1);
-        assertThat(storedAlarms.get(0)).hasTime("13:51").hasDayOfWeeks("6_sat", "7_sun");
+        assertThat(storedAlarms.get(0)).hasTime("13:51").hasDayOfWeeks("1_mon", "2_tue", "3_wed", "4_thu", "5_fri", "6_sat", "7_sun");
+    }
 
-        // 一覧画面へ戻ってくること
-        onView(withClassName(is("AlarmListActivity")));
+    @Test
+    public void 曜日が未選択の場合にエラーダイアログが表示されること() {
+        assertThat(preference.alarms()).isEmpty();
+
+        // ダイアログ表示
+        onData(withKey("alarmDayOfWeeks")).perform(click());
+
+        // 曜日の選択を解除
+        onView(withText("月")).perform(click());
+        onView(withText("火")).perform(click());
+        onView(withText("水")).perform(click());
+        onView(withText("木")).perform(click());
+        onView(withText("金")).perform(click());
+
+        // OK
+        onView(withText("OK")).perform(click());
+
+        // 登録
+        onView(withId(R.id.action_store_alarm)).perform(click());
+
+        // エラーダイアログを検証
+        onView(withText("アラームを鳴らす曜日を 1 つ以上選択してください。")).check(matches(isDisplayed()));
+
+        // 登録画面のままであること
+        onView(withClassName(is("AlarmRegisterActivity")));
+        assertThat(preference.alarms()).isEmpty();
     }
 
     private void selectTime() {
