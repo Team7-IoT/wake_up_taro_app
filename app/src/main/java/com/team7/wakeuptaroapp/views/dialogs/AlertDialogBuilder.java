@@ -52,6 +52,33 @@ public class AlertDialogBuilder {
         }
     }
 
+    /**
+     * アラーム登録時にバリデーションチェックに失敗した旨を通知するダイアログ。
+     */
+    public static class ValidationFailureDialog extends Builder {
+
+        private int messageId;
+
+        public ValidationFailureDialog(Context context) {
+            super(context);
+        }
+
+        public ValidationFailureDialog cause(int messageId) {
+            this.messageId = messageId;
+            return this;
+        }
+
+        public void show() {
+            AlertDialog dialog = new AlertDialog.Builder(context)
+                    .setTitle(R.string.title_dialog_alarm_validation_failure)
+                    .setMessage(messageId)
+                    .setPositiveButton("OK", null)
+                    .create();
+
+            dialog.show();
+        }
+    }
+
     private static abstract class Builder {
 
         protected Context context;

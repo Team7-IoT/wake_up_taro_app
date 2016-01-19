@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.team7.wakeuptaroapp.R;
+import com.team7.wakeuptaroapp.exceptions.AlarmConstraintViolationsException;
 import com.team7.wakeuptaroapp.fragments.AlarmFragment;
 import com.team7.wakeuptaroapp.models.Alarm;
 import com.team7.wakeuptaroapp.utils.AppLog;
@@ -14,6 +15,7 @@ import com.team7.wakeuptaroapp.utils.Preconditions;
 import com.team7.wakeuptaroapp.utils.TaroAlarmManager;
 import com.team7.wakeuptaroapp.utils.TaroSharedPreference;
 import com.team7.wakeuptaroapp.utils.Toasts;
+import com.team7.wakeuptaroapp.views.dialogs.AlertDialogBuilder;
 
 import java.util.List;
 import java.util.Set;
@@ -87,7 +89,12 @@ public class AlarmUpdateActivity extends AppCompatActivity {
             // アラームの更新
             TaroAlarmManager alarmManager = new TaroAlarmManager(getApplicationContext());
             alarmManager.cancel(targetAlarm);
-            updateAlarm();
+            try {
+                updateAlarm();
+            } catch (AlarmConstraintViolationsException e) {
+                new AlertDialogBuilder.ValidationFailureDialog(this).cause(e.getCauseMessageId()).show();
+                return true;
+            }
             alarmManager.register(targetAlarm);
 
             // メッセージ
@@ -111,7 +118,7 @@ public class AlarmUpdateActivity extends AppCompatActivity {
     /**
      * 入力内容を基にアラーム情報を SharedPreference に保存する。
      */
-    private void updateAlarm() {
+    private void updateAlarm() throws AlarmConstraintViolationsException {
 
         String time = preference.alarmTime();
         Set<String> dayOfWeeks = preference.alarmDayOfWeeks();
@@ -127,6 +134,7 @@ public class AlarmUpdateActivity extends AppCompatActivity {
         targetAlarm.setTime(time);
         targetAlarm.setDayOfWeeks(dayOfWeeks);
         targetAlarm.setRingtoneUri(ringtoneUri);
+        targetAlarm.validate();
 
         alarms.remove(targetAlarm);
         alarms.add(targetAlarm);

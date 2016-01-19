@@ -1,6 +1,7 @@
 package com.team7.wakeuptaroapp.views.preferences;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.support.annotation.VisibleForTesting;
@@ -21,6 +22,18 @@ public class AlarmDayOfWeekPreference extends MultiSelectListPreference {
     public AlarmDayOfWeekPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         setOnPreferenceChangeListener(listener);
+    }
+
+    @Override
+    protected Object onGetDefaultValue(TypedArray a, int index) {
+        CharSequence[] defalutValues = a.getTextArray(index);
+        Set<String> values = new HashSet<>();
+        if (defalutValues != null) {
+            for (CharSequence defaultValue : defalutValues) {
+                values.add(defaultValue.toString());
+            }
+        }
+        return values;
     }
 
     @Override
