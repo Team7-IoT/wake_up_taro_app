@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -166,4 +167,18 @@ public class AlarmListActivity extends AppCompatActivity {
         return alarms;
     }
 
+    /**
+     * 戻るボタンをホームボタン押下と同じ振る舞いに上書きする。
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode != KeyEvent.KEYCODE_BACK) {
+            return super.onKeyDown(keyCode, event);
+        }
+
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        startActivity(intent);
+        return true;
+    }
 }
