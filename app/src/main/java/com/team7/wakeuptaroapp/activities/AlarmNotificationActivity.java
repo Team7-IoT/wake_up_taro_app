@@ -1,7 +1,6 @@
 package com.team7.wakeuptaroapp.activities;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
@@ -15,6 +14,7 @@ import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,9 +53,6 @@ public class AlarmNotificationActivity extends Activity {
     private BluetoothAdapter bluetoothAdapter;
     private Handler handler;
     private BluetoothGatt bluetoothGatt;
-
-    // センサー検証中に表示するダイアログ
-    private ProgressDialog waitingDialog;
 
     // SharedPreference
     private TaroSharedPreference preference;
@@ -199,6 +196,9 @@ public class AlarmNotificationActivity extends Activity {
         AlarmIntent intent = AlarmIntent.of(getIntent());
         ringtone = RingtoneManager.getRingtone(getApplicationContext(), intent.getRingtoneUri());
 
+        bluetoothGatt = null;
+        handler = new Handler(getApplicationContext().getMainLooper());
+
         // スクリーンロックを解除する
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
@@ -216,10 +216,6 @@ public class AlarmNotificationActivity extends Activity {
             // TODO アラーム起動時に、接続検証済みの親機が居ない場合
             return;
         }
-
-        // BLE の機能を使って親機を検索
-        bluetoothGatt = null;
-        handler = new Handler(getApplicationContext().getMainLooper());
     }
 
     @Override
@@ -335,5 +331,15 @@ public class AlarmNotificationActivity extends Activity {
      */
     public void stopAlarmForce(View view) {
         stopAlarm();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode != KeyEvent.KEYCODE_BACK) {
+            return super.onKeyDown(keyCode, event);
+        }
+
+        // 何もしない
+        return true;
     }
 }
