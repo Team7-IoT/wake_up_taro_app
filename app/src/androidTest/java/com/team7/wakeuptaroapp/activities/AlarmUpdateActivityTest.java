@@ -34,6 +34,7 @@ import static com.team7.wakeuptaroapp.assertions.AlarmAssertion.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.core.AnyOf.anyOf;
 import static org.hamcrest.core.Is.is;
 
 /**
@@ -157,7 +158,8 @@ public class AlarmUpdateActivityTest {
         onView(withText("OK")).perform(click());
 
         // 更新
-        onView(withContentDescription("上へ移動")).perform(click());
+        // CircleCI 環境依存に対応
+        onView(anyOf(withContentDescription("上へ移動"), withContentDescription("Navigate up"))).perform(click());
 
         // ダイアログを検証
         onView(withText("アラーム情報が変更されていますが、戻りますか?")).check(matches(isDisplayed()));
