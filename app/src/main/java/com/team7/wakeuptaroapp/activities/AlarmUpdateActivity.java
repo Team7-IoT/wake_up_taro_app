@@ -1,5 +1,7 @@
 package com.team7.wakeuptaroapp.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -109,6 +111,27 @@ public class AlarmUpdateActivity extends AppCompatActivity {
         if (id == android.R.id.home) {
             AppLog.d("Tap to back on menu_alarm_update.");
 
+            if (isChanged()) {
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.title_dialog_alarm_validation_failure)
+                        .setMessage(R.string.message_alarm_changed_ignore)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        finish();
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .create().show();
+
+                return true;
+            }
+
             finish();
             return true;
         }
@@ -145,6 +168,19 @@ public class AlarmUpdateActivity extends AppCompatActivity {
         // アラーム一覧画面の Activity を呼び出す。
         Intent intent = new Intent(AlarmUpdateActivity.this, AlarmListActivity.class);
         startActivity(intent);
+    }
+
+    /**
+     * 更新前のアラーム情報から変更があるかどうかを判定する。
+     *
+     * @return いずれかの項目で変更があった場合は true
+     */
+    private boolean isChanged() {
+        String newTime = preference.alarmTime();
+        Set<String> newDayOfWeeks = preference.alarmDayOfWeeks();
+        String newRingtoneUri = preference.alarmRingtone();
+
+        return targetAlarm.isChanged(newTime, newDayOfWeeks, newRingtoneUri);
     }
 
     /**

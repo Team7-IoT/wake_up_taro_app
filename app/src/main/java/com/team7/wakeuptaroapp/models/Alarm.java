@@ -1,6 +1,7 @@
 package com.team7.wakeuptaroapp.models;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -175,6 +176,20 @@ public class Alarm implements Comparable<Alarm>, Serializable {
         if (dayOfWeeks.isEmpty()) {
             throw new AlarmConstraintViolationsException(R.string.message_day_of_week_not_selected);
         }
+    }
+
+    @JsonIgnore
+    public boolean isChanged(String newTime, Set<String> newDayOfWeeks, String newRingtoneUri) {
+        if (!TextUtils.equals(this.time, newTime)) {
+            return true;
+        }
+        if (!this.dayOfWeeks.equals(newDayOfWeeks)) {
+            return true;
+        }
+        if (!TextUtils.equals(this.ringtoneUri, newRingtoneUri)) {
+            return true;
+        }
+        return false;
     }
 
     /**
