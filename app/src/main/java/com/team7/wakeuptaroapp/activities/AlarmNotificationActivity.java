@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.skyfishjy.library.RippleBackground;
 import com.team7.wakeuptaroapp.R;
 import com.team7.wakeuptaroapp.ble.RaspberryPi;
 import com.team7.wakeuptaroapp.ble.RpiGattCallback;
@@ -31,6 +32,8 @@ import com.team7.wakeuptaroapp.utils.Toasts;
 
 import java.util.UUID;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import de.devland.esperandro.Esperandro;
 
 import static com.team7.wakeuptaroapp.BuildConfig.NOTIFICATION_CHARACTERISTIC_UUID;
@@ -65,6 +68,9 @@ public class AlarmNotificationActivity extends Activity {
 
     // アラーム起動時に親機との接続に成功したかどうか
     private boolean scanSuccessful;
+
+    @Bind(R.id.content)
+    RippleBackground background;
 
     /**
      * 親機を BLE でスキャンする際のコールバック。
@@ -117,7 +123,15 @@ public class AlarmNotificationActivity extends Activity {
                 // Characteristic の Notification 有効化
                 BluetoothGattDescriptor descriptor = c.getDescriptor(RaspberryPi.CLIENT_CHARACTERISTIC_UUID);
                 descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-                gatt.writeDescriptor(descriptor);
+                boolean success = gatt.writeDescriptor(descriptor);
+                if (success) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            background.startRippleAnimation();
+                        }
+                    });
+                }
             }
         }
 
@@ -183,6 +197,8 @@ public class AlarmNotificationActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_notification);
+
+        ButterKnife.bind(this);
 
         // SharedPreference
         preference = Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
