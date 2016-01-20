@@ -86,6 +86,7 @@ dependencies {
     apt 'de.devland.esperandro:esperandro:2.2.0'
     compile 'de.devland.esperandro:esperandro-jackson-addon:2.2.0'
     compile 'net.danlew:android.joda:2.6.0'
+    compile 'com.skyfishjy.ripplebackground:library:1.0.1'
 
     // DeployGate SDK for Android
     compile 'com.deploygate:sdk:3.1'
