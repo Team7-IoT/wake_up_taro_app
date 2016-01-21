@@ -9,6 +9,9 @@ buildscript {
 
         // the latest version of the android-apt plugin from https://bitbucket.org/hvisser/android-apt
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.5.1'
+
+        // for Hugo
+        classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
     }
 }
 

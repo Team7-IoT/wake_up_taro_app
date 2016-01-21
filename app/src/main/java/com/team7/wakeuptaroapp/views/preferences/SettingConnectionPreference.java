@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.devland.esperandro.Esperandro;
+import hugo.weaving.DebugLog;
 
 import static android.content.Context.BLUETOOTH_SERVICE;
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
@@ -66,6 +67,7 @@ public class SettingConnectionPreference extends Preference {
          *
          * @param device {@link BluetoothDevice}
          */
+        @DebugLog
         @Override
         protected void doLeScan(BluetoothDevice device) {
             devices.put(device.getName(), device);
@@ -81,6 +83,7 @@ public class SettingConnectionPreference extends Preference {
          *
          * @param gatt {@link BluetoothGatt}
          */
+        @DebugLog
         @Override
         protected void doConnectionStateIfConnected(BluetoothGatt gatt) {
             // アラーム停止用にデバイス名を保存しておく

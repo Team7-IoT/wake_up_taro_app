@@ -28,6 +28,7 @@ import com.team7.wakeuptaroapp.views.dialogs.AlertDialogBuilder;
 import java.util.UUID;
 
 import de.devland.esperandro.Esperandro;
+import hugo.weaving.DebugLog;
 
 import static android.content.Context.BLUETOOTH_SERVICE;
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
@@ -67,6 +68,7 @@ public class SettingCensorPreference extends Preference {
          *
          * @param device {@link BluetoothDevice}
          */
+        @DebugLog
         @Override
         protected void doLeScan(BluetoothDevice device) {
             AppLog.d("device.getName(): " + device.getName());
@@ -87,6 +89,7 @@ public class SettingCensorPreference extends Preference {
          *
          * @param gatt {@link BluetoothGatt}
          */
+        @DebugLog
         @Override
         protected void doConnectionStateIfConnected(BluetoothGatt gatt) {
             bluetoothGatt.discoverServices();
@@ -97,6 +100,7 @@ public class SettingCensorPreference extends Preference {
          *
          * @param gatt {@link BluetoothGatt}
          */
+        @DebugLog
         @Override
         protected void doServicesDiscoveredIfGattSuccess(BluetoothGatt gatt) {
             // デバイスのボタン押下の通知受け取り設定
@@ -120,6 +124,7 @@ public class SettingCensorPreference extends Preference {
          * @param gatt {@link BluetoothGatt}
          * @param characteristic {@link BluetoothGattCharacteristic}
          */
+        @DebugLog
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             AppLog.d("onCharacteristicChanged UUID: " + characteristic.getUuid().toString());

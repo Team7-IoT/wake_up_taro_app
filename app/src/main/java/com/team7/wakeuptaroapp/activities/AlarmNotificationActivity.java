@@ -35,6 +35,7 @@ import java.util.UUID;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.devland.esperandro.Esperandro;
+import hugo.weaving.DebugLog;
 
 import static com.team7.wakeuptaroapp.BuildConfig.NOTIFICATION_CHARACTERISTIC_UUID;
 import static com.team7.wakeuptaroapp.BuildConfig.NOTIFICATION_SERVICE_UUID;
@@ -81,6 +82,7 @@ public class AlarmNotificationActivity extends Activity {
          *
          * @param device {@link BluetoothDevice}
          */
+        @DebugLog
         @Override
         protected void doLeScan(BluetoothDevice device) {
             AppLog.d("device.getName(): " + device.getName());
@@ -101,6 +103,7 @@ public class AlarmNotificationActivity extends Activity {
          *
          * @param gatt {@link BluetoothGatt}
          */
+        @DebugLog
         @Override
         protected void doConnectionStateIfConnected(BluetoothGatt gatt) {
             bluetoothGatt.discoverServices();
@@ -111,6 +114,7 @@ public class AlarmNotificationActivity extends Activity {
          *
          * @param gatt {@link BluetoothGatt}
          */
+        @DebugLog
         @Override
         protected void doServicesDiscoveredIfGattSuccess(BluetoothGatt gatt) {
             if (isConnected()) {
@@ -141,6 +145,7 @@ public class AlarmNotificationActivity extends Activity {
          * @param gatt {@link BluetoothGatt}
          * @param characteristic {@link BluetoothGattCharacteristic}
          */
+        @DebugLog
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             AppLog.d("onCharacteristicChanged UUID: " + characteristic.getUuid().toString());
@@ -301,6 +306,7 @@ public class AlarmNotificationActivity extends Activity {
      * @param cid キャラクタリスティックの UUID 文字列
      * @return 見つかった{@link BluetoothGattCharacteristic}
      */
+    @DebugLog
     private BluetoothGattCharacteristic findCharacteristic(String sid, String cid) {
         if (!isConnected()) {
             return null;
