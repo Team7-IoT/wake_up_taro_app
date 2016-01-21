@@ -25,8 +25,8 @@
 
     <ImageView
         android:id="@+id/taro_dish"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="86dp"
+        android:layout_height="86dp"
         android:layout_centerInParent="true"
         android:src="@drawable/taro_dish"/>
 
