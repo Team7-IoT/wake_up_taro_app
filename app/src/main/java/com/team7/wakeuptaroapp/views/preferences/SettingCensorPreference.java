@@ -211,7 +211,12 @@ public class SettingCensorPreference extends Preference {
         handler.postDelayed(scanFinalizer, WAIT_MOTION_PERIOD);
 
         // スキャン開始
-        bluetoothAdapter.startLeScan(scanCallback);
+        BluetoothDevice device = bluetoothAdapter.getRemoteDevice(preference.deviceAddress());
+        if (device == null) {
+            bluetoothAdapter.startLeScan(scanCallback);
+        } else {
+            bluetoothGatt = device.connectGatt(getContext(), false, gattCallback);
+        }
     }
 
     /**

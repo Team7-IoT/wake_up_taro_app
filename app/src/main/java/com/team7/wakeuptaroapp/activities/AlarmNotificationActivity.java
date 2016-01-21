@@ -275,7 +275,12 @@ public class AlarmNotificationActivity extends Activity {
         handler.postDelayed(scanFinalizer, WAIT_CONNECT_PERIOD);
 
         // スキャン開始
-        bluetoothAdapter.startLeScan(scanCallback);
+        BluetoothDevice device = bluetoothAdapter.getRemoteDevice(preference.deviceAddress());
+        if (device == null) {
+            bluetoothAdapter.startLeScan(scanCallback);
+        } else {
+            bluetoothGatt = device.connectGatt(getApplicationContext(), false, gattCallback);
+        }
     }
 
     private void stopScan() {

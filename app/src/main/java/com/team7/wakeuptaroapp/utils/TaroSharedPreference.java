@@ -39,6 +39,22 @@ public interface TaroSharedPreference extends SharedPreferenceActions {
     void deviceName(String deviceName);
 
     /**
+     * 親機となるデバイスのアドレスを取得する。<br />
+     * 親機が未設定の場合、空文字を返す。
+     *
+     * @return 親機のアドレス
+     */
+    @Default(ofString = "")
+    String deviceAddress();
+
+    /**
+     * 親機となるデバイスのアドレスを保存する。
+     *
+     * @param deviceAddress 親機のアドレス
+     */
+    void deviceAddress(String deviceAddress);
+
+    /**
      * アラーム登録・更新時に設定した時間を取得する。
      *
      * @return アラーム時間 (HH:MM 形式)
