@@ -34,8 +34,8 @@ android {
             versionNameSuffix "${versionPrefixTime()}"
 
             // Raspberry Pi
-            buildConfigField "String", "NOTIFICATION_SERVICE_UUID", "\"${project.property("notification_service_uuid")}\""
-            buildConfigField "String", "NOTIFICATION_CHARACTERISTIC_UUID", "\"${project.property("notification_characteristic_uuid")}\""
+            buildConfigField "String", "NOTIFICATION_SERVICE_UUID", "\"${project.property("notification_service_debug_uuid")}\""
+            buildConfigField "String", "NOTIFICATION_CHARACTERISTIC_UUID", "\"${project.property("notification_characteristic_debug_uuid")}\""
         }
         release {
             // デバッグモード許可
