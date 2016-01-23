@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.team7.wakeuptaroapp.R;
 import com.team7.wakeuptaroapp.adapters.ListItemAdapter;
 import com.team7.wakeuptaroapp.models.Alarm;
@@ -69,6 +71,18 @@ public class AlarmListActivity extends AppCompatActivity {
 
         //ロングタップ時に表示されるコンテキストを登録する。
         registerForContextMenu(lv);
+
+        ViewTarget target = new ViewTarget(R.id.new_alarm, this);
+        new ShowcaseView.Builder(this)
+                .withHoloShowcase()
+                .setTarget(target)
+                .setStyle(R.style.CustomShowcaseTheme)
+                .setContentTitle("はじめに")
+                .setContentText("タロウのエサについて設定を行ってください。")
+                .hideOnTouchOutside()
+                .build().hideButton();
+
+        // TODO どうやら ActionBar の item に対して設定できないみたい...
     }
 
     @Override
