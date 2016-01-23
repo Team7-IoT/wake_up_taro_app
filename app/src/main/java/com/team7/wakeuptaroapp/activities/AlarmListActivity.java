@@ -50,7 +50,6 @@ public class AlarmListActivity extends AppCompatActivity {
 
         // アラームデータをビューに渡す
         list = preference.alarms();
-        Collections.sort(list);
 
         adapter = new ListItemAdapter(this);
         adapter.setItemList(list);
@@ -176,7 +175,9 @@ public class AlarmListActivity extends AppCompatActivity {
      * アラーム一覧をソートしなおし、アダプタに変更を通知する。
      */
     private void notifyListChanged() {
-        Collections.sort(list);
+        if (list != null) {
+            Collections.sort(list);
+        }
         adapter.notifyDataSetChanged();
     }
 }
