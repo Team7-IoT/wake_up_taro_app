@@ -85,6 +85,7 @@ public class SettingConnectionPreference extends Preference {
         protected void doConnectionStateIfConnected(BluetoothGatt gatt) {
             // アラーム停止用にデバイス名を保存しておく
             preference.deviceName(bluetoothGatt.getDevice().getName());
+            preference.deviceAddress(bluetoothGatt.getDevice().getAddress());
 
             activity.runOnUiThread(new Runnable() {
                 public void run() {

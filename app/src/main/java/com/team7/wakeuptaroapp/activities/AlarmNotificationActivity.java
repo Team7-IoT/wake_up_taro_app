@@ -118,7 +118,7 @@ public class AlarmNotificationActivity extends Activity {
                 BluetoothGattCharacteristic c = findCharacteristic(
                         NOTIFICATION_SERVICE_UUID, NOTIFICATION_CHARACTERISTIC_UUID);
                 boolean result = bluetoothGatt.setCharacteristicNotification(c, true);
-                AppLog.d("setCharacteristicNotification result: " + result);
+                AppLog.d("setCharacteristicNotification enable result: " + result);
 
                 // Characteristic の Notification 有効化
                 BluetoothGattDescriptor descriptor = c.getDescriptor(RaspberryPi.CLIENT_CHARACTERISTIC_UUID);
@@ -142,17 +142,26 @@ public class AlarmNotificationActivity extends Activity {
          * @param characteristic {@link BluetoothGattCharacteristic}
          */
         @Override
-        public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+        public void onCharacteristicChanged(final BluetoothGatt gatt, final BluetoothGattCharacteristic characteristic) {
             AppLog.d("onCharacteristicChanged UUID: " + characteristic.getUuid().toString());
 
             if (TextUtils.equals(characteristic.getUuid().toString(), NOTIFICATION_CHARACTERISTIC_UUID)) {
                 AppLog.d("Notification characteristic: " + characteristic.getValue()[0]);
 
                 final Activity activity = AlarmNotificationActivity.this;
-                if (characteristic.getValue()[0] == 1) {
+                if (characteristic.getValue()[0] != 0) {
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            // Notification を無効にする
+                            BluetoothGattDescriptor descriptor = characteristic.getDescriptor(RaspberryPi.CLIENT_CHARACTERISTIC_UUID);
+                            descriptor.setValue(BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
+                            boolean result = gatt.writeDescriptor(descriptor);
+                            AppLog.d("Gatt disabled: " + result);
+
+                            result = gatt.setCharacteristicNotification(characteristic, false);
+                            AppLog.d("setCharacteristicNotification disable result: " + result);
+
                             stopAlarm();
                             Toasts.showMessageLong(activity, R.string.message_alarm_stop_success);
                         }
@@ -275,7 +284,12 @@ public class AlarmNotificationActivity extends Activity {
         handler.postDelayed(scanFinalizer, WAIT_CONNECT_PERIOD);
 
         // スキャン開始
-        bluetoothAdapter.startLeScan(scanCallback);
+        BluetoothDevice device = bluetoothAdapter.getRemoteDevice(preference.deviceAddress());
+        if (device == null) {
+            bluetoothAdapter.startLeScan(scanCallback);
+        } else {
+            bluetoothGatt = device.connectGatt(getApplicationContext(), false, gattCallback);
+        }
     }
 
     private void stopScan() {
