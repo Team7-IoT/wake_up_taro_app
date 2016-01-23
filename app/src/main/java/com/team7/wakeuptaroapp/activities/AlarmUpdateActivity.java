@@ -85,7 +85,7 @@ public class AlarmUpdateActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        // 登録ボタン押下
+        // 更新ボタン押下
         if (id == R.id.action_update_alarm) {
             AppLog.d("Tap to update on alarm.");
 
@@ -98,7 +98,9 @@ public class AlarmUpdateActivity extends AppCompatActivity {
                 new AlertDialogBuilder.ValidationFailureDialog(this).cause(e.getCauseMessageId()).show();
                 return true;
             }
-            alarmManager.register(targetAlarm);
+            if (targetAlarm.isValid()) {
+                alarmManager.register(targetAlarm);
+            }
 
             // メッセージ
             Toasts.showMessageLong(this, R.string.message_update_alarm);
