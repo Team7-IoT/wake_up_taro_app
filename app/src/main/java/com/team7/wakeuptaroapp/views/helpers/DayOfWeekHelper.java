@@ -6,8 +6,6 @@ import android.support.annotation.NonNull;
 import com.team7.wakeuptaroapp.R;
 import com.team7.wakeuptaroapp.models.DayOfWeek;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import java.util.Arrays;
 import java.util.Set;
 
@@ -78,11 +76,11 @@ public class DayOfWeekHelper {
     }
 
     private static boolean containsSaturday(String... days) {
-        return ArrayUtils.contains(days, DOW_SAT);
+        return Arrays.asList(days).contains(DOW_SAT);
     }
 
     private static boolean containsSunday(String... days) {
-        return ArrayUtils.contains(days, DOW_SUN);
+        return Arrays.asList(days).contains(DOW_SUN);
     }
 
     private static String convertToDayOfWeeks(Context context, String... days) {

@@ -32,33 +32,29 @@ android {
             debuggable true
             // バージョン名接尾辞
             versionNameSuffix "${versionPrefixTime()}"
-
-            // Raspberry Pi
-//            buildConfigField "String", "NOTIFICATION_SERVICE_UUID", "\"${project.property("notification_service_debug_uuid")}\""
-//            buildConfigField "String", "NOTIFICATION_CHARACTERISTIC_UUID", "\"${project.property("notification_characteristic_debug_uuid")}\""
-
-            // Raspberry Pi
-            buildConfigField "String", "NOTIFICATION_SERVICE_UUID", "\"${project.property("notification_service_uuid")}\""
-            buildConfigField "String", "NOTIFICATION_CHARACTERISTIC_UUID", "\"${project.property("notification_characteristic_uuid")}\""
         }
         release {
-            // デバッグモード許可
+            // デバッグモード禁止
             debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-            // Raspberry Pi
-            buildConfigField "String", "NOTIFICATION_SERVICE_UUID", "\"${project.property("notification_service_uuid")}\""
-            buildConfigField "String", "NOTIFICATION_CHARACTERISTIC_UUID", "\"${project.property("notification_characteristic_uuid")}\""
         }
     }
 
     productFlavors {
         develop {
             applicationId "${PACKAGE_NAME}.develop"
+
+            // BSHSBTPT01BK (as Raspberry Pi)
+            buildConfigField "String", "NOTIFICATION_SERVICE_UUID", "\"${project.property("notification_service_develop_uuid")}\""
+            buildConfigField "String", "NOTIFICATION_CHARACTERISTIC_UUID", "\"${project.property("notification_characteristic_develop_uuid")}\""
         }
         production {
             applicationId PACKAGE_NAME
+
+            // Raspberry Pi
+            buildConfigField "String", "NOTIFICATION_SERVICE_UUID", "\"${project.property("notification_service_uuid")}\""
+            buildConfigField "String", "NOTIFICATION_CHARACTERISTIC_UUID", "\"${project.property("notification_characteristic_uuid")}\""
         }
     }
 
@@ -90,24 +86,27 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:support-annotations:23.0.1'
     compile 'com.android.support:support-v4:23.0.1'
     compile 'com.android.support:design:22.2.0'
-    compile 'org.apache.commons:commons-lang3:3.4'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'de.devland.esperandro:esperandro-api:2.2.0'
     apt 'de.devland.esperandro:esperandro:2.2.0'
     compile 'de.devland.esperandro:esperandro-jackson-addon:2.2.0'
     compile 'net.danlew:android.joda:2.6.0'
     compile 'com.skyfishjy.ripplebackground:library:1.0.1'
+
     // DeployGate SDK for Android
     compile 'com.deploygate:sdk:3.1'
+
     // For Unit test dependencies
     testCompile 'org.robolectric:robolectric:3.0'
     testCompile 'org.mockito:mockito-all:1.10.19'
     testCompile 'junit:junit:4.+'
     testCompile 'org.assertj:assertj-core:1.+'
+
     // For Espresso test dependencies
     androidTestCompile 'com.android.support:support-annotations:23.0.1'
     androidTestCompile 'com.android.support.test:runner:0.4'
