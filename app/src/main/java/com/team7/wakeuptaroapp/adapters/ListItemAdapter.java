@@ -115,34 +115,22 @@ public class ListItemAdapter extends BaseAdapter {
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) { // ON
-                    alarmManager.register(itemList.get(position));
-
-                    List<Alarm> alarms = preference.alarms();
-                    Alarm alarm = alarms.get(position);
-                    alarms.remove(alarm);
+                Alarm alarm = itemList.get(position);
+                if (isChecked) {
                     alarm.setValid(true);
-                    alarms.add(alarm);
-                    preference.alarms(alarms);
-
-                } else { // OFF
-                    alarmManager.cancel(itemList.get(position));
-
-                    List<Alarm> alarms = preference.alarms();
-                    Alarm alarm = alarms.get(position);
-                    alarms.remove(alarm);
+                    alarmManager.register(alarm);
+                } else {
                     alarm.setValid(false);
-                    alarms.add(alarm);
-                    preference.alarms(alarms);
-
+                    alarmManager.cancel(alarm);
                 }
+
+                List<Alarm> alarms = preference.alarms();
+                alarms.remove(alarm);
+                alarms.add(alarm);
+                preference.alarms(alarms);
             }
         });
 
         return convertView;
-    }
-
-    public void addList(Alarm alarm) {
-        itemList.add(alarm);
     }
 }
