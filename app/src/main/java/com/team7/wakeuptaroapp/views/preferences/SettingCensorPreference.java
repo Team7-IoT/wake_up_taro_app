@@ -121,22 +121,34 @@ public class SettingCensorPreference extends Preference {
          * @param characteristic {@link BluetoothGattCharacteristic}
          */
         @Override
-        public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+        public void onCharacteristicChanged(final BluetoothGatt gatt, final BluetoothGattCharacteristic characteristic) {
             AppLog.d("onCharacteristicChanged UUID: " + characteristic.getUuid().toString());
+            AppLog.d("onCharacteristicChanged VALUE: " + characteristic.getValue()[0]);
 
             if (TextUtils.equals(characteristic.getUuid().toString(), NOTIFICATION_CHARACTERISTIC_UUID)) {
                 AppLog.d("Notification characteristic: " + characteristic.getValue()[0]);
 
-                if (characteristic.getValue()[0] == 1) {
+//                if (characteristic.getValue()[0] == 1) {
+                if (characteristic.getValue()[0] != 0) {
                     activity.runOnUiThread(new Runnable() {
                         @Override
+
                         public void run() {
+                            // Notification を無効にする
+                            BluetoothGattDescriptor descriptor = characteristic.getDescriptor(RaspberryPi.CLIENT_CHARACTERISTIC_UUID);
+                            descriptor.setValue(BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
+                            boolean result = gatt.writeDescriptor(descriptor);
+                            AppLog.d("Gatt disabled: " + result);
+
+                            result = gatt.setCharacteristicNotification(characteristic, false);
+                            AppLog.d("setCharacteristicNotification disable result: " + result);
+
                             closeWaitingDialog();
                             Toasts.showMessageLong(activity, R.string.message_motion_success);
+
+                            stopScan();
                         }
                     });
-
-                    stopScan();
                 }
             }
         }
@@ -163,6 +175,8 @@ public class SettingCensorPreference extends Preference {
     @Override
     protected void onClick() {
         AppLog.d("onClick SettingCensorPreference");
+        AppLog.d("NOTIFICATION_SERVICE_UUID: " + NOTIFICATION_SERVICE_UUID);
+        AppLog.d("NOTIFICATION_CHARACTERISTIC_UUID: " + NOTIFICATION_CHARACTERISTIC_UUID);
 
         // Bluetooth 有効判定
         if (!bluetoothAdapter.isEnabled()) {

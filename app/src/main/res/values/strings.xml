@@ -35,7 +35,7 @@
     <string name="message_delete_alarm">アラームを削除しました。</string>
     <string name="message_notification">早く起きて!!</string>
     <string name="message_alarm">早く起きて!!\n親機まで急げ!!</string>
-    <string name="message_alarm_stop_success">おはようございます!!</string>
+    <string name="message_alarm_stop_success">Good Morning!!</string>
     <string name="message_day_of_week_not_selected">アラームを鳴らす曜日を 1 つ以上選択してください。</string>
     <string name="message_alarm_changed_ignore">アラーム情報が変更されていますが、戻りますか?</string>
 
