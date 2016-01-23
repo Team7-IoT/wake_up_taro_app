@@ -28,19 +28,7 @@
         android:layout_width="86dp"
         android:layout_height="86dp"
         android:layout_centerInParent="true"
-        android:src="@drawable/taro_dish"/>
-
-    <Button
-        android:id="@+id/stop_alarm"
-        android:layout_width="160dp"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="63dp"
-        android:background="@color/kraft_paper"
         android:onClick="stopAlarmForce"
-        android:text="@string/stop_alarm"
-        android:textColor="@color/pewter"
-        android:textSize="24sp"
+        android:src="@drawable/taro_dish"
         />
 </com.skyfishjy.library.RippleBackground>
