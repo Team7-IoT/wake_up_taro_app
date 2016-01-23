@@ -128,7 +128,6 @@ public class SettingCensorPreference extends Preference {
             if (TextUtils.equals(characteristic.getUuid().toString(), NOTIFICATION_CHARACTERISTIC_UUID)) {
                 AppLog.d("Notification characteristic: " + characteristic.getValue()[0]);
 
-//                if (characteristic.getValue()[0] == 1) {
                 if (characteristic.getValue()[0] != 0) {
                     activity.runOnUiThread(new Runnable() {
                         @Override
@@ -144,9 +143,8 @@ public class SettingCensorPreference extends Preference {
                             AppLog.d("setCharacteristicNotification disable result: " + result);
 
                             closeWaitingDialog();
-                            Toasts.showMessageLong(activity, R.string.message_motion_success);
-
                             stopScan();
+                            Toasts.showMessageLong(activity, R.string.message_motion_success);
                         }
                     });
                 }
