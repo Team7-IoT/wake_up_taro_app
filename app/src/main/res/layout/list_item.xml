@@ -8,6 +8,7 @@
         android:id="@+id/alarm_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:focusable="false"
         />
 
@@ -16,16 +17,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginStart="10dp"
         android:focusable="false"
-        android:textSize="13pt"
+        android:textSize="16pt"
         />
 
     <TextView
         android:id="@+id/alarm_day_of_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
         android:focusable="false"
-        android:textSize="6pt"
+        android:textSize="8pt"
         />
 
 </LinearLayout>

@@ -18,8 +18,11 @@ import com.team7.wakeuptaroapp.utils.AppLog;
 import com.team7.wakeuptaroapp.utils.TaroSharedPreference;
 import com.team7.wakeuptaroapp.utils.Toasts;
 
+import java.util.Collections;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import de.devland.esperandro.Esperandro;
 
 /**
@@ -31,7 +34,8 @@ import de.devland.esperandro.Esperandro;
  */
 public class AlarmListActivity extends AppCompatActivity {
 
-    private ListView lv;
+    @Bind(R.id.alarm_list)
+    ListView lv;
     private List<Alarm> list;
     private ListItemAdapter adapter;
     private TaroSharedPreference preference;
@@ -41,16 +45,15 @@ public class AlarmListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_list);
 
-        lv = (ListView) findViewById(R.id.alarm_list);
-
-        list = this.getListItem();
+        preference = Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
+        ButterKnife.bind(this);
 
         // アラームデータをビューに渡す
+        list = preference.alarms();
+
         adapter = new ListItemAdapter(this);
         adapter.setItemList(list);
         lv.setAdapter(adapter);
-
-        preference = Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
 
         // ListView クリック時アラーム更新画面へ遷移させる
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -58,16 +61,20 @@ public class AlarmListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 AppLog.d("onClickEditAlarm");
 
-                ListView listView = (ListView) parent;
-
                 Intent intent = new Intent(AlarmListActivity.this, AlarmUpdateActivity.class);
-                intent.putExtra(AlarmUpdateActivity.ALARM_KEY, preference.alarms().get(position).getAlarmKey());
+                intent.putExtra(AlarmUpdateActivity.ALARM_KEY, list.get(position).getAlarmKey());
                 startActivity(intent);
             }
         });
 
         //ロングタップ時に表示されるコンテキストを登録する。
         registerForContextMenu(lv);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        notifyListChanged();
     }
 
     @Override
@@ -114,12 +121,11 @@ public class AlarmListActivity extends AppCompatActivity {
             case R.id.alarm_delete:
                 Alarm alarm = list.get(info.position);
                 list.remove(alarm);
-                adapter.notifyDataSetChanged();
 
                 // 端末から対象のアラーム情報を削除する。
-                preference = Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
                 preference.alarms(list);
 
+                notifyListChanged();
                 Toasts.showMessageLong(this, R.string.message_delete_alarm);
 
                 break;
@@ -137,34 +143,17 @@ public class AlarmListActivity extends AppCompatActivity {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-
-            // 設定 Activity 呼び出し
             Intent intent = new Intent(AlarmListActivity.this, SettingActivity.class);
             startActivity(intent);
 
             return true;
-
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * 端末に保存されているアラーム情報を取得する。
-     *
-     * @return alarms アラーム一覧
-     */
-    private List<Alarm> getListItem() {
-
-        preference = Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
-        List<Alarm> alarms = preference.alarms();
-
-        return alarms;
     }
 
     /**
@@ -180,5 +169,15 @@ public class AlarmListActivity extends AppCompatActivity {
         intent.addCategory(Intent.CATEGORY_HOME);
         startActivity(intent);
         return true;
+    }
+
+    /**
+     * アラーム一覧をソートしなおし、アダプタに変更を通知する。
+     */
+    private void notifyListChanged() {
+        if (list != null) {
+            Collections.sort(list);
+        }
+        adapter.notifyDataSetChanged();
     }
 }

@@ -7,7 +7,7 @@
     <string name="action_settings">設定</string>
     <string name="action_store_alarm">登録</string>
     <string name="action_update_alarm">更新</string>
-    <string name="action_delete_alarm">削除</string>
+    <string name="action_delete_alarm">アラーム削除</string>
     <string name="stop_alarm">Stop!!</string>
 
 
