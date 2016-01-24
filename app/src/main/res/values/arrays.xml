@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="day_of_week_labels">
+        <item>月</item>
+        <item>火</item>
+        <item>水</item>
+        <item>木</item>
+        <item>金</item>
+        <item>土</item>
+        <item>日</item>
+    </string-array>
+    <string-array name="day_of_week_values">
+        <item>1_mon</item>
+        <item>2_tue</item>
+        <item>3_wed</item>
+        <item>4_thu</item>
+        <item>5_fri</item>
+        <item>6_sat</item>
+        <item>7_sun</item>
+    </string-array>
+    <string-array name="day_of_week_default_values">
+        <item>1_mon</item>
+        <item>2_tue</item>
+        <item>3_wed</item>
+        <item>4_thu</item>
+        <item>5_fri</item>
+    </string-array>
+</resources>

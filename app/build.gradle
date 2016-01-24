@@ -1,0 +1,117 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+
+def PACKAGE_NAME = "com.team7.wakeuptaroapp"
+
+def versionPrefixTime = {
+    Calendar now = Calendar.getInstance()
+    int year = now.get(Calendar.YEAR)
+    int month = now.get(Calendar.MONTH) + 1
+    int day = now.get(Calendar.DAY_OF_MONTH)
+    int hour = now.get(Calendar.HOUR_OF_DAY)
+    int minute = now.get(Calendar.MINUTE)
+    return String.format(Locale.JAPAN, ".%04d%02d%02d%02d%02d", year, month, day, hour, minute)
+}
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "23.0.1"
+
+    defaultConfig {
+        applicationId "com.team7.wakeuptaroapp"
+        minSdkVersion 18
+        targetSdkVersion 22
+        version "${version_code}"
+        versionName "${version_name}"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        debug {
+            // デバッグモード許可
+            debuggable true
+            // バージョン名接尾辞
+            versionNameSuffix "${versionPrefixTime()}"
+        }
+        release {
+            // デバッグモード禁止
+            debuggable false
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        develop {
+            applicationId "${PACKAGE_NAME}.develop"
+
+            // BSHSBTPT01BK (as Raspberry Pi)
+            buildConfigField "String", "NOTIFICATION_SERVICE_UUID", "\"${project.property("notification_service_develop_uuid")}\""
+            buildConfigField "String", "NOTIFICATION_CHARACTERISTIC_UUID", "\"${project.property("notification_characteristic_develop_uuid")}\""
+        }
+        production {
+            applicationId PACKAGE_NAME
+
+            // Raspberry Pi
+            buildConfigField "String", "NOTIFICATION_SERVICE_UUID", "\"${project.property("notification_service_uuid")}\""
+            buildConfigField "String", "NOTIFICATION_CHARACTERISTIC_UUID", "\"${project.property("notification_characteristic_uuid")}\""
+        }
+    }
+
+    packagingOptions {
+        // for AndroidStudio's bug. duplication error of file below.
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+
+    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:support-annotations:23.0.1'
+    compile 'com.android.support:support-v4:23.0.1'
+    compile 'com.android.support:design:22.2.0'
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'de.devland.esperandro:esperandro-api:2.2.0'
+    apt 'de.devland.esperandro:esperandro:2.2.0'
+    compile 'de.devland.esperandro:esperandro-jackson-addon:2.2.0'
+    compile 'net.danlew:android.joda:2.6.0'
+    compile 'com.skyfishjy.ripplebackground:library:1.0.1'
+
+    // DeployGate SDK for Android
+    compile 'com.deploygate:sdk:3.1'
+
+    // For Unit test dependencies
+    testCompile 'org.robolectric:robolectric:3.0'
+    testCompile 'org.mockito:mockito-all:1.10.19'
+    testCompile 'junit:junit:4.+'
+    testCompile 'org.assertj:assertj-core:1.+'
+
+    // For Espresso test dependencies
+    androidTestCompile 'com.android.support:support-annotations:23.0.1'
+    androidTestCompile 'com.android.support.test:runner:0.4'
+    androidTestCompile 'com.android.support.test:rules:0.4'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
+    androidTestCompile 'junit:junit:4.+'
+    androidTestCompile 'org.assertj:assertj-core:1.+'
+}
