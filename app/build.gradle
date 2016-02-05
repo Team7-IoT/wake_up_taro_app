@@ -48,6 +48,8 @@ android {
             // BSHSBTPT01BK (as Raspberry Pi)
             buildConfigField "String", "NOTIFICATION_SERVICE_UUID", "\"${project.property("notification_service_develop_uuid")}\""
             buildConfigField "String", "NOTIFICATION_CHARACTERISTIC_UUID", "\"${project.property("notification_characteristic_develop_uuid")}\""
+
+            buildConfigField "boolean", "APP_MODE_DEVELOP", "true"
         }
         production {
             applicationId PACKAGE_NAME
@@ -55,6 +57,8 @@ android {
             // Raspberry Pi
             buildConfigField "String", "NOTIFICATION_SERVICE_UUID", "\"${project.property("notification_service_uuid")}\""
             buildConfigField "String", "NOTIFICATION_CHARACTERISTIC_UUID", "\"${project.property("notification_characteristic_uuid")}\""
+
+            buildConfigField "boolean", "APP_MODE_DEVELOP", "false"
         }
     }
 
