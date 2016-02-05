@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.skyfishjy.library.RippleBackground;
+import com.team7.wakeuptaroapp.BuildConfig;
 import com.team7.wakeuptaroapp.R;
 import com.team7.wakeuptaroapp.ble.RaspberryPi;
 import com.team7.wakeuptaroapp.ble.RpiGattCallback;
@@ -235,12 +236,6 @@ public class AlarmNotificationActivity extends Activity {
             bluetoothDisabled = true;
             bluetoothAdapter.enable();
         }
-
-        // 接続検証済み親機の存在判定
-        if (TextUtils.isEmpty(preference.deviceName())) {
-            // TODO アラーム起動時に、接続検証済みの親機が居ない場合
-            return;
-        }
     }
 
     @Override
@@ -251,7 +246,9 @@ public class AlarmNotificationActivity extends Activity {
         // TODO もし親機との疎通に失敗した場合、緊急停止用として停止ボタンを活性化させる？
 
         // スキャン開始
-        startScan();
+        if (!TextUtils.isEmpty(preference.deviceName())) {
+            startScan();
+        }
     }
 
     @Override
@@ -360,7 +357,9 @@ public class AlarmNotificationActivity extends Activity {
      * @param view {@link View}
      */
     public void stopAlarmForce(View view) {
-        stopAlarm();
+        if (BuildConfig.APP_MODE_DEVELOP) {
+            stopAlarm();
+        }
     }
 
     @Override
