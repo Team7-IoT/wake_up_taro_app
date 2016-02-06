@@ -24,6 +24,8 @@ import java.util.Set;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Alarm implements Comparable<Alarm>, Serializable {
 
+    private static final Set<String> EMPTY_SET = new HashSet<>(0);
+
     // アラーム時間 (HH:MM)
     private String time;
 
@@ -107,7 +109,7 @@ public class Alarm implements Comparable<Alarm>, Serializable {
      * @return アラームの曜日一覧
      */
     public Set<String> getDayOfWeeks() {
-        return (dayOfWeeks == null ? Collections.EMPTY_SET : dayOfWeeks);
+        return (dayOfWeeks == null ? EMPTY_SET : dayOfWeeks);
     }
 
     /**
@@ -186,10 +188,7 @@ public class Alarm implements Comparable<Alarm>, Serializable {
         if (!this.dayOfWeeks.equals(newDayOfWeeks)) {
             return true;
         }
-        if (!TextUtils.equals(this.ringtoneUri, newRingtoneUri)) {
-            return true;
-        }
-        return false;
+        return !TextUtils.equals(this.ringtoneUri, newRingtoneUri);
     }
 
     /**

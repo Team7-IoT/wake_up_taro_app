@@ -60,7 +60,7 @@ public class SettingConnectionPreference extends Preference {
     /**
      * 親機を BLE でスキャンする際のコールバック。
      */
-    private RpiLeScanCallback scanCallback = new RpiLeScanCallback() {
+    private final RpiLeScanCallback scanCallback = new RpiLeScanCallback() {
         /**
          * スキャンで見つかったデバイスの情報を一覧に保存する。
          *
@@ -75,7 +75,7 @@ public class SettingConnectionPreference extends Preference {
     /**
      * 親機との GATT 通信時に使用するコールバック。
      */
-    private RpiGattCallback gattCallback = new RpiGattCallback() {
+    private final RpiGattCallback gattCallback = new RpiGattCallback() {
         /**
          * GATT 通信に成功したデバイス名の保存を行い、メッセージを表示する。
          *
@@ -101,7 +101,7 @@ public class SettingConnectionPreference extends Preference {
     /**
      * 一定時間スキャン後に呼び出す後処理。
      */
-    private Runnable scanFinalizer = new Runnable() {
+    private final Runnable scanFinalizer = new Runnable() {
         @Override
         public void run() {
             closeSearchingDialog();

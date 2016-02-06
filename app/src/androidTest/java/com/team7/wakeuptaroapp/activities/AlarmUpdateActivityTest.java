@@ -47,7 +47,7 @@ import static org.hamcrest.core.Is.is;
 public class AlarmUpdateActivityTest {
 
     @Rule
-    public ActivityTestRule<AlarmListActivity> alarmActivityRule = new ActivityTestRule<AlarmListActivity>(AlarmListActivity.class);
+    public ActivityTestRule<AlarmListActivity> alarmActivityRule = new ActivityTestRule<>(AlarmListActivity.class);
 
     private TaroSharedPreference preference;
 

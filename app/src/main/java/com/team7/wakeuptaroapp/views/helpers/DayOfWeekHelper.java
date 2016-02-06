@@ -62,17 +62,11 @@ public class DayOfWeekHelper {
     }
 
     private static boolean isWeekday(String... days) {
-        if (days.length != 5) {
-            return false;
-        }
-        return (!containsSaturday(days) && !containsSunday(days));
+        return (days.length == 5 && !containsSaturday(days) && !containsSunday(days));
     }
 
     private static boolean isWeekend(String... days) {
-        if (days.length != 2) {
-            return false;
-        }
-        return (containsSaturday(days) && containsSunday(days));
+        return (days.length == 2 && containsSaturday(days) && containsSunday(days));
     }
 
     private static boolean containsSaturday(String... days) {

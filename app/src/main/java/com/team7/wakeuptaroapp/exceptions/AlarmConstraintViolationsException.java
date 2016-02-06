@@ -7,7 +7,7 @@ package com.team7.wakeuptaroapp.exceptions;
  */
 public class AlarmConstraintViolationsException extends Exception {
 
-    private int causeMessageId;
+    private final int causeMessageId;
 
     /**
      * 違反内容を表すメッセージ ID を指定して例外情報を生成する。

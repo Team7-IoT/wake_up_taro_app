@@ -55,7 +55,9 @@
 
         <service android:name=".services.AlarmService"/>
 
-        <receiver android:name=".services.AlarmReceiver">
+        <receiver
+            android:name=".services.AlarmReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="TIMER_FINISHED"/>
             </intent-filter>

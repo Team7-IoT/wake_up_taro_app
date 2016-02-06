@@ -54,11 +54,6 @@ public class StartActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -82,6 +77,10 @@ public class StartActivity extends Activity {
      */
     public void deleteAllAlarm(View view) {
         AppLog.d("Delete All Alarm");
+
+        if (!BuildConfig.APP_MODE_DEVELOP) {
+            return;
+        }
 
         TaroSharedPreference preference = Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
         TaroAlarmManager alarmManager = new TaroAlarmManager(getApplicationContext());
