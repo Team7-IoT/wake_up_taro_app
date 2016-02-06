@@ -8,8 +8,6 @@
     <string name="action_store_alarm">登録</string>
     <string name="action_update_alarm">更新</string>
     <string name="action_delete_alarm">アラーム削除</string>
-    <string name="stop_alarm">Stop!!</string>
-
 
     <string name="title_activity_alarm_list">アラーム一覧</string>
     <string name="title_activity_alarm_register">アラーム登録</string>
@@ -23,9 +21,9 @@
     <string name="title_dialog_alarm_validation_failure">アラーム情報 確認</string>
 
     <string name="message_dialog_disabled_bluetooth">Bluetooth を有効にしてください。</string>
-    <string name="message_dialog_ble_searching">タロウのエサを探しています...</string>
+    <string name="message_dialog_ble_searching">タロウのエサを探しています&#8230;</string>
     <string name="message_dialog_usated_device">タロウのエサを先に探してください。</string>
-    <string name="message_dialog_motion_waiting">タロウのエサに設置されたセンサーを使って連携確認をしています...</string>
+    <string name="message_dialog_motion_waiting">タロウのエサに設置されたセンサーを使って連携確認をしています&#8230;</string>
     <string name="message_found_ble">タロウのエサ (%1$s) が見つかりました!!</string>
     <string name="message_motion_success">タロウのエサと連携できました!!</string>
     <string name="message_not_found_ble">タロウのエサが見つかりませんでした。。。</string>
@@ -33,7 +31,6 @@
     <string name="message_store_alarm">アラームを登録しました。</string>
     <string name="message_update_alarm">アラームを更新しました。</string>
     <string name="message_delete_alarm">アラームを削除しました。</string>
-    <string name="message_notification">早く起きて!!</string>
     <string name="message_alarm">早く起きて!!\nエサまで急げ!!</string>
     <string name="message_alarm_stop_success">Good Morning!!</string>
     <string name="message_day_of_week_not_selected">アラームを鳴らす曜日を 1 つ以上選択してください。</string>
@@ -42,11 +39,6 @@
     <!-- On Development Message -->
     <string name="message_alarm_delete_all">アラーム情報を全て削除しました。</string>
     <string name="message_alarm_delete_none">削除するアラーム情報はありませんでした。</string>
-    <string name="message_clear_device_name">保存済みのデバイス名を削除しました。</string>
-
-    <string name="setting_connect">接続検証</string>
-
-    <string name="log_prefix">TARO</string>
 
     <!-- alarm titles -->
     <string name="title_alarm_time">時間</string>
@@ -69,6 +61,4 @@
     <string name="label_alarm_weekday">平日</string>
     <string name="label_alarm_weekend">週末</string>
     <string name="label_alarm_silent">サイレント</string>
-
-    <string name="hello_world">Hello world!</string>
 </resources>

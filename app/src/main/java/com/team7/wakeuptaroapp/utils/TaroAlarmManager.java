@@ -21,8 +21,8 @@ import static android.app.AlarmManager.INTERVAL_DAY;
  */
 public class TaroAlarmManager {
 
-    private Context context;
-    private AlarmManager alarmManager;
+    private final Context context;
+    private final AlarmManager alarmManager;
 
     /**
      * インスタンスを生成する。
