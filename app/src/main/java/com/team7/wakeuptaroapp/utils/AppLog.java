@@ -10,6 +10,8 @@ import android.util.Log;
  */
 public class AppLog {
 
+    private static final String LOG_PREFIX = "TARO";
+
     // インスタンス化を抑制
     private AppLog() {
         // NOP
@@ -120,6 +122,6 @@ public class AppLog {
     }
 
     private static String prefix() {
-        return "TARO";
+        return LOG_PREFIX;
     }
 }

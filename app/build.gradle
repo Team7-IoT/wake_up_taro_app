@@ -21,7 +21,7 @@ android {
         applicationId "com.team7.wakeuptaroapp"
         minSdkVersion 18
         targetSdkVersion 22
-        version "${version_code}"
+        versionCode Integer.parseInt("${version_code}")
         versionName "${version_name}"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -48,6 +48,8 @@ android {
             // BSHSBTPT01BK (as Raspberry Pi)
             buildConfigField "String", "NOTIFICATION_SERVICE_UUID", "\"${project.property("notification_service_develop_uuid")}\""
             buildConfigField "String", "NOTIFICATION_CHARACTERISTIC_UUID", "\"${project.property("notification_characteristic_develop_uuid")}\""
+
+            buildConfigField "boolean", "APP_MODE_DEVELOP", "true"
         }
         production {
             applicationId PACKAGE_NAME
@@ -55,6 +57,8 @@ android {
             // Raspberry Pi
             buildConfigField "String", "NOTIFICATION_SERVICE_UUID", "\"${project.property("notification_service_uuid")}\""
             buildConfigField "String", "NOTIFICATION_CHARACTERISTIC_UUID", "\"${project.property("notification_characteristic_uuid")}\""
+
+            buildConfigField "boolean", "APP_MODE_DEVELOP", "false"
         }
     }
 
@@ -104,14 +108,14 @@ dependencies {
     // For Unit test dependencies
     testCompile 'org.robolectric:robolectric:3.0'
     testCompile 'org.mockito:mockito-all:1.10.19'
-    testCompile 'junit:junit:4.+'
-    testCompile 'org.assertj:assertj-core:1.+'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.assertj:assertj-core:1.7.1'
 
     // For Espresso test dependencies
     androidTestCompile 'com.android.support:support-annotations:23.0.1'
     androidTestCompile 'com.android.support.test:runner:0.4'
     androidTestCompile 'com.android.support.test:rules:0.4'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
-    androidTestCompile 'junit:junit:4.+'
-    androidTestCompile 'org.assertj:assertj-core:1.+'
+    androidTestCompile 'junit:junit:4.12'
+    androidTestCompile 'org.assertj:assertj-core:1.7.1'
 }

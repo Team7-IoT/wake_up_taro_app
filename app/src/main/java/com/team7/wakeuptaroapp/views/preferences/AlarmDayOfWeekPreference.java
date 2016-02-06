@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
+import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 import android.util.AttributeSet;
 
@@ -25,11 +26,11 @@ public class AlarmDayOfWeekPreference extends MultiSelectListPreference {
     }
 
     @Override
-    protected Object onGetDefaultValue(TypedArray a, int index) {
-        CharSequence[] defalutValues = a.getTextArray(index);
+    protected Object onGetDefaultValue(@NonNull TypedArray array, int index) {
+        CharSequence[] defaultValues = array.getTextArray(index);
         Set<String> values = new HashSet<>();
-        if (defalutValues != null) {
-            for (CharSequence defaultValue : defalutValues) {
+        if (defaultValues != null) {
+            for (CharSequence defaultValue : defaultValues) {
                 values.add(defaultValue.toString());
             }
         }
@@ -49,6 +50,7 @@ public class AlarmDayOfWeekPreference extends MultiSelectListPreference {
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             AlarmDayOfWeekPreference pref = AlarmDayOfWeekPreference.class.cast(preference);
 
+            @SuppressWarnings("unchecked")
             Set<String> selectedDays = (HashSet<String>) newValue;
             pref.setSummary(DayOfWeekHelper.convertToLabel(pref.getContext(), selectedDays));
 

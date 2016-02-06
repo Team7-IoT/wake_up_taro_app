@@ -13,6 +13,13 @@ import com.team7.wakeuptaroapp.R;
 public class AlertDialogBuilder {
 
     /**
+     * Used by {@code new AlertDialogBuilder.ConcreteDialog(context).show();}
+     */
+    private AlertDialogBuilder() {
+        // NOP
+    }
+
+    /**
      * Bluetooth が無効である旨を通知するダイアログ。
      */
     public static class DisabledBluetooth extends Builder {
@@ -81,7 +88,7 @@ public class AlertDialogBuilder {
 
     private static abstract class Builder {
 
-        protected Context context;
+        protected final Context context;
 
         public Builder(Context context) {
             this.context = context;

@@ -20,7 +20,7 @@
         android:layout_marginTop="100dp"
         android:singleLine="false"
         android:text="@string/message_alarm"
-        android:textSize="30dp"
+        android:textSize="30sp"
         />
 
     <ImageView

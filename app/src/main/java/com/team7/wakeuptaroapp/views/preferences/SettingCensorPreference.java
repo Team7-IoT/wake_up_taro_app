@@ -61,7 +61,7 @@ public class SettingCensorPreference extends Preference {
     /**
      * 親機を BLE でスキャンする際のコールバック。
      */
-    private RpiLeScanCallback scanCallback = new RpiLeScanCallback() {
+    private final RpiLeScanCallback scanCallback = new RpiLeScanCallback() {
         /**
          * スキャンで見つかったデバイスの情報を一覧に保存する。
          *
@@ -81,7 +81,7 @@ public class SettingCensorPreference extends Preference {
     /**
      * 親機との GATT 通信時に使用するコールバック。
      */
-    private RpiGattCallback gattCallback = new RpiGattCallback() {
+    private final RpiGattCallback gattCallback = new RpiGattCallback() {
         /**
          * GATT 通信に成功後、{@link #onServicesDiscovered(BluetoothGatt, int)} を実行する。
          *
@@ -155,7 +155,7 @@ public class SettingCensorPreference extends Preference {
     /**
      * 一定時間スキャン後に呼び出す後処理。
      */
-    private Runnable scanFinalizer = new Runnable() {
+    private final Runnable scanFinalizer = new Runnable() {
         @Override
         public void run() {
             closeWaitingDialog();
@@ -300,15 +300,15 @@ public class SettingCensorPreference extends Preference {
             return null;
         }
 
-        UUID suuid = UUID.fromString(sid);
-        UUID cuuid = UUID.fromString(cid);
+        UUID serviceUuid = UUID.fromString(sid);
+        UUID characteristicUuid = UUID.fromString(cid);
 
-        BluetoothGattService s = bluetoothGatt.getService(suuid);
+        BluetoothGattService s = bluetoothGatt.getService(serviceUuid);
         if (s == null) {
             AppLog.w("Service NOT found :" + sid);
             return null;
         }
-        BluetoothGattCharacteristic c = s.getCharacteristic(cuuid);
+        BluetoothGattCharacteristic c = s.getCharacteristic(characteristicUuid);
         if (c == null) {
             AppLog.w("Characteristic NOT found :" + cid);
             return null;
