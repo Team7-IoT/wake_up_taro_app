@@ -78,6 +78,10 @@ public class StartActivity extends Activity {
     public void deleteAllAlarm(View view) {
         AppLog.d("Delete All Alarm");
 
+        if (!BuildConfig.APP_MODE_DEVELOP) {
+            return;
+        }
+
         TaroSharedPreference preference = Esperandro.getPreferences(TaroSharedPreference.class, getApplicationContext());
         TaroAlarmManager alarmManager = new TaroAlarmManager(getApplicationContext());
 
