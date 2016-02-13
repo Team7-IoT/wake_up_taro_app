@@ -55,6 +55,21 @@ public interface TaroSharedPreference extends SharedPreferenceActions {
     void deviceAddress(String deviceAddress);
 
     /**
+     * アプリ共通で使用するアラーム音量を取得する。
+     *
+     * @return アラーム音量
+     */
+    @Default(ofInt = 0)
+    int alarmVolume();
+
+    /**
+     * アプリ共通で使用するアラーム音量を保存する。
+     *
+     * @param volume アラーム音量
+     */
+    void alarmVolume(int volume);
+
+    /**
      * アラーム登録・更新時に設定した時間を取得する。
      *
      * @return アラーム時間 (HH:MM 形式)

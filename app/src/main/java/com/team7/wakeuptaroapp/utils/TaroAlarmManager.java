@@ -21,6 +21,8 @@ import static android.app.AlarmManager.INTERVAL_DAY;
  */
 public class TaroAlarmManager {
 
+    private static final int SNOOZE_INTERVAL_MINUTE = 5;
+
     private final Context context;
     private final AlarmManager alarmManager;
 
@@ -42,7 +44,7 @@ public class TaroAlarmManager {
      * @param alarm 登録対象のアラーム情報
      */
     public void register(@NonNull Alarm alarm) {
-        Preconditions.notNull(alarm, "Register menu_alarm_register required!!");
+        Preconditions.notNull(alarm, "Register alarm required!!");
 
         for (String dayOfWeek : alarm.getDayOfWeeks()) {
             DayOfWeek dow = DayOfWeek.resolve(dayOfWeek);
@@ -61,13 +63,32 @@ public class TaroAlarmManager {
     }
 
     /**
+     * アラームのスヌーズを登録する。<br />
+     * 現在時刻から一定時間後に再度アラームが鳴るように設定する。
+     *
+     * @param ringtoneUri アラーム音の URI
+     */
+    public void snoozeRegister(@NonNull String ringtoneUri) {
+        Preconditions.notNull(ringtoneUri, "Snooze register alarm ringtone uri required!!");
+
+        Long snoozeTime = generateSnoozeTime();
+
+        AlarmIntent intent = AlarmIntent.forService(context, ringtoneUri);
+        intent.setActionAsUniqueKey(Long.valueOf(snoozeTime.hashCode())); // アラーム情報を重複させないよう識別させる
+        intent.setAlarmKey(Long.valueOf(snoozeTime.hashCode()));
+        PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, snoozeTime, pendingIntent);
+    }
+
+    /**
      * アラーム情報の取り消しを行う。<br />
      * 指定されたアラーム情報の内容に基づき、キーとなるアラーム情報 ({@link Alarm#getRegisteredDateTime()}) が同一のアラーム情報を全て取り消す。
      *
      * @param alarm 取り消し対象のアラーム情報
      */
     public void cancel(@NonNull Alarm alarm) {
-        Preconditions.notNull(alarm, "Cancel menu_alarm_register required!!");
+        Preconditions.notNull(alarm, "Cancel alarm required!!");
 
         for (String dayOfWeek : alarm.getDayOfWeeks()) {
             DayOfWeek dow = DayOfWeek.resolve(dayOfWeek);
@@ -110,6 +131,20 @@ public class TaroAlarmManager {
         dateTime = dateTime.withHourOfDay(alarm.getTimeHour()).withMinuteOfHour(alarm.getTimeMinute());
 
         AppLog.d("AlarmTime(DOW): " + dateTime.toString(DateTimeFormat.fullDateTime()) + "(" + dow.getResId() + ")");
+        return dateTime.toDateTime().getMillis();
+    }
+
+    /**
+     * スヌーズ用に現在時刻から 5 分後の時刻を生成する。
+     *
+     * @return アラーム時刻を表す値
+     */
+    private Long generateSnoozeTime() {
+
+        LocalDateTime dateTime = LocalDateTime.now().minuteOfHour().roundFloorCopy();
+        dateTime = dateTime.plusMinutes(SNOOZE_INTERVAL_MINUTE);
+
+        AppLog.d("SnoozeTime: " + dateTime.toString(DateTimeFormat.fullDateTime()));
         return dateTime.toDateTime().getMillis();
     }
 

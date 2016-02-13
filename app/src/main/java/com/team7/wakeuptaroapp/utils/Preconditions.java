@@ -29,6 +29,19 @@ public class Preconditions {
     }
 
     /**
+     * 指定した値が正の値 (0 を含む) であることを検証する。
+     *
+     * @param value   検証値
+     * @param message 条件を満たしていない場合のメッセージ
+     * @throws IllegalArgumentException 検証値が負数の場合
+     */
+    public static void checkPositive(int value, String message) {
+        if (value < 0) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    /**
      * 指定されたオブジェクトが　NULL でないことを検証する。
      *
      * @param condition 検証値

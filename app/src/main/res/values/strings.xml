@@ -8,6 +8,7 @@
     <string name="action_store_alarm">登録</string>
     <string name="action_update_alarm">更新</string>
     <string name="action_delete_alarm">アラーム削除</string>
+    <string name="action_snooze">スヌーズ (5分)</string>
 
     <string name="title_activity_alarm_list">アラーム一覧</string>
     <string name="title_activity_alarm_register">アラーム登録</string>
@@ -33,6 +34,7 @@
     <string name="message_delete_alarm">アラームを削除しました。</string>
     <string name="message_alarm">早く起きて!!\nエサまで急げ!!</string>
     <string name="message_alarm_stop_success">Good Morning!!</string>
+    <string name="message_snooze">スヌーズ設定 (5分) をしました。</string>
     <string name="message_day_of_week_not_selected">アラームを鳴らす曜日を 1 つ以上選択してください。</string>
     <string name="message_alarm_changed_ignore">アラーム情報が変更されていますが、戻りますか?</string>
 
@@ -46,6 +48,7 @@
     <string name="title_alarm_ringtone">アラーム音</string>
     <string name="title_setting_try_connect">タロウのエサを探す</string>
     <string name="title_setting_try_censor">タロウのエサとの連携確認</string>
+    <string name="title_setting_alarm_volume">アラーム音量</string>
     <string name="title_setting_version">バージョン</string>
 
     <!-- alarm labels -->
@@ -61,4 +64,6 @@
     <string name="label_alarm_weekday">平日</string>
     <string name="label_alarm_weekend">週末</string>
     <string name="label_alarm_silent">サイレント</string>
+
+    <string name="label_mute">ミュート</string>
 </resources>

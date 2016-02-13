@@ -1,5 +1,6 @@
 package com.team7.wakeuptaroapp.activities;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -9,8 +10,7 @@ import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.content.Intent;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.skyfishjy.library.RippleBackground;
 import com.team7.wakeuptaroapp.BuildConfig;
@@ -27,7 +28,10 @@ import com.team7.wakeuptaroapp.ble.RaspberryPi;
 import com.team7.wakeuptaroapp.ble.RpiGattCallback;
 import com.team7.wakeuptaroapp.ble.RpiLeScanCallback;
 import com.team7.wakeuptaroapp.models.AlarmIntent;
+import com.team7.wakeuptaroapp.models.AlarmVolume;
+import com.team7.wakeuptaroapp.models.OptionalRingtone;
 import com.team7.wakeuptaroapp.utils.AppLog;
+import com.team7.wakeuptaroapp.utils.TaroAlarmManager;
 import com.team7.wakeuptaroapp.utils.TaroSharedPreference;
 import com.team7.wakeuptaroapp.utils.Toasts;
 
@@ -37,6 +41,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.devland.esperandro.Esperandro;
 
+import static android.media.AudioManager.STREAM_RING;
 import static com.team7.wakeuptaroapp.BuildConfig.NOTIFICATION_CHARACTERISTIC_UUID;
 import static com.team7.wakeuptaroapp.BuildConfig.NOTIFICATION_SERVICE_UUID;
 
@@ -46,6 +51,9 @@ import static com.team7.wakeuptaroapp.BuildConfig.NOTIFICATION_SERVICE_UUID;
  * @author Naotake.K
  */
 public class AlarmNotificationActivity extends Activity {
+
+    // スヌーズ有効化の待ち時間 (10秒)
+    private static final long WAIT_SNOOZE_PERIOD = 10000;
 
     // 親機への接続検証待ち時間 (5秒)
     private static final long WAIT_CONNECT_PERIOD = 5000;
@@ -58,20 +66,30 @@ public class AlarmNotificationActivity extends Activity {
     private Handler handler;
     private BluetoothGatt bluetoothGatt;
 
+    private AudioManager audioManager;
+
     // SharedPreference
     private TaroSharedPreference preference;
 
     // アラーム登録時に指定したアラーム音
-    private Ringtone ringtone;
+    private OptionalRingtone ringtone;
 
     // アラーム起動時の Bluetooth 状態
     private boolean bluetoothDisabled;
 
+    // アラーム起動時の端末着信音量
+    private int currentVolume;
+
     // アラーム起動時に親機との接続に成功したかどうか
     private boolean scanSuccessful;
 
+    private AlarmIntent intent;
+
     @Bind(R.id.content)
     RippleBackground background;
+
+    @Bind(R.id.snooze)
+    TextView snooze;
 
     /**
      * 親機を BLE でスキャンする際のコールバック。
@@ -173,6 +191,18 @@ public class AlarmNotificationActivity extends Activity {
     };
 
     /**
+     * アラーム起動の一定時間後、スヌーズ機能を有効化する処理。
+     */
+    private final Runnable snoozeDisplayer = new Runnable() {
+        @Override
+        public void run() {
+            ObjectAnimator feedIn = ObjectAnimator.ofFloat(snooze, "alpha", 1.0f);
+            feedIn.setStartDelay(1000);
+            feedIn.start();
+        }
+    };
+
+    /**
      * 一定時間スキャン後に呼び出す後処理。
      */
     private final Runnable scanFinalizer = new Runnable() {
@@ -219,8 +249,15 @@ public class AlarmNotificationActivity extends Activity {
         this.scanCallback.setActivity(this);
 
         // AlarmReceiver 経由で受け取ったアラーム音
-        AlarmIntent intent = AlarmIntent.of(getIntent());
-        ringtone = RingtoneManager.getRingtone(getApplicationContext(), intent.getRingtoneUri());
+        intent = AlarmIntent.of(getIntent());
+        ringtone = OptionalRingtone.of(getApplicationContext(), intent.getRingtoneUri());
+
+        // AuditManager
+        audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+        currentVolume = audioManager.getStreamVolume(STREAM_RING);
+
+        int maxVolume = audioManager.getStreamMaxVolume(STREAM_RING);
+        audioManager.setStreamVolume(STREAM_RING, AlarmVolume.of(preference.alarmVolume()).adjust(maxVolume), 0);
 
         bluetoothGatt = null;
         handler = new Handler(getApplicationContext().getMainLooper());
@@ -236,6 +273,8 @@ public class AlarmNotificationActivity extends Activity {
             bluetoothDisabled = true;
             bluetoothAdapter.enable();
         }
+
+        snooze.setAlpha(0.0f);
     }
 
     @Override
@@ -244,6 +283,9 @@ public class AlarmNotificationActivity extends Activity {
         ringtone.play();
 
         // TODO もし親機との疎通に失敗した場合、緊急停止用として停止ボタンを活性化させる？
+
+        // 一定時間後にスヌーズ機能を有効化
+        handler.postDelayed(snoozeDisplayer, WAIT_SNOOZE_PERIOD);
 
         // スキャン開始
         if (!TextUtils.isEmpty(preference.deviceName())) {
@@ -340,6 +382,9 @@ public class AlarmNotificationActivity extends Activity {
             bluetoothAdapter.disable();
         }
 
+        // 音量を元に戻す
+        audioManager.setStreamVolume(STREAM_RING, currentVolume, 0);
+
         Intent intent = new Intent(this, AlarmListActivity.class);
         startActivity(intent);
 
@@ -355,6 +400,20 @@ public class AlarmNotificationActivity extends Activity {
         if (BuildConfig.APP_MODE_DEVELOP) {
             stopAlarm();
         }
+    }
+
+    /**
+     * アラームをスヌーズする。
+     *
+     * @param view {@link View}
+     */
+    public void snoozeAlarm(View view) {
+        TaroAlarmManager alarmManager = new TaroAlarmManager(getApplicationContext());
+        alarmManager.snoozeRegister(intent.getRingtoneUriAsString());
+
+        Toasts.showMessageLong(this, R.string.message_snooze);
+
+        stopAlarm();
     }
 
     @Override
