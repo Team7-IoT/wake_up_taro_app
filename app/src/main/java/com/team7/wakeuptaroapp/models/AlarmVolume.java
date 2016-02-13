@@ -7,7 +7,7 @@ import java.math.RoundingMode;
 import java.util.Locale;
 
 /**
- * ƒAƒ‰[ƒ€‚Ì‰¹—Ê‚ÉŠÖ‚·‚éî•ñ‚ğˆµ‚¤ƒ‚ƒfƒ‹B
+ * ã‚¢ãƒ©ãƒ¼ãƒ ã®éŸ³é‡ã«é–¢ã™ã‚‹æƒ…å ±ã‚’æ‰±ã†ãƒ¢ãƒ‡ãƒ«ã€‚
  *
  * @author Naotake.K
  */
@@ -27,10 +27,10 @@ public class AlarmVolume {
     }
 
     /**
-     * Å‘å‰¹—Ê‚Ì”’l‚ğ‰Á–¡‚µ‚½Œ»İ‚Ì‰¹—Ê‚ğ’²®‚·‚éB
+     * æœ€å¤§éŸ³é‡ã®æ•°å€¤ã‚’åŠ å‘³ã—ãŸç¾åœ¨ã®éŸ³é‡ã‚’èª¿æ•´ã™ã‚‹ã€‚
      *
-     * @param max Å‘å‰¹—Ê
-     * @return ’²®Œ‹‰Ê
+     * @param max æœ€å¤§éŸ³é‡
+     * @return èª¿æ•´çµæœ
      */
     public int adjust(int max) {
         Preconditions.checkPositive(max, "Alarm max volume required positive, but was " + max);
