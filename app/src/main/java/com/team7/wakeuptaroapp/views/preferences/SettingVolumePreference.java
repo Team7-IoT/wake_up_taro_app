@@ -16,7 +16,7 @@ import com.team7.wakeuptaroapp.utils.TaroSharedPreference;
 import de.devland.esperandro.Esperandro;
 
 /**
- * ƒAƒvƒŠ“à‹¤’Ê‚Åg—p‚·‚éƒAƒ‰[ƒ€‚Ìƒ{ƒŠƒ…[ƒ€‰¹—Ê‚ğİ’è‚·‚é‚½‚ß‚Ì Preference ƒNƒ‰ƒXB
+ * ã‚¢ãƒ—ãƒªå†…å…±é€šã§ä½¿ç”¨ã™ã‚‹ã‚¢ãƒ©ãƒ¼ãƒ ã®ãƒœãƒªãƒ¥ãƒ¼ãƒ éŸ³é‡ã‚’è¨­å®šã™ã‚‹ãŸã‚ã® Preference ã‚¯ãƒ©ã‚¹ã€‚
  *
  * @author Naotake.K
  */

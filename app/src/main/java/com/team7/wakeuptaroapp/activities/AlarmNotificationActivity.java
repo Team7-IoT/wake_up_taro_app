@@ -10,11 +10,6 @@ import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.content.Intent;
 import android.media.AudioManager;
-
-import static android.media.AudioManager.STREAM_RING;
-
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -32,6 +27,7 @@ import com.team7.wakeuptaroapp.ble.RpiGattCallback;
 import com.team7.wakeuptaroapp.ble.RpiLeScanCallback;
 import com.team7.wakeuptaroapp.models.AlarmIntent;
 import com.team7.wakeuptaroapp.models.AlarmVolume;
+import com.team7.wakeuptaroapp.models.OptionalRingtone;
 import com.team7.wakeuptaroapp.utils.AppLog;
 import com.team7.wakeuptaroapp.utils.TaroSharedPreference;
 import com.team7.wakeuptaroapp.utils.Toasts;
@@ -42,6 +38,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.devland.esperandro.Esperandro;
 
+import static android.media.AudioManager.STREAM_RING;
 import static com.team7.wakeuptaroapp.BuildConfig.NOTIFICATION_CHARACTERISTIC_UUID;
 import static com.team7.wakeuptaroapp.BuildConfig.NOTIFICATION_SERVICE_UUID;
 
@@ -69,7 +66,7 @@ public class AlarmNotificationActivity extends Activity {
     private TaroSharedPreference preference;
 
     // アラーム登録時に指定したアラーム音
-    private Ringtone ringtone;
+    private OptionalRingtone ringtone;
 
     // アラーム起動時の Bluetooth 状態
     private boolean bluetoothDisabled;
@@ -230,7 +227,7 @@ public class AlarmNotificationActivity extends Activity {
 
         // AlarmReceiver 経由で受け取ったアラーム音
         AlarmIntent intent = AlarmIntent.of(getIntent());
-        ringtone = RingtoneManager.getRingtone(getApplicationContext(), intent.getRingtoneUri());
+        ringtone = OptionalRingtone.of(getApplicationContext(), intent.getRingtoneUri());
 
         // AuditManager
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);

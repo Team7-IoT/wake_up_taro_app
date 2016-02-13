@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.team7.wakeuptaroapp.activities.AlarmNotificationActivity;
 import com.team7.wakeuptaroapp.services.AlarmService;
@@ -134,7 +135,7 @@ public class AlarmIntent extends Intent {
      */
     public Uri getRingtoneUri() {
         String uriStr = getRingtoneUriAsString();
-        return (uriStr == null ? null : Uri.parse(uriStr));
+        return (TextUtils.isEmpty(uriStr) ? null : Uri.parse(uriStr));
     }
 
     /**
