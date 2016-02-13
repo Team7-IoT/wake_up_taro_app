@@ -50,8 +50,18 @@ public class AlarmIntent extends Intent {
      * @see AlarmService
      */
     public static AlarmIntent forService(@NonNull Context packageContext, @NonNull Alarm alarm) {
+        return forService(packageContext, alarm.getRingtoneUri());
+    }
+
+    /**
+     * @param packageContext {@link Context}
+     * @param ringtoneUri    アラーム音の URI
+     * @return {@link AlarmIntent}
+     * @see AlarmService
+     */
+    public static AlarmIntent forService(@NonNull Context packageContext, @NonNull String ringtoneUri) {
         AlarmIntent intent = new AlarmIntent(packageContext, AlarmService.class);
-        intent.setRingtoneUri(alarm.getRingtoneUri());
+        intent.setRingtoneUri(ringtoneUri);
         return intent;
     }
 

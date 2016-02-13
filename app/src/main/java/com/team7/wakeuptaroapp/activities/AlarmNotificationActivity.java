@@ -1,5 +1,6 @@
 package com.team7.wakeuptaroapp.activities;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -18,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.skyfishjy.library.RippleBackground;
 import com.team7.wakeuptaroapp.BuildConfig;
@@ -29,6 +31,7 @@ import com.team7.wakeuptaroapp.models.AlarmIntent;
 import com.team7.wakeuptaroapp.models.AlarmVolume;
 import com.team7.wakeuptaroapp.models.OptionalRingtone;
 import com.team7.wakeuptaroapp.utils.AppLog;
+import com.team7.wakeuptaroapp.utils.TaroAlarmManager;
 import com.team7.wakeuptaroapp.utils.TaroSharedPreference;
 import com.team7.wakeuptaroapp.utils.Toasts;
 
@@ -48,6 +51,9 @@ import static com.team7.wakeuptaroapp.BuildConfig.NOTIFICATION_SERVICE_UUID;
  * @author Naotake.K
  */
 public class AlarmNotificationActivity extends Activity {
+
+    // スヌーズ有効化の待ち時間 (10秒)
+    private static final long WAIT_SNOOZE_PERIOD = 10000;
 
     // 親機への接続検証待ち時間 (5秒)
     private static final long WAIT_CONNECT_PERIOD = 5000;
@@ -77,8 +83,13 @@ public class AlarmNotificationActivity extends Activity {
     // アラーム起動時に親機との接続に成功したかどうか
     private boolean scanSuccessful;
 
+    private AlarmIntent intent;
+
     @Bind(R.id.content)
     RippleBackground background;
+
+    @Bind(R.id.snooze)
+    TextView snooze;
 
     /**
      * 親機を BLE でスキャンする際のコールバック。
@@ -180,6 +191,18 @@ public class AlarmNotificationActivity extends Activity {
     };
 
     /**
+     * アラーム起動の一定時間後、スヌーズ機能を有効化する処理。
+     */
+    private final Runnable snoozeDisplayer = new Runnable() {
+        @Override
+        public void run() {
+            ObjectAnimator feedIn = ObjectAnimator.ofFloat(snooze, "alpha", 1.0f);
+            feedIn.setStartDelay(1000);
+            feedIn.start();
+        }
+    };
+
+    /**
      * 一定時間スキャン後に呼び出す後処理。
      */
     private final Runnable scanFinalizer = new Runnable() {
@@ -226,7 +249,7 @@ public class AlarmNotificationActivity extends Activity {
         this.scanCallback.setActivity(this);
 
         // AlarmReceiver 経由で受け取ったアラーム音
-        AlarmIntent intent = AlarmIntent.of(getIntent());
+        intent = AlarmIntent.of(getIntent());
         ringtone = OptionalRingtone.of(getApplicationContext(), intent.getRingtoneUri());
 
         // AuditManager
@@ -250,6 +273,8 @@ public class AlarmNotificationActivity extends Activity {
             bluetoothDisabled = true;
             bluetoothAdapter.enable();
         }
+
+        snooze.setAlpha(0.0f);
     }
 
     @Override
@@ -258,6 +283,9 @@ public class AlarmNotificationActivity extends Activity {
         ringtone.play();
 
         // TODO もし親機との疎通に失敗した場合、緊急停止用として停止ボタンを活性化させる？
+
+        // 一定時間後にスヌーズ機能を有効化
+        handler.postDelayed(snoozeDisplayer, WAIT_SNOOZE_PERIOD);
 
         // スキャン開始
         if (!TextUtils.isEmpty(preference.deviceName())) {
@@ -372,6 +400,20 @@ public class AlarmNotificationActivity extends Activity {
         if (BuildConfig.APP_MODE_DEVELOP) {
             stopAlarm();
         }
+    }
+
+    /**
+     * アラームをスヌーズする。
+     *
+     * @param view {@link View}
+     */
+    public void snoozeAlarm(View view) {
+        TaroAlarmManager alarmManager = new TaroAlarmManager(getApplicationContext());
+        alarmManager.snoozeRegister(intent.getRingtoneUriAsString());
+
+        Toasts.showMessageLong(this, R.string.message_snooze);
+
+        stopAlarm();
     }
 
     @Override
