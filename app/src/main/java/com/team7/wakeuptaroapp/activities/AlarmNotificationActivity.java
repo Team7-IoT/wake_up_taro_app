@@ -9,6 +9,10 @@ import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.content.Intent;
+import android.media.AudioManager;
+
+import static android.media.AudioManager.STREAM_RING;
+
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.os.Bundle;
@@ -27,6 +31,7 @@ import com.team7.wakeuptaroapp.ble.RaspberryPi;
 import com.team7.wakeuptaroapp.ble.RpiGattCallback;
 import com.team7.wakeuptaroapp.ble.RpiLeScanCallback;
 import com.team7.wakeuptaroapp.models.AlarmIntent;
+import com.team7.wakeuptaroapp.models.AlarmVolume;
 import com.team7.wakeuptaroapp.utils.AppLog;
 import com.team7.wakeuptaroapp.utils.TaroSharedPreference;
 import com.team7.wakeuptaroapp.utils.Toasts;
@@ -58,6 +63,8 @@ public class AlarmNotificationActivity extends Activity {
     private Handler handler;
     private BluetoothGatt bluetoothGatt;
 
+    private AudioManager audioManager;
+
     // SharedPreference
     private TaroSharedPreference preference;
 
@@ -66,6 +73,9 @@ public class AlarmNotificationActivity extends Activity {
 
     // アラーム起動時の Bluetooth 状態
     private boolean bluetoothDisabled;
+
+    // アラーム起動時の端末着信音量
+    private int currentVolume;
 
     // アラーム起動時に親機との接続に成功したかどうか
     private boolean scanSuccessful;
@@ -222,6 +232,13 @@ public class AlarmNotificationActivity extends Activity {
         AlarmIntent intent = AlarmIntent.of(getIntent());
         ringtone = RingtoneManager.getRingtone(getApplicationContext(), intent.getRingtoneUri());
 
+        // AuditManager
+        audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+        currentVolume = audioManager.getStreamVolume(STREAM_RING);
+
+        int maxVolume = audioManager.getStreamMaxVolume(STREAM_RING);
+        audioManager.setStreamVolume(STREAM_RING, AlarmVolume.of(preference.alarmVolume()).adjust(maxVolume), 0);
+
         bluetoothGatt = null;
         handler = new Handler(getApplicationContext().getMainLooper());
 
@@ -339,6 +356,9 @@ public class AlarmNotificationActivity extends Activity {
         if (bluetoothDisabled) {
             bluetoothAdapter.disable();
         }
+
+        // 音量を元に戻す
+        audioManager.setStreamVolume(STREAM_RING, currentVolume, 0);
 
         Intent intent = new Intent(this, AlarmListActivity.class);
         startActivity(intent);
