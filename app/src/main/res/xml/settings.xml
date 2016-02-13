@@ -15,6 +15,12 @@
         android:title="@string/title_setting_try_censor"
         />
 
+    <!-- アラーム音量 -->
+    <com.team7.wakeuptaroapp.views.preferences.SettingVolumePreference
+        android:key="alarmVolume"
+        android:title="@string/title_setting_alarm_volume"
+        />
+
     <!-- アプリバージョン -->
     <com.team7.wakeuptaroapp.views.preferences.VersionPreference
         android:key="appVersion"

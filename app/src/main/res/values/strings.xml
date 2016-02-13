@@ -46,6 +46,7 @@
     <string name="title_alarm_ringtone">アラーム音</string>
     <string name="title_setting_try_connect">タロウのエサを探す</string>
     <string name="title_setting_try_censor">タロウのエサとの連携確認</string>
+    <string name="title_setting_alarm_volume">アラーム音量</string>
     <string name="title_setting_version">バージョン</string>
 
     <!-- alarm labels -->
@@ -61,4 +62,6 @@
     <string name="label_alarm_weekday">平日</string>
     <string name="label_alarm_weekend">週末</string>
     <string name="label_alarm_silent">サイレント</string>
+
+    <string name="label_mute">ミュート</string>
 </resources>
