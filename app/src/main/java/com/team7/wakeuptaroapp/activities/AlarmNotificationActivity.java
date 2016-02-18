@@ -18,6 +18,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -262,12 +263,6 @@ public class AlarmNotificationActivity extends Activity {
         bluetoothGatt = null;
         handler = new Handler(getApplicationContext().getMainLooper());
 
-        // スクリーンロックを解除する
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
-                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
-                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
         // 一時的に Bluetooth を有効にする
         if (!bluetoothAdapter.isEnabled()) {
             bluetoothDisabled = true;
@@ -275,6 +270,21 @@ public class AlarmNotificationActivity extends Activity {
         }
 
         snooze.setAlpha(0.0f);
+    }
+
+    /**
+     * スクリーンロックを解除する。
+     */
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON    // スクリーンをONにする
+                | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED        // ロック画面の場合でも表示する
+                | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON          // スクリーン表示を保つ
+                | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+
     }
 
     @Override
