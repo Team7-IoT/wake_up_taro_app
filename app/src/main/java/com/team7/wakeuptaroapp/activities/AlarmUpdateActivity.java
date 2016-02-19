@@ -160,6 +160,7 @@ public class AlarmUpdateActivity extends AppCompatActivity {
         targetAlarm.setTime(time);
         targetAlarm.setDayOfWeeks(dayOfWeeks);
         targetAlarm.setRingtoneUri(ringtoneUri);
+        targetAlarm.setValid(true);  // アラーム更新のタイミングで必ず有効化
         targetAlarm.validate();
 
         alarms.remove(targetAlarm);
