@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.preference.Preference;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 
 import com.team7.wakeuptaroapp.R;
@@ -68,6 +69,9 @@ public class SettingConnectionPreference extends Preference {
          */
         @Override
         protected void doLeScan(BluetoothDevice device) {
+            if (TextUtils.isEmpty(device.getName()) || TextUtils.isEmpty(device.getAddress())) {
+                return;
+            }
             devices.put(device.getName(), device);
         }
     };
