@@ -17,6 +17,7 @@
 
     <!-- アラーム音量 -->
     <com.team7.wakeuptaroapp.views.preferences.SettingVolumePreference
+        android:defaultValue="@string/label_mute"
         android:key="alarmVolume"
         android:title="@string/title_setting_alarm_volume"
         />

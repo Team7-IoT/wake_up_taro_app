@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.team7.wakeuptaroapp.R;
 import com.team7.wakeuptaroapp.adapters.ListItemAdapter;
@@ -36,6 +37,9 @@ public class AlarmListActivity extends AppCompatActivity {
 
     @Bind(R.id.alarm_list)
     ListView lv;
+    @Bind(R.id.alarm_list_empty)
+    TextView emptyTextOnAlarmEmpty;
+
     private List<Alarm> list;
     private ListItemAdapter adapter;
     private TaroSharedPreference preference;
@@ -54,6 +58,7 @@ public class AlarmListActivity extends AppCompatActivity {
         adapter = new ListItemAdapter(this);
         adapter.setItemList(list);
         lv.setAdapter(adapter);
+        lv.setEmptyView(emptyTextOnAlarmEmpty);
 
         // ListView クリック時アラーム更新画面へ遷移させる
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
