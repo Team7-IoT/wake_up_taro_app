@@ -32,6 +32,7 @@
     <string name="message_store_alarm">アラームを登録しました。</string>
     <string name="message_update_alarm">アラームを更新しました。</string>
     <string name="message_delete_alarm">アラームを削除しました。</string>
+    <string name="message_alarm_list_empty">まずは右上の設定から\nタロウのエサを探して!!\n\nその後でアラームを\n登録してください!!</string>
     <string name="message_alarm">早く起きて!!\nエサまで急げ!!</string>
     <string name="message_alarm_stop_success">Good Morning!!</string>
     <string name="message_snooze">スヌーズ設定 (5分) をしました。</string>
